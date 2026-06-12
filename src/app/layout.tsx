@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Cursor } from "@/components/cursor";
+import Script from "next/script";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className={`${cormorant.variable} ${spaceGrotesk.variable}`}>
         <Cursor />
         {children}
+        <Script src="/cyberpunk-toggle.js" strategy="afterInteractive" />
       </body>
     </html>
   );
