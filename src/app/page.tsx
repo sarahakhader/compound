@@ -127,7 +127,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
       const tl = gsap.timeline()
       tl.to(logoMark, { opacity: 1, scale: 1, rotate: 0, duration: 1.8, ease: "power4.out" }, 0)
         .to(".hero-top-word", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.1 }, 0.3)
-        .to([".hero-bl", ".hero-br"], { opacity: 0.7, duration: 0.9, ease: "power3.out", stagger: 0.08 }, 0.7)
+        .to(".hero-bl", { opacity: 0.7, duration: 0.9, ease: "power3.out" }, 0.7)
         .to("#hero-bc", { clipPath: "inset(0 0% 0 0)", duration: 1.3, ease: "power4.out" }, 0.85)
     }, 2850)
 
@@ -240,7 +240,6 @@ const plLogoRef = useRef<SVGSVGElement>(null)
         </div>
 
         <div className="hero-bottom" ref={heroBottomRef}>
-          {/* TextCursorProximity hero tagline */}
           <div className="hero-bc" id="hero-bc">
             <div className="hero-bc-inner">
               <TextCursorProximity
@@ -265,8 +264,6 @@ const plLogoRef = useRef<SVGSVGElement>(null)
               />
             </div>
           </div>
-
-          <p className="hero-br">thecompoundlabs@gmail.com<br />@whoiscompound</p>
         </div>
       </section>
 

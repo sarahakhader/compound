@@ -286,9 +286,9 @@ nav {
   overflow: visible;
 }
 .hero-bottom {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: flex-end; gap: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 .hero-bl {
   font-size: .62rem; letter-spacing: .18em; line-height: 1.8;
