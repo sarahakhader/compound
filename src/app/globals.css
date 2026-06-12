@@ -455,7 +455,7 @@ nav {
 .f-submit:hover::after { width:100%; }
 footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.07); padding:1.8rem 2.5rem; display:flex; justify-content:space-between; align-items:center; }
 .f-brand   { font-size:.62rem; letter-spacing:.32em; color:var(--linen); opacity:.25; font-weight:500; }
-.f-tagline { font-family:var(--serif); font-size:.88rem; font-style:italic; color:var(--linen); opacity:.22; }
+.f-tagline { font-family:var(--sans); font-size:.62rem; letter-spacing:.32em; font-style:normal; color:var(--linen); opacity:.22; }
 
 @media (max-width: 768px) {
   .hero-top-word:nth-child(2), .hero-top-word:nth-child(3) { display: none; }
