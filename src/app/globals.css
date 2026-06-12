@@ -240,7 +240,7 @@ nav {
   background: var(--smoked-plum);
   display: flex; flex-direction: column;
   padding: 7rem 2.5rem 3rem;
-  transform: translateY(-102%);
+  transform: translateY(-110%);
   transition: transform .9s cubic-bezier(0.16,1,0.3,1);
 }
 #menu.open { transform: translateY(0); }
