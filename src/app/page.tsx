@@ -240,8 +240,6 @@ const plLogoRef = useRef<SVGSVGElement>(null)
         </div>
 
         <div className="hero-bottom" ref={heroBottomRef}>
-          <p className="hero-bl">Design Studio<br />Toronto 2026</p>
-
           {/* TextCursorProximity hero tagline */}
           <div className="hero-bc" id="hero-bc">
             <div className="hero-bc-inner">

@@ -183,8 +183,12 @@ function CarouselContent({ children, className, transition, fade }: CarouselCont
         {Children.map(children, (child, i) => (
           <motion.div
             key={i}
+            initial={{ opacity: 0, scale: 1.04 }}
             style={{ position: i === 0 ? 'relative' : 'absolute', inset: 0 }}
-            animate={{ opacity: i === index ? 1 : 0 }}
+            animate={{
+              opacity: i === index ? 1 : 0,
+              scale: i === index ? 1 : 1.04,
+            }}
             transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
           >
             {child}
