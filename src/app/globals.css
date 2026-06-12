@@ -333,6 +333,14 @@ nav {
 }
 .about-body-text { margin-bottom: 5rem; }
 
+/* Welcome headline */
+.at-welcome {
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(3rem, 8vw, 9rem);
+  line-height: 1.0; letter-spacing: -.03em;
+  color: var(--smoked-plum); margin-bottom: 2.5rem;
+}
+
 /* Stanza 1 — wide intro body */
 .at-intro {
   font-family: var(--serif); font-style: italic;
@@ -421,8 +429,13 @@ nav {
 .pillar::before { content:''; position:absolute; top:0; left:0; width:22px; height:1px; background:var(--smoked-plum); opacity:.3; }
 .pillar h3 { font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; opacity:.45; margin-bottom:.65rem; font-weight:500; }
 .pillar p  { font-family:var(--serif); font-size:1.05rem; line-height:1.6; font-style:italic; opacity:.75; }
-.swatch-strip { display:flex; height:3px; margin-top:5rem; border-radius:2px; overflow:hidden; }
-.swatch-strip div { flex:1; transform-origin:left; }
+.colour-blocks { display:flex; height:clamp(120px,18vw,200px); margin-top:5rem; border-radius:4px; overflow:hidden; gap:2px; }
+.cb-block {
+  flex:1; display:flex; flex-direction:column; justify-content:flex-end;
+  padding:.75rem .9rem; transform-origin:bottom;
+}
+.cb-name    { font-family:var(--sans); font-size:.55rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.85); line-height:1.6; }
+.cb-pantone { font-family:var(--serif); font-size:.58rem; font-style:italic; color:rgba(255,255,255,.45); }
 
 /* CONTACT */
 #contact { background:var(--deep-jungle); position:relative; overflow:hidden; }

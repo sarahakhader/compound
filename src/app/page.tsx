@@ -16,7 +16,7 @@ const HELLOS = [
 function CyclingHello() {
   const [index, setIndex] = useState(0)
   useEffect(() => {
-    const id = setInterval(() => setIndex(i => (i + 1) % HELLOS.length), 1800)
+    const id = setInterval(() => setIndex(i => (i + 1) % HELLOS.length), 3200)
     return () => clearInterval(id)
   }, [])
   return (
@@ -157,9 +157,9 @@ const plLogoRef = useRef<SVGSVGElement>(null)
       scrollTrigger: { trigger: ".pillars", start: "top 82%" },
       opacity: 0, y: 40, duration: 0.9, ease: "power3.out", stagger: 0.15,
     })
-    gsap.from("#swatches div", {
-      scrollTrigger: { trigger: "#swatches", start: "top 92%" },
-      scaleX: 0, transformOrigin: "left", duration: 1.1, ease: "power3.out", stagger: 0.09,
+    gsap.from(".cb-block", {
+      scrollTrigger: { trigger: "#swatches", start: "top 88%" },
+      scaleY: 0, transformOrigin: "bottom", duration: 1.0, ease: "power3.out", stagger: 0.08,
     })
     ScrollTrigger.create({
       trigger: "#inquire", start: "top 85%",
@@ -297,9 +297,12 @@ const plLogoRef = useRef<SVGSVGElement>(null)
         </div>
         <div className="about-body-text" id="manifesto">
 
+          {/* Stanza 0 — welcome headline */}
+          <h2 className="at-welcome">Welcome to Compound.</h2>
+
           {/* Stanza 1 — wide intro */}
           <p className="at-intro">
-            Welcome to Compound, a living archive, of objects, materials, and ideas. A world composed by design, grounded in the memory of the Earth. Each piece that enters Compound takes its place within a larger narrative: a continuing record of form, texture, and material culture.
+            A living archive of objects, materials, and ideas. A world composed by design, grounded in the memory of the Earth. Each piece that enters Compound takes its place within a larger narrative: a continuing record of form, texture, and material culture.
           </p>
 
           {/* Stanza 2 — centred pull quote */}
@@ -339,14 +342,21 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           <div className="pillar"><h3>Form &amp; Purpose</h3><p>Space as language. Structure that outlasts trend.</p></div>
           <div className="pillar"><h3>Objects as Artifacts</h3><p>Curation over collection. Beauty with intellectual weight.</p></div>
         </div>
-        <div className="swatch-strip" id="swatches">
-          <div style={{ background: "#CC4A12" }} />
-          <div style={{ background: "#1B3A2D" }} />
-          <div style={{ background: "#3D2645" }} />
-          <div style={{ background: "#6ECECE" }} />
-          <div style={{ background: "#EDE4D8" }} />
-          <div style={{ background: "#8B3A1E" }} />
-          <div style={{ background: "#B5CC45" }} />
+        <div className="colour-blocks" id="swatches">
+          {[
+            { name: "Molten",      hex: "#CC4A12", pantone: "7526 C" },
+            { name: "Deep Jungle", hex: "#1B3A2D", pantone: "560 C"  },
+            { name: "Smoked Plum", hex: "#3D2645", pantone: "2627 C" },
+            { name: "Glacier",     hex: "#6ECECE", pantone: "3262 C" },
+            { name: "Linen",       hex: "#EDE4D8", pantone: "9183 C" },
+            { name: "Bedrock",     hex: "#8B3A1E", pantone: "1615 C" },
+            { name: "Acid",        hex: "#B5CC45", pantone: "375 C"  },
+          ].map((s, i) => (
+            <div key={s.name} className="cb-block" style={{ background: s.hex }}>
+              <span className="cb-name">{s.name}</span>
+              <span className="cb-pantone">Pantone {s.pantone}</span>
+            </div>
+          ))}
         </div>
       </section>
 
