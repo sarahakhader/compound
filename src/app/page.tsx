@@ -107,6 +107,15 @@ const LogoCircles = () => (
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [submitLabel, setSubmitLabel] = useState("SUBMIT ↗")
+  const [cyberpunk, setCyberpunk] = useState(false)
+
+  useEffect(() => {
+    const check = () => setCyberpunk(document.documentElement.classList.contains("cyberpunk-mode"))
+    check()
+    const obs = new MutationObserver(check)
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+    return () => obs.disconnect()
+  }, [])
   const heroBottomRef = useRef<HTMLDivElement>(null)
 const plLogoRef = useRef<SVGSVGElement>(null)
   const preloaderRef = useRef<HTMLDivElement>(null)
@@ -257,7 +266,11 @@ const plLogoRef = useRef<SVGSVGElement>(null)
                 containerRef={heroBottomRef}
                 radius={120}
                 falloff="gaussian"
-                styles={{
+                styles={cyberpunk ? {
+                  color: { from: "#00f0ff", to: "#FF003C" },
+                  textShadow: { from: "0 0 0px transparent", to: "0 0 24px rgba(255,0,60,0.95), 0 0 48px rgba(255,0,60,0.45)" },
+                  transform: { from: "scale(1)", to: "scale(1.07)" },
+                } : {
                   color: { from: "#3D2645", to: "#ffff02" },
                   transform: { from: "scale(1)", to: "scale(1.08)" },
                 }}
@@ -267,7 +280,11 @@ const plLogoRef = useRef<SVGSVGElement>(null)
                 containerRef={heroBottomRef}
                 radius={120}
                 falloff="gaussian"
-                styles={{
+                styles={cyberpunk ? {
+                  color: { from: "#00f0ff", to: "#FF003C" },
+                  textShadow: { from: "0 0 0px transparent", to: "0 0 24px rgba(255,0,60,0.95), 0 0 48px rgba(255,0,60,0.45)" },
+                  transform: { from: "scale(1)", to: "scale(1.07)" },
+                } : {
                   color: { from: "#3D2645", to: "#ffff02" },
                   transform: { from: "scale(1)", to: "scale(1.08)" },
                 }}
