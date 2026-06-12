@@ -352,10 +352,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
             { name: "Bedrock",     hex: "#8B3A1E", pantone: "1615 C" },
             { name: "Acid",        hex: "#B5CC45", pantone: "375 C"  },
           ].map((s, i) => (
-            <div key={s.name} className="cb-block" style={{ background: s.hex }}>
-              <span className="cb-name">{s.name}</span>
-              <span className="cb-pantone">Pantone {s.pantone}</span>
-            </div>
+            <div key={s.name} className="cb-block" style={{ background: s.hex }} />
           ))}
         </div>
       </section>
