@@ -219,7 +219,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
         </ul>
         <div className="m-foot">
-          <p>Earth, Remembered Through Design</p>
+          <p>Taste, redefined</p>
           <p>© COMPOUND 2026</p>
         </div>
       </div>
@@ -372,7 +372,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
         </div>
         <footer>
           <span className="f-brand">C O M P O U N D</span>
-          <span className="f-tagline">Earth, Remembered Through Design</span>
+          <span className="f-tagline">Taste, redefined</span>
           <span className="f-brand">© 2026</span>
         </footer>
       </section>
