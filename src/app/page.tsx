@@ -267,12 +267,13 @@ const plLogoRef = useRef<SVGSVGElement>(null)
                 radius={120}
                 falloff="gaussian"
                 styles={cyberpunk ? {
-                  color: { from: "#00f0ff", to: "#FF003C" },
-                  textShadow: { from: "0 0 0px transparent", to: "0 0 24px rgba(255,0,60,0.95), 0 0 48px rgba(255,0,60,0.45)" },
-                  transform: { from: "scale(1)", to: "scale(1.07)" },
+                  color:      { from: "#00f0ff", to: "#FF003C" },
+                  textShadow: { from: "0 0 0px rgba(255,0,60,0)", to: "0 0 24px rgba(255,0,60,0.95), 0 0 48px rgba(255,0,60,0.45)" },
+                  transform:  { from: "scale(1)", to: "scale(1.07)" },
                 } : {
-                  color: { from: "#3D2645", to: "#ffff02" },
-                  transform: { from: "scale(1)", to: "scale(1.08)" },
+                  color:      { from: "#3D2645", to: "#ffff02" },
+                  textShadow: { from: "0 0 0px rgba(0,0,0,0)", to: "0 0 0px rgba(0,0,0,0)" },
+                  transform:  { from: "scale(1)", to: "scale(1.08)" },
                 }}
               />
               <TextCursorProximity
@@ -281,12 +282,13 @@ const plLogoRef = useRef<SVGSVGElement>(null)
                 radius={120}
                 falloff="gaussian"
                 styles={cyberpunk ? {
-                  color: { from: "#00f0ff", to: "#FF003C" },
-                  textShadow: { from: "0 0 0px transparent", to: "0 0 24px rgba(255,0,60,0.95), 0 0 48px rgba(255,0,60,0.45)" },
-                  transform: { from: "scale(1)", to: "scale(1.07)" },
+                  color:      { from: "#00f0ff", to: "#FF003C" },
+                  textShadow: { from: "0 0 0px rgba(255,0,60,0)", to: "0 0 24px rgba(255,0,60,0.95), 0 0 48px rgba(255,0,60,0.45)" },
+                  transform:  { from: "scale(1)", to: "scale(1.07)" },
                 } : {
-                  color: { from: "#3D2645", to: "#ffff02" },
-                  transform: { from: "scale(1)", to: "scale(1.08)" },
+                  color:      { from: "#3D2645", to: "#ffff02" },
+                  textShadow: { from: "0 0 0px rgba(0,0,0,0)", to: "0 0 0px rgba(0,0,0,0)" },
+                  transform:  { from: "scale(1)", to: "scale(1.08)" },
                 }}
               />
             </div>
