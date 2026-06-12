@@ -240,6 +240,7 @@ nav {
   background: var(--smoked-plum);
   display: flex; flex-direction: column;
   padding: 7rem 2.5rem 3rem;
+  overflow: hidden;
   transform: translateY(-110%);
   transition: transform .9s cubic-bezier(0.16,1,0.3,1);
 }
@@ -331,7 +332,14 @@ nav {
   background: var(--molten); color: var(--smoked-plum);
   padding: 7rem 2.5rem 6rem; position: relative; overflow: hidden;
 }
-.about-body-text { margin-bottom: 5rem; }
+.about-logo-float {
+  position: absolute; right: -4vw; top: 50%;
+  transform: translateY(-50%);
+  width: clamp(260px, 38vw, 520px);
+  pointer-events: none; z-index: 0;
+}
+.about-logo-float svg { width: 100%; height: auto; display: block; }
+.about-body-text { margin-bottom: 5rem; position: relative; z-index: 1; }
 
 /* Welcome headline */
 .at-welcome {
@@ -397,7 +405,7 @@ nav {
   color: var(--smoked-plum); letter-spacing: -.02em;
 }
 .at-closing p { margin-bottom: .15em; }
-.about-top { display: flex; justify-content: space-between; margin-bottom: 5rem; }
+.about-top { display: flex; justify-content: space-between; margin-bottom: 5rem; position: relative; z-index: 1; }
 .about-label { font-size: clamp(2.2rem, 5vw, 4.5rem); letter-spacing: .04em; font-weight: 800; opacity: .85; }
 .about-est   { font-size: .62rem; letter-spacing: .18em; opacity: .35; }
 .manifesto-text {

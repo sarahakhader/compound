@@ -147,6 +147,14 @@ const plLogoRef = useRef<SVGSVGElement>(null)
       scrollTrigger: { trigger: "#about", start: "top 80%" },
       opacity: 0, x: -30, duration: 0.9, ease: "power3.out",
     })
+
+    gsap.fromTo("#about-logo",
+      { opacity: 0, scale: 0.7, rotate: -80 },
+      {
+        scrollTrigger: { trigger: "#about", start: "top 60%", end: "bottom bottom", scrub: 1.2 },
+        opacity: 0.18, scale: 1, rotate: 60, ease: "none",
+      }
+    )
     document.querySelectorAll<HTMLElement>(".img-block").forEach(el => {
       gsap.fromTo(el, { y: 25 }, {
         scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 },
@@ -291,6 +299,20 @@ const plLogoRef = useRef<SVGSVGElement>(null)
 
       {/* ══ ABOUT ══════════════════════════════════ */}
       <section id="about">
+
+        {/* Scroll-animated logo */}
+        <div className="about-logo-float" id="about-logo">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="92"  fill="#3A1A08"/>
+            <circle cx="100" cy="100" r="79"  fill="#8B3A1E"/>
+            <circle cx="100" cy="100" r="64"  fill="#CC4A12"/>
+            <circle cx="100" cy="100" r="50"  fill="#5C2510"/>
+            <circle cx="100" cy="100" r="37"  fill="#3D2645"/>
+            <circle cx="100" cy="100" r="23"  fill="#6ECECE"/>
+            <circle cx="100" cy="100" r="9.5" fill="#050403"/>
+          </svg>
+        </div>
+
         <div className="about-top">
           <span className="about-label"><CyclingHello /></span>
           <span className="about-est">Est. 2026</span>
