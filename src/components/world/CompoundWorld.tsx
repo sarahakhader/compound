@@ -6,7 +6,6 @@ import * as THREE from "three"
 import { Player } from "./Player"
 import { City, COLLIDERS } from "./City"
 import { Skyline } from "./Skyline"
-import { Rain } from "./Rain"
 import { Lights } from "./Lights"
 
 interface Props { onExit: () => void }
@@ -22,7 +21,6 @@ function Scene({ onExit }: Props) {
       <Suspense fallback={null}>
         <City />
         <Skyline />
-        <Rain />
         <Player colliders={COLLIDERS} onExit={onExit} />
       </Suspense>
 
