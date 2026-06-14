@@ -19,7 +19,7 @@ declare global {
       start(): void;
       stop(): void;
       readonly active: boolean;
-      readonly debug: object | null;
+      debug(): void;
     };
   }
 }
