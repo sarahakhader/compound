@@ -18,6 +18,7 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
+
 export const metadata: Metadata = {
   title: "COMPOUND — Earth, Remembered Through Design.",
   description: "Toronto-based design studio and archive.",
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className={`${cormorant.variable} ${spaceGrotesk.variable}`}>
         <Cursor />
         {children}
+        {/* compound-universe.js is lazy-loaded by cyberpunk-toggle.js on first click */}
         <Script src="/cyberpunk-toggle.js" strategy="afterInteractive" />
       </body>
     </html>

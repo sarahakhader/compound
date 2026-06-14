@@ -1,59 +1,183 @@
 (function () {
+  "use strict";
+
   const style = document.createElement("style");
   style.textContent = `
+  /* ── Cloud wrapper — fixed position, owns the cloud silhouette ── */
+  #cu-cloud-wrap {
+    position: fixed;
+    bottom: 28px;
+    right: 36px;
+    z-index: 999999;
+    width: 248px;
+
+    /* The drop-shadow applies to the whole cloud (body + bumps) as one shape */
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.46));
+    transition: transform 0.22s ease, filter 0.22s ease;
+    cursor: pointer;
+  }
+
+  #cu-cloud-wrap:hover {
+    transform: translateY(-6px) scale(1.025);
+    filter: drop-shadow(0 14px 32px rgba(0,0,0,0.54));
+  }
+
+  /* ── Three cloud bumps — sit ABOVE the button body ── */
+  #cu-cloud-bumps {
+    position: relative;
+    height: 52px;          /* space for bumps; no background here */
+    pointer-events: none;
+  }
+
+  /* left bump */
+  #cu-cloud-bumps::before {
+    content: '';
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    width: 74px;
+    height: 74px;
+    bottom: -18px;          /* deeper overlap so bumps merge flush into body */
+    left: 8px;
+  }
+
+  /* centre bump — tallest */
+  #cu-cloud-bumps::after {
+    content: '';
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    bottom: -20px;
+    left: 70px;
+  }
+
+  /* right bump */
+  #cu-cloud-bump-r {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    width: 62px;
+    height: 62px;
+    bottom: -16px;
+    right: 8px;
+    pointer-events: none;
+  }
+
+  /* ── Button body — the cloud base ── */
   #cyberpunk-toggle-btn {
-    position:fixed;bottom:24px;right:24px;z-index:999999;
-    padding:11px 18px;
-    font-family:"Courier New",monospace;
-    font-size:11px;font-weight:700;letter-spacing:1.5px;
-    max-width:310px;text-align:center;cursor:pointer;border-radius:3px;
-    background:rgba(7,8,15,0.88);color:#e6e6fa;
-    border:1px solid rgba(230,230,250,0.22);
-    box-shadow:0 2px 12px rgba(0,0,0,0.5);
-    backdrop-filter:blur(8px);
-    will-change:transform;
-    transition:transform .18s ease,border-color .22s ease,color .22s ease;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 50px;
+    z-index: 1;            /* above bump divs so text is always clear */
+
+    background: #ffffff;
+    color: #0c0d18;
+    border: none;
+    border-radius: 100px;
+
+    font-family: "Courier New", monospace;
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+
+    transition: background 0.2s ease, color 0.2s ease;
   }
-  #cyberpunk-toggle-btn:hover {
-    transform:translateY(-2px);
-    border-color:rgba(0,240,255,0.5);
-    color:#00f0ff;
+
+  #cyberpunk-toggle-btn:focus-visible {
+    outline: 3px solid rgba(110,206,206,0.9);
+    outline-offset: 5px;
   }
-  #cyberpunk-toggle-btn.game-active {
-    border-color:#FF003C;color:#FF003C;
-    text-shadow:0 0 6px rgba(255,0,60,0.7);
-    background:rgba(7,8,15,0.95);
+
+  /* Active state — storm-grey cloud, red text */
+  #cu-cloud-wrap.game-active #cyberpunk-toggle-btn  { background: #e2e2e2; color: #cc1800; }
+  #cu-cloud-wrap.game-active #cu-cloud-bumps::before { background: #e2e2e2; }
+  #cu-cloud-wrap.game-active #cu-cloud-bumps::after  { background: #e2e2e2; }
+  #cu-cloud-wrap.game-active #cu-cloud-bump-r        { background: #e2e2e2; }
+
+  /* Loading state */
+  #cu-cloud-wrap.loading { opacity: 0.6; cursor: wait; }
+  #cu-cloud-wrap.loading #cyberpunk-toggle-btn { cursor: wait; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #cu-cloud-wrap { transition: none; }
   }
   `;
   document.head.appendChild(style);
 
+  /* ── Build DOM: wrapper > bumps + right-bump + button ── */
+  const wrap = document.createElement("div");
+  wrap.id = "cu-cloud-wrap";
+  wrap.setAttribute("role", "group");
+  wrap.setAttribute("aria-label", "Compound Universe launcher");
+
+  /* bump container */
+  const bumps = document.createElement("div");
+  bumps.id = "cu-cloud-bumps";
+
+  /* third bump (right) as a real element so we avoid box-shadow shape issues */
+  const bumpR = document.createElement("div");
+  bumpR.id = "cu-cloud-bump-r";
+  bumps.appendChild(bumpR);
+
+  /* the actual button */
   const btn = document.createElement("button");
   btn.id = "cyberpunk-toggle-btn";
   btn.type = "button";
+  btn.setAttribute("aria-haspopup", "dialog");
 
+  wrap.appendChild(bumps);
+  wrap.appendChild(btn);
+
+  /* ── State helpers ── */
   function setActive(on) {
     btn.textContent = on
       ? "↩ RETURN TO THE MUNDANE"
-      : "⚡ EXPLORE COMPOUND'S ALTERNATE UNIVERSE";
+      : "☁ ENTER COMPOUND'S UNIVERSE";
     btn.setAttribute("aria-pressed", String(on));
-    btn.classList.toggle("game-active", on);
+    wrap.classList.toggle("game-active", on);
   }
   setActive(false);
 
+  /* ── Lazy-load compound-universe.js on first click ── */
+  let loaded = false;
+  function ensureLoaded(cb) {
+    if (loaded || window.CompoundUniverse) { loaded = true; cb(); return; }
+    wrap.classList.add("loading");
+    btn.setAttribute("aria-busy", "true");
+    const s = document.createElement("script");
+    s.src = "/compound-universe.js";
+    s.onload = () => {
+      loaded = true;
+      wrap.classList.remove("loading");
+      btn.removeAttribute("aria-busy");
+      cb();
+    };
+    s.onerror = () => {
+      wrap.classList.remove("loading");
+      btn.removeAttribute("aria-busy");
+      console.error("Compound Universe: failed to load game script.");
+    };
+    document.head.appendChild(s);
+  }
+
   btn.addEventListener("click", () => {
     const cu = window.CompoundUniverse;
-    if (!cu) return;
-    if (cu.active) {
-      cu.stop();
-    } else {
-      cu.start();
-      setActive(true);
-    }
+    if (cu && cu.active) { cu.stop(); setActive(false); return; }
+    ensureLoaded(() => {
+      if (window.CompoundUniverse) { window.CompoundUniverse.start(); setActive(true); }
+    });
   });
 
   window.addEventListener("compound-universe:exit", () => setActive(false));
 
-  function mount() { document.body.appendChild(btn); }
+  function mount() { document.body.appendChild(wrap); }
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", mount);
   else mount();

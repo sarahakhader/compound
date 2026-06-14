@@ -256,7 +256,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           </svg>
         </div>
 
-        <div className="hero-bottom" ref={heroBottomRef}>
+        <div className="hero-bottom" ref={heroBottomRef} ref={heroBottomRef}>
           <p className="hero-bl">Design Studio<br />Toronto 2026</p>
 
           <div className="hero-bc" id="hero-bc">
