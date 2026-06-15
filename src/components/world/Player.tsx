@@ -141,7 +141,13 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
     }
 
     const onKeyUp = (e: KeyboardEvent) => { keys.current[e.code] = false }
-    const onClick = () => { if (!locked.current) canvas.requestPointerLock() }
+    const onClick = () => {
+      if (!locked.current) {
+        // Chrome 116+ returns a Promise — must be caught or it becomes an unhandled rejection
+        const p = canvas.requestPointerLock()
+        if (p && typeof p.catch === "function") p.catch(() => undefined)
+      }
+    }
 
     canvas.addEventListener("click", onClick)
     document.addEventListener("pointerlockchange", onLockChange)

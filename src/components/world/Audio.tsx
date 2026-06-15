@@ -73,12 +73,16 @@ export function CityAmbience({ interior }: Props) {
       return { master, drone, drone2, noise, lfo }
     }
 
-    // Defer until first user interaction (browser autoplay policy)
+    // Defer until first user interaction (browser autoplay policy).
+    // setTimeout(0) moves the heavy audio setup off the event handler so
+    // it doesn't block pointer-lock acquisition or cause a jank spike.
     let nodes: ReturnType<typeof start> | null = null
     const onInteract = () => {
-      nodes = start()
       window.removeEventListener("click", onInteract)
       window.removeEventListener("keydown", onInteract)
+      setTimeout(() => {
+        try { nodes = start() } catch { /* audio unavailable — silent fallback */ }
+      }, 0)
     }
     window.addEventListener("click", onInteract)
     window.addEventListener("keydown", onInteract)
