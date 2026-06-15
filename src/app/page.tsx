@@ -233,6 +233,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           <li><a href="#about"   onClick={closeMenu}>About</a></li>
           <li><Link href="/blankets" onClick={closeMenu}>Blankets</Link></li>
           <li><Link href="/story" onClick={closeMenu}>Story</Link></li>
+          <li><Link href="/universe" onClick={closeMenu}>Universe</Link></li>
           <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
         </ul>
         <div className="m-foot">
@@ -256,7 +257,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           </svg>
         </div>
 
-        <div className="hero-bottom" ref={heroBottomRef} ref={heroBottomRef}>
+        <div className="hero-bottom" ref={heroBottomRef}>
           <p className="hero-bl">Design Studio<br />Toronto 2026</p>
 
           <div className="hero-bc" id="hero-bc">
