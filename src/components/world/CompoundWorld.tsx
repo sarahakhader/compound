@@ -83,12 +83,11 @@ function detectQuality(): Quality {
 }
 
 const QUALITY_DPR:        Record<Quality, [number, number]> = {
-  high:   [1, 1.75],
-  medium: [1, 1.50],
+  high:   [1, 1.25],
+  medium: [1, 1.00],
   low:    [1, 1.00],
 }
-const QUALITY_RAIN_COUNT: Record<Quality, number> = { high: 4000, medium: 2000, low: 0 }
-const QUALITY_SHADOWS:    Record<Quality, boolean> = { high: true,  medium: false, low: false }
+const QUALITY_RAIN_COUNT: Record<Quality, number> = { high: 2000, medium: 1000, low: 0 }
 
 interface Props { onExit: () => void }
 
@@ -131,11 +130,10 @@ export function CompoundWorld({ onExit }: Props) {
   const nearInspectable   = useRef<InspectableDef | null>(null)
   const [inspectPrompt, setInspectPrompt] = useState<string | null>(null)
 
-  /* Quality tier — detected once, drives dpr / bloom / rain count */
+  /* Quality tier — detected once, drives dpr / rain count */
   const [quality]  = useState<Quality>(detectQuality)
   const dpr        = QUALITY_DPR[quality]
   const rainCount  = QUALITY_RAIN_COUNT[quality]
-  const shadows    = QUALITY_SHADOWS[quality]
 
   /* Interior state */
   useEffect(() => {
@@ -179,16 +177,15 @@ export function CompoundWorld({ onExit }: Props) {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 99998, background: "#05070B", overflow: "hidden" }}>
       <Canvas
-        shadows={shadows}
         dpr={dpr}
         gl={{
-          antialias:           quality !== "low",
+          antialias:           quality === "high",
           powerPreference:     "high-performance",
           outputColorSpace:    THREE.SRGBColorSpace,
           toneMapping:         THREE.ACESFilmicToneMapping,
           toneMappingExposure: interior ? 1.1 : 0.88,
         }}
-        camera={{ fov: 72, near: 0.1, far: 900, position: [0, 1.6, 12] }}
+        camera={{ fov: 72, near: 0.1, far: 600, position: [0, 1.6, 12] }}
       >
         <Scene
           onExit={onExit} fogDensity={fogDensity} onPrompt={handlePrompt}

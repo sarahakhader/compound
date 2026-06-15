@@ -9,12 +9,12 @@ for (let z = 8; z > -148; z -= 18) {
   LAMP_POSITIONS.push([13.2, 0, z])
 }
 
-function StreetLight({ position }: { position: [number, number, number] }) {
-  const [x, , z] = position
+function StreetLight({ position, lit }: { position: [number, number, number]; lit: boolean }) {
+  const [x] = position
   return (
     <group position={position}>
       {/* Pole */}
-      <mesh position={[0, 4.25, 0]} castShadow>
+      <mesh position={[0, 4.25, 0]}>
         <cylinderGeometry args={[0.06, 0.09, 8.5, 8]} />
         <meshStandardMaterial color="#1a1c22" roughness={0.6} metalness={0.8} />
       </mesh>
@@ -31,22 +31,18 @@ function StreetLight({ position }: { position: [number, number, number] }) {
       {/* Emissive lamp element */}
       <mesh position={[x < 0 ? 1.35 : -1.35, 8.2, 0]}>
         <boxGeometry args={[0.38, 0.05, 0.22]} />
-        <meshStandardMaterial
-          color="#E6B87A"
-          emissive="#E6B87A"
-          emissiveIntensity={3}
-          roughness={0.4}
-        />
+        <meshStandardMaterial color="#E6B87A" emissive="#E6B87A" emissiveIntensity={3} roughness={0.4} />
       </mesh>
-      {/* Point light */}
-      <pointLight
-        position={[x < 0 ? 1.35 : -1.35, 7.9, 0]}
-        color="#E6B87A"
-        intensity={28}
-        distance={22}
-        decay={2}
-        castShadow={false}
-      />
+      {/* Point light — only every 3rd pair to limit GPU light count */}
+      {lit && (
+        <pointLight
+          position={[x < 0 ? 1.35 : -1.35, 7.9, 0]}
+          color="#E6B87A"
+          intensity={42}
+          distance={32}
+          decay={2}
+        />
+      )}
     </group>
   )
 }
@@ -54,21 +50,8 @@ function StreetLight({ position }: { position: [number, number, number] }) {
 export function Lights() {
   return (
     <>
-      {/* Overcast moon — sole shadow-casting directional */}
-      <directionalLight
-        position={[30, 80, 20]}
-        intensity={0.85}
-        color="#c0cce0"
-        castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-near={0.5}
-        shadow-camera-far={400}
-        shadow-camera-left={-120}
-        shadow-camera-right={120}
-        shadow-camera-top={120}
-        shadow-camera-bottom={-120}
-        shadow-bias={-0.0005}
-      />
+      {/* Overcast moon */}
+      <directionalLight position={[30, 80, 20]} intensity={0.85} color="#c0cce0" />
 
       {/* Hemisphere fill */}
       <hemisphereLight args={["#1a2a40", "#07100D", 0.65]} />
@@ -76,9 +59,9 @@ export function Lights() {
       {/* Ambient base */}
       <ambientLight intensity={0.14} color="#0e1428" />
 
-      {/* Boulevard streetlights */}
+      {/* Boulevard streetlights — emissive mesh at all positions, point light every 3rd pair */}
       {LAMP_POSITIONS.map((pos, i) => (
-        <StreetLight key={i} position={pos} />
+        <StreetLight key={i} position={pos} lit={i % 6 < 2} />
       ))}
 
       {/* Plaza flood — Glacier accent */}
