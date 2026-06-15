@@ -1,7 +1,6 @@
 "use client"
 import { Suspense, useState, useEffect, useCallback, useRef } from "react"
 import { Canvas } from "@react-three/fiber"
-import { EffectComposer, Bloom } from "@react-three/postprocessing"
 import * as THREE from "three"
 import { Player, type PlayerSharedState } from "./Player"
 import { CatCompanion } from "./CatCompanion"
@@ -89,7 +88,6 @@ const QUALITY_DPR:        Record<Quality, [number, number]> = {
   low:    [1, 1.00],
 }
 const QUALITY_RAIN_COUNT: Record<Quality, number> = { high: 4000, medium: 2000, low: 0 }
-const QUALITY_BLOOM:      Record<Quality, boolean> = { high: true,  medium: true,  low: false }
 const QUALITY_SHADOWS:    Record<Quality, boolean> = { high: true,  medium: false, low: false }
 
 interface Props { onExit: () => void }
@@ -99,10 +97,9 @@ type SceneProps = Props & {
   onPrompt:    (t: string | null) => void
   playerState: React.MutableRefObject<PlayerSharedState>
   rainCount:   number
-  bloom:       boolean
 }
 
-function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount, bloom }: SceneProps) {
+function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount }: SceneProps) {
   return (
     <>
       <color attach="background" args={["#05070B"]} />
@@ -121,12 +118,6 @@ function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount, bloom }: 
           <InspectableObject key={def.id} def={def} playerState={playerState} />
         ))}
       </Suspense>
-
-      {bloom && (
-        <EffectComposer>
-          <Bloom intensity={0.62} luminanceThreshold={0.60} luminanceSmoothing={0.80} mipmapBlur />
-        </EffectComposer>
-      )}
     </>
   )
 }
@@ -144,7 +135,6 @@ export function CompoundWorld({ onExit }: Props) {
   const [quality]  = useState<Quality>(detectQuality)
   const dpr        = QUALITY_DPR[quality]
   const rainCount  = QUALITY_RAIN_COUNT[quality]
-  const bloom      = QUALITY_BLOOM[quality]
   const shadows    = QUALITY_SHADOWS[quality]
 
   /* Interior state */
@@ -202,7 +192,7 @@ export function CompoundWorld({ onExit }: Props) {
       >
         <Scene
           onExit={onExit} fogDensity={fogDensity} onPrompt={handlePrompt}
-          playerState={playerState} rainCount={rainCount} bloom={bloom}
+          playerState={playerState} rainCount={rainCount}
         />
       </Canvas>
 

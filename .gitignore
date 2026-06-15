@@ -32,17 +32,3 @@ site3.png
 site4.png
 site5.png
 site6.png
-
-# Claude / agent internals
-.agents/
-.claude/
-Brand_assets/.claude/
-skills-lock.json
-.mcp.json.save
-
-# Local reference screenshots (not deployed)
-universe-game.png
-universe-hub.png
-universe-loading.png
-universe-v2.png
-videogamecompound.jpeg
