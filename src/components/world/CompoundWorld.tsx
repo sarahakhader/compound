@@ -1,5 +1,6 @@
 "use client"
 import { Suspense, useState, useEffect, useCallback, useRef } from "react"
+import { useFrame } from "@react-three/fiber"
 import { Canvas } from "@react-three/fiber"
 import * as THREE from "three"
 import { Player, type PlayerSharedState } from "./Player"
@@ -89,7 +90,7 @@ const QUALITY_DPR:        Record<Quality, [number, number]> = {
 }
 const QUALITY_RAIN_COUNT: Record<Quality, number> = { high: 2000, medium: 1000, low: 0 }
 
-interface Props { onExit: () => void }
+interface Props { onExit: () => void; onReady?: () => void }
 
 type SceneProps = Props & {
   fogDensity:  number
@@ -98,7 +99,14 @@ type SceneProps = Props & {
   rainCount:   number
 }
 
-function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount }: SceneProps) {
+function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount, onReady }: SceneProps) {
+  const firedReady = useRef(false)
+  useFrame(() => {
+    if (!firedReady.current) {
+      firedReady.current = true
+      onReady?.()
+    }
+  })
   return (
     <>
       <color attach="background" args={["#05070B"]} />
@@ -121,7 +129,7 @@ function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount }: ScenePr
   )
 }
 
-export function CompoundWorld({ onExit }: Props) {
+export function CompoundWorld({ onExit, onReady }: Props) {
   const [prompt, setPrompt]         = useState<string | null>(null)
   const [interior, setInterior]     = useState(false)
   const [inspecting, setInspecting] = useState<InspectableDef | null>(null)
@@ -189,7 +197,7 @@ export function CompoundWorld({ onExit }: Props) {
       >
         <Scene
           onExit={onExit} fogDensity={fogDensity} onPrompt={handlePrompt}
-          playerState={playerState} rainCount={rainCount}
+          playerState={playerState} rainCount={rainCount} onReady={onReady}
         />
       </Canvas>
 
