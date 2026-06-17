@@ -32,22 +32,22 @@ const EXTERIOR_RETURN = new THREE.Vector3(65, 0, -100)
 /* ── Constants ── */
 const WALK_SPEED    = 12.0
 const RUN_SPEED     = 22.0
-const CAM_DIST      = 5.0    // orbital arm length (metres)
-const CAM_LOOK_Y    = 1.25   // look-at height on player body
-const CAM_STIFFNESS = 18     // framerate-independent spring (larger = tighter)
-const CAM_MIN_Y    = 0.8    // camera never clips below this world height
-const MOUSE_SENS   = 0.0022
-const GAMEPAD_SENS = 2.2    // radians/sec for stick camera
-const GAMEPAD_DEAD = 0.12
-const PLAYER_R     = 0.42
-const PLAYER_Y     = 0
+const CAM_DIST      = 5.2
+const CAM_LOOK_Y    = 1.35
+const CAM_STIFFNESS = 18
+const CAM_MIN_Y     = 0.8
+const ARROW_TURN    = 2.4   // radians/sec for arrow key camera rotation
+const PITCH_TURN    = 1.4   // radians/sec for arrow key pitch
+const GAMEPAD_SENS  = 2.2
+const GAMEPAD_DEAD  = 0.12
+const PLAYER_R      = 0.42
+const PLAYER_Y      = 0
 
 /* Persistent vectors — no allocation in hot path */
 const _fwd       = new THREE.Vector3()
 const _right     = new THREE.Vector3()
 const _camTarget = new THREE.Vector3()
 
-/* Compute spherical orbital camera target from player state */
 function computeCamTarget(px: number, pz: number, yaw: number, pitch: number): THREE.Vector3 {
   const cosP = Math.cos(pitch)
   const sinP = Math.sin(pitch)
@@ -58,7 +58,6 @@ function computeCamTarget(px: number, pz: number, yaw: number, pitch: number): T
   )
 }
 
-/* Shared player state — written every frame, read by CatCompanion with zero re-renders */
 export interface PlayerSharedState {
   pos:    THREE.Vector3
   yaw:    number
@@ -72,14 +71,24 @@ export interface PlayerProps {
   playerState?: React.MutableRefObject<PlayerSharedState>
 }
 
+/* ── Shared materials (avoid recreating per render) ── */
+const MAT_SKIN   = new THREE.MeshStandardMaterial({ color: "#C68A52", roughness: 0.60, metalness: 0.0 })
+const MAT_JACKET = new THREE.MeshStandardMaterial({ color: "#0d0f16", roughness: 0.72, metalness: 0.10 })
+const MAT_PANTS  = new THREE.MeshStandardMaterial({ color: "#0e1018", roughness: 0.82, metalness: 0.04 })
+const MAT_BOOT   = new THREE.MeshStandardMaterial({ color: "#0a0b0e", roughness: 0.45, metalness: 0.30 })
+const MAT_HAIR   = new THREE.MeshStandardMaterial({ color: "#1e0e06", roughness: 0.94, metalness: 0.0 })
+const MAT_EYE    = new THREE.MeshStandardMaterial({ color: "#060606", roughness: 0.05, metalness: 0.6 })
+const MAT_WHITE  = new THREE.MeshStandardMaterial({ color: "#dde8ff", roughness: 0.3,  metalness: 0.0, emissive: "#dde8ff", emissiveIntensity: 0.15 })
+const MAT_SOLE   = new THREE.MeshStandardMaterial({ color: "#1a1a1f", roughness: 0.85, metalness: 0.05 })
+const MAT_SHIRT  = new THREE.MeshStandardMaterial({ color: "#1c2535", roughness: 0.80, metalness: 0.05 })
+
 export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps) {
-  const { camera, gl } = useThree()
+  const { camera } = useThree()
 
   const pos         = useRef(new THREE.Vector3(0, PLAYER_Y, 8))
   const yaw         = useRef(0)
-  const pitch       = useRef(-0.18)   // slight downward look → camera sits above player
+  const pitch       = useRef(-0.22)
   const keys        = useRef<Record<string, boolean>>({})
-  const locked      = useRef(false)
   const interior    = useRef(false)
   const nearTrigger = useRef(false)
 
@@ -91,26 +100,13 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
   const walkPhase   = useRef(0)
   const idlePhase   = useRef(0)
 
-  /* ── Snap camera immediately on mount (no lerp drift on first frame) ── */
   useEffect(() => {
-    camera.position.copy(
-      computeCamTarget(pos.current.x, pos.current.z, yaw.current, pitch.current)
-    )
+    camera.position.copy(computeCamTarget(pos.current.x, pos.current.z, yaw.current, pitch.current))
     camera.lookAt(pos.current.x, CAM_LOOK_Y, pos.current.z)
   }, [camera])
 
-  /* ── Input / pointer lock ── */
+  /* ── Input — keyboard only, no pointer lock ── */
   useEffect(() => {
-    const canvas = gl.domElement
-
-    const onLockChange = () => { locked.current = document.pointerLockElement === canvas }
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!locked.current) return
-      yaw.current  += e.movementX * MOUSE_SENS
-      pitch.current = Math.max(-0.50, Math.min(0.25, pitch.current - e.movementY * MOUSE_SENS))
-    }
-
     const onKeyDown = (e: KeyboardEvent) => {
       keys.current[e.code] = true
 
@@ -132,7 +128,7 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
           camera.position.copy(computeCamTarget(EXTERIOR_RETURN.x, EXTERIOR_RETURN.z, Math.PI / 2, pitch.current))
           window.dispatchEvent(new CustomEvent("compound-interior", { detail: { active: false } }))
         } else {
-          locked.current ? document.exitPointerLock() : onExit()
+          onExit()
         }
       }
 
@@ -141,64 +137,49 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
     }
 
     const onKeyUp = (e: KeyboardEvent) => { keys.current[e.code] = false }
-    const onClick = () => {
-      if (!locked.current) {
-        // Chrome 116+ returns a Promise — must be caught or it becomes an unhandled rejection
-        const p = canvas.requestPointerLock()
-        if (p && typeof p.catch === "function") p.catch(() => undefined)
-      }
-    }
 
-    canvas.addEventListener("click", onClick)
-    document.addEventListener("pointerlockchange", onLockChange)
-    document.addEventListener("mousemove", onMouseMove)
     window.addEventListener("keydown", onKeyDown)
-    window.addEventListener("keyup", onKeyUp)
-
+    window.addEventListener("keyup",   onKeyUp)
     return () => {
-      canvas.removeEventListener("click", onClick)
-      document.removeEventListener("pointerlockchange", onLockChange)
-      document.removeEventListener("mousemove", onMouseMove)
       window.removeEventListener("keydown", onKeyDown)
-      window.removeEventListener("keyup", onKeyUp)
-      if (document.pointerLockElement === canvas) document.exitPointerLock()
+      window.removeEventListener("keyup",   onKeyUp)
     }
-  }, [gl, onExit])
+  }, [camera, onExit, onPrompt])
 
   /* ── Frame loop ── */
   useFrame((_, rawDt) => {
     const dt = Math.min(rawDt, 0.05)
     const k  = keys.current
-    const y  = yaw.current
 
-    /* Orientation basis */
+    /* Arrow keys rotate camera — independent of movement */
+    if (k["ArrowLeft"])  yaw.current   += ARROW_TURN  * dt
+    if (k["ArrowRight"]) yaw.current   -= ARROW_TURN  * dt
+    if (k["ArrowUp"])    pitch.current  = Math.max(-0.50, pitch.current - PITCH_TURN * dt)
+    if (k["ArrowDown"])  pitch.current  = Math.min( 0.28, pitch.current + PITCH_TURN * dt)
+
+    const y = yaw.current
+
+    /* WASD movement direction — relative to camera yaw */
     _fwd.set(-Math.sin(y), 0, -Math.cos(y))
     _right.set(Math.cos(y), 0, -Math.sin(y))
 
-    /* Keyboard movement input */
     let dx = 0, dz = 0
     let run = k["ShiftLeft"] || k["ShiftRight"]
-    if (k["KeyW"] || k["ArrowUp"])    { dx += _fwd.x;   dz += _fwd.z   }
-    if (k["KeyS"] || k["ArrowDown"])  { dx -= _fwd.x;   dz -= _fwd.z   }
-    if (k["KeyA"] || k["ArrowLeft"])  { dx -= _right.x; dz -= _right.z }
-    if (k["KeyD"] || k["ArrowRight"]) { dx += _right.x; dz += _right.z }
+    if (k["KeyW"]) { dx += _fwd.x;   dz += _fwd.z   }
+    if (k["KeyS"]) { dx -= _fwd.x;   dz -= _fwd.z   }
+    if (k["KeyA"]) { dx -= _right.x; dz -= _right.z }
+    if (k["KeyD"]) { dx += _right.x; dz += _right.z }
 
-    /* Gamepad input — polled each frame */
+    /* Gamepad — left stick move, right stick camera */
     const pads = navigator.getGamepads?.()
     if (pads) {
       for (const pad of pads) {
         if (!pad?.connected) continue
         const dead = (v: number) => (Math.abs(v) > GAMEPAD_DEAD ? v : 0)
-        const lx = dead(pad.axes[0])
-        const ly = dead(pad.axes[1])
-        /* Left stick → movement */
-        dx += _right.x * lx - _fwd.x * ly
-        dz += _right.z * lx - _fwd.z * ly
-        /* Right stick → camera orbit */
+        dx += _right.x * dead(pad.axes[0]) - _fwd.x * dead(pad.axes[1])
+        dz += _right.z * dead(pad.axes[0]) - _fwd.z * dead(pad.axes[1])
         yaw.current   += dead(pad.axes[2]) * GAMEPAD_SENS * dt
-        pitch.current  = Math.max(-0.50, Math.min(0.25,
-          pitch.current - dead(pad.axes[3]) * GAMEPAD_SENS * dt))
-        /* RB or R-trigger → run */
+        pitch.current  = Math.max(-0.50, Math.min(0.28, pitch.current - dead(pad.axes[3]) * GAMEPAD_SENS * dt))
         if (pad.buttons[5]?.pressed || (pad.buttons[7]?.value ?? 0) > 0.5) run = true
         break
       }
@@ -208,8 +189,7 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
     const moving = len > 0.01
     if (moving) { dx /= len; dz /= len }
 
-    /* Slide-collision movement */
-    const spd = run ? RUN_SPEED : WALK_SPEED
+    const spd  = run ? RUN_SPEED : WALK_SPEED
     const step = spd * dt
     const p    = pos.current
     const intr = interior.current
@@ -218,9 +198,9 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
     if (!blocked(nx, p.z, PLAYER_R, colliders, intr)) p.x = nx
     if (!blocked(p.x, nz, PLAYER_R, colliders, intr)) p.z = nz
 
-    /* Trigger proximity */
+    /* Estate entrance trigger */
     if (!intr) {
-      const dist = Math.hypot(p.x - TRIGGER_POS.x, p.z - TRIGGER_POS.z)
+      const dist    = Math.hypot(p.x - TRIGGER_POS.x, p.z - TRIGGER_POS.z)
       const nowNear = dist < 5
       if (nowNear !== nearTrigger.current) {
         nearTrigger.current = nowNear
@@ -228,145 +208,352 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
       }
     }
 
-    /* Animation phases — walk and idle are mutually exclusive */
-    if (moving) {
-      walkPhase.current += dt * (run ? 22 : 14)
-      idlePhase.current  = 0
-    } else {
-      idlePhase.current += dt
-    }
+    /* Animation phases */
+    if (moving) { walkPhase.current += dt * (run ? 22 : 14); idlePhase.current = 0 }
+    else        { idlePhase.current += dt }
     const wp = walkPhase.current
     const ip = idlePhase.current
 
-    /* Vertical body displacement */
-    const walkBob = moving ? Math.sin(wp) * 0.045 : 0
-    const idleBob = moving ? 0 : Math.sin(ip * 1.1 * Math.PI * 2) * 0.006
+    const walkBob = moving ? Math.sin(wp) * 0.038 : 0
+    const idleBob = moving ? 0 : Math.sin(ip * 1.1 * Math.PI * 2) * 0.005
 
-    /* Limb swing — walk swing or idle arm sway */
-    const swing      = moving ? Math.sin(wp) * 0.42 : 0
-    const idleSwayL  = moving ? 0 : Math.sin(ip * 0.85 * Math.PI * 2) * 0.04
-    const idleSwayR  = moving ? 0 : -Math.sin(ip * 0.85 * Math.PI * 2) * 0.04
+    const swing     = moving ? Math.sin(wp) * 0.40 : 0
+    const idleSwayL = moving ? 0 :  Math.sin(ip * 0.85 * Math.PI * 2) * 0.035
+    const idleSwayR = moving ? 0 : -Math.sin(ip * 0.85 * Math.PI * 2) * 0.035
 
     if (leftLegRef.current)  leftLegRef.current.rotation.x  =  swing
     if (rightLegRef.current) rightLegRef.current.rotation.x = -swing
-    if (leftArmRef.current)  leftArmRef.current.rotation.x  = moving ? -swing * 0.55 : idleSwayL
-    if (rightArmRef.current) rightArmRef.current.rotation.x = moving ?  swing * 0.55 : idleSwayR
+    if (leftArmRef.current)  leftArmRef.current.rotation.x  = moving ? -swing * 0.5 : idleSwayL
+    if (rightArmRef.current) rightArmRef.current.rotation.x = moving ?  swing * 0.5 : idleSwayR
 
     if (rootRef.current) {
       rootRef.current.position.set(p.x, walkBob + idleBob, p.z)
       rootRef.current.rotation.y = y
     }
 
-    /* Broadcast to shared state (CatCompanion, future HUD, etc.) */
     if (playerState?.current) {
       playerState.current.pos.copy(p)
       playerState.current.yaw    = y
       playerState.current.moving = moving
     }
 
-    /* ── Orbital camera — spherical coordinates around player ── */
-    camera.position.lerp(
-      computeCamTarget(p.x, p.z, y, pitch.current),
-      1 - Math.exp(-CAM_STIFFNESS * dt),
-    )
+    camera.position.lerp(computeCamTarget(p.x, p.z, y, pitch.current), 1 - Math.exp(-CAM_STIFFNESS * dt))
     camera.lookAt(p.x, CAM_LOOK_Y, p.z)
   })
 
-  /* ── Player mesh (unchanged) ── */
+  /* ── Realistic character mesh ── */
   return (
     <group ref={rootRef}>
-      {/* Torso — structured black jacket */}
-      <mesh position={[0, 1.0, 0]} castShadow>
-        <cylinderGeometry args={[0.26, 0.3, 0.55, 10]} />
-        <meshStandardMaterial color="#0d0e12" roughness={0.62} metalness={0.08} />
-      </mesh>
-      {/* Skin — exposed midriff strip */}
-      <mesh position={[0, 0.72, 0]} castShadow>
-        <cylinderGeometry args={[0.25, 0.26, 0.18, 10]} />
-        <meshStandardMaterial color="#8B5E3C" roughness={0.65} />
-      </mesh>
 
-      {/* Pelvis / waist */}
-      <mesh position={[0, 0.58, 0]} castShadow>
-        <cylinderGeometry args={[0.27, 0.26, 0.2, 10]} />
-        <meshStandardMaterial color="#0e0f14" roughness={0.80} />
-      </mesh>
+      {/* ════ LOWER BODY ════ */}
 
-      {/* Left leg */}
-      <group ref={leftLegRef} position={[-0.14, 0.55, 0]}>
-        <mesh position={[0, -0.2, 0]} castShadow>
-          <cylinderGeometry args={[0.11, 0.1, 0.38, 8]} />
-          <meshStandardMaterial color="#0e0f14" roughness={0.80} />
+      {/* Left leg group — pivots at hip */}
+      <group ref={leftLegRef} position={[-0.13, 0.62, 0]}>
+        {/* Thigh */}
+        <mesh position={[0, -0.22, 0]}>
+          <cylinderGeometry args={[0.115, 0.105, 0.44, 12]} />
+          <primitive object={MAT_PANTS} attach="material" />
         </mesh>
-        <mesh position={[0, -0.48, 0]} castShadow>
-          <cylinderGeometry args={[0.09, 0.08, 0.34, 8]} />
-          <meshStandardMaterial color="#0e0f14" roughness={0.80} />
+        {/* Knee cap */}
+        <mesh position={[0, -0.455, 0.015]}>
+          <sphereGeometry args={[0.082, 8, 6]} />
+          <primitive object={MAT_PANTS} attach="material" />
         </mesh>
-        <mesh position={[0, -0.67, 0.04]} castShadow>
-          <boxGeometry args={[0.14, 0.1, 0.22]} />
-          <meshStandardMaterial color="#111" roughness={0.5} metalness={0.2} />
+        {/* Shin */}
+        <mesh position={[0, -0.64, 0]}>
+          <cylinderGeometry args={[0.085, 0.072, 0.37, 10]} />
+          <primitive object={MAT_PANTS} attach="material" />
+        </mesh>
+        {/* Boot body */}
+        <mesh position={[0, -0.875, 0.024]}>
+          <boxGeometry args={[0.145, 0.22, 0.245]} />
+          <primitive object={MAT_BOOT} attach="material" />
+        </mesh>
+        {/* Boot toe cap */}
+        <mesh position={[0, -0.895, 0.135]}>
+          <boxGeometry args={[0.13, 0.18, 0.08]} />
+          <primitive object={MAT_BOOT} attach="material" />
+        </mesh>
+        {/* Boot sole */}
+        <mesh position={[0, -0.99, 0.034]}>
+          <boxGeometry args={[0.155, 0.03, 0.28]} />
+          <primitive object={MAT_SOLE} attach="material" />
         </mesh>
       </group>
 
       {/* Right leg */}
-      <group ref={rightLegRef} position={[0.14, 0.55, 0]}>
-        <mesh position={[0, -0.2, 0]} castShadow>
-          <cylinderGeometry args={[0.11, 0.1, 0.38, 8]} />
-          <meshStandardMaterial color="#0e0f14" roughness={0.80} />
+      <group ref={rightLegRef} position={[0.13, 0.62, 0]}>
+        <mesh position={[0, -0.22, 0]}>
+          <cylinderGeometry args={[0.115, 0.105, 0.44, 12]} />
+          <primitive object={MAT_PANTS} attach="material" />
         </mesh>
-        <mesh position={[0, -0.48, 0]} castShadow>
-          <cylinderGeometry args={[0.09, 0.08, 0.34, 8]} />
-          <meshStandardMaterial color="#0e0f14" roughness={0.80} />
+        <mesh position={[0, -0.455, 0.015]}>
+          <sphereGeometry args={[0.082, 8, 6]} />
+          <primitive object={MAT_PANTS} attach="material" />
         </mesh>
-        <mesh position={[0, -0.67, 0.04]} castShadow>
-          <boxGeometry args={[0.14, 0.1, 0.22]} />
-          <meshStandardMaterial color="#111" roughness={0.5} metalness={0.2} />
+        <mesh position={[0, -0.64, 0]}>
+          <cylinderGeometry args={[0.085, 0.072, 0.37, 10]} />
+          <primitive object={MAT_PANTS} attach="material" />
+        </mesh>
+        <mesh position={[0, -0.875, 0.024]}>
+          <boxGeometry args={[0.145, 0.22, 0.245]} />
+          <primitive object={MAT_BOOT} attach="material" />
+        </mesh>
+        <mesh position={[0, -0.895, 0.135]}>
+          <boxGeometry args={[0.13, 0.18, 0.08]} />
+          <primitive object={MAT_BOOT} attach="material" />
+        </mesh>
+        <mesh position={[0, -0.99, 0.034]}>
+          <boxGeometry args={[0.155, 0.03, 0.28]} />
+          <primitive object={MAT_SOLE} attach="material" />
         </mesh>
       </group>
 
-      {/* Left arm */}
-      <group ref={leftArmRef} position={[-0.32, 1.12, 0]}>
-        <mesh position={[0, -0.17, 0]} castShadow>
-          <cylinderGeometry args={[0.09, 0.08, 0.32, 8]} />
-          <meshStandardMaterial color="#8B5E3C" roughness={0.65} />
+      {/* ════ TORSO ════ */}
+
+      {/* Hips */}
+      <mesh position={[0, 0.62, 0]}>
+        <cylinderGeometry args={[0.275, 0.265, 0.18, 12]} />
+        <primitive object={MAT_PANTS} attach="material" />
+      </mesh>
+
+      {/* Belt */}
+      <mesh position={[0, 0.72, 0]}>
+        <cylinderGeometry args={[0.278, 0.278, 0.055, 12]} />
+        <meshStandardMaterial color="#0a0b0d" roughness={0.35} metalness={0.55} />
+      </mesh>
+      {/* Belt buckle */}
+      <mesh position={[0, 0.72, -0.28]}>
+        <boxGeometry args={[0.06, 0.048, 0.012]} />
+        <meshStandardMaterial color="#8a8a8a" roughness={0.2} metalness={0.9} />
+      </mesh>
+
+      {/* Undershirt visible at waist */}
+      <mesh position={[0, 0.80, 0]}>
+        <cylinderGeometry args={[0.265, 0.275, 0.12, 12]} />
+        <primitive object={MAT_SHIRT} attach="material" />
+      </mesh>
+
+      {/* Main jacket torso — tapered, wider shoulders */}
+      <mesh position={[0, 1.02, 0]}>
+        <cylinderGeometry args={[0.285, 0.268, 0.48, 12]} />
+        <primitive object={MAT_JACKET} attach="material" />
+      </mesh>
+
+      {/* Chest / pectoral volume */}
+      <mesh position={[0, 1.05, -0.19]}>
+        <boxGeometry args={[0.38, 0.28, 0.10]} />
+        <primitive object={MAT_JACKET} attach="material" />
+      </mesh>
+
+      {/* Left jacket lapel */}
+      <mesh position={[-0.09, 1.16, -0.27]} rotation={[0.18, 0.18, 0.25]}>
+        <boxGeometry args={[0.10, 0.20, 0.025]} />
+        <primitive object={MAT_JACKET} attach="material" />
+      </mesh>
+      {/* Right jacket lapel */}
+      <mesh position={[0.09, 1.16, -0.27]} rotation={[0.18, -0.18, -0.25]}>
+        <boxGeometry args={[0.10, 0.20, 0.025]} />
+        <primitive object={MAT_JACKET} attach="material" />
+      </mesh>
+
+      {/* Shirt visible between lapels */}
+      <mesh position={[0, 1.10, -0.29]}>
+        <boxGeometry args={[0.09, 0.22, 0.012]} />
+        <primitive object={MAT_SHIRT} attach="material" />
+      </mesh>
+
+      {/* Shoulder pads — slight width */}
+      <mesh position={[-0.30, 1.24, 0]}>
+        <sphereGeometry args={[0.09, 8, 6]} />
+        <primitive object={MAT_JACKET} attach="material" />
+      </mesh>
+      <mesh position={[0.30, 1.24, 0]}>
+        <sphereGeometry args={[0.09, 8, 6]} />
+        <primitive object={MAT_JACKET} attach="material" />
+      </mesh>
+
+      {/* Jacket collar */}
+      <mesh position={[0, 1.28, -0.05]}>
+        <cylinderGeometry args={[0.14, 0.19, 0.10, 10]} />
+        <primitive object={MAT_JACKET} attach="material" />
+      </mesh>
+
+      {/* ════ ARMS ════ */}
+
+      {/* Left arm — pivots at shoulder */}
+      <group ref={leftArmRef} position={[-0.35, 1.22, 0]}>
+        {/* Upper arm (jacket sleeve) */}
+        <mesh position={[0, -0.19, 0]}>
+          <cylinderGeometry args={[0.092, 0.082, 0.36, 10]} />
+          <primitive object={MAT_JACKET} attach="material" />
         </mesh>
-        <mesh position={[0, -0.42, 0]} castShadow>
-          <cylinderGeometry args={[0.075, 0.07, 0.28, 8]} />
-          <meshStandardMaterial color="#8B5E3C" roughness={0.65} />
+        {/* Elbow */}
+        <mesh position={[0, -0.40, 0]}>
+          <sphereGeometry args={[0.074, 8, 6]} />
+          <primitive object={MAT_JACKET} attach="material" />
+        </mesh>
+        {/* Forearm (skin — sleeve rolled or short) */}
+        <mesh position={[0, -0.58, 0]}>
+          <cylinderGeometry args={[0.070, 0.060, 0.34, 10]} />
+          <primitive object={MAT_SKIN} attach="material" />
+        </mesh>
+        {/* Wrist */}
+        <mesh position={[0, -0.76, 0]}>
+          <sphereGeometry args={[0.058, 8, 6]} />
+          <primitive object={MAT_SKIN} attach="material" />
+        </mesh>
+        {/* Hand */}
+        <mesh position={[0, -0.86, 0.01]}>
+          <boxGeometry args={[0.088, 0.095, 0.065]} />
+          <primitive object={MAT_SKIN} attach="material" />
         </mesh>
       </group>
 
       {/* Right arm */}
-      <group ref={rightArmRef} position={[0.32, 1.12, 0]}>
-        <mesh position={[0, -0.17, 0]} castShadow>
-          <cylinderGeometry args={[0.09, 0.08, 0.32, 8]} />
-          <meshStandardMaterial color="#8B5E3C" roughness={0.65} />
+      <group ref={rightArmRef} position={[0.35, 1.22, 0]}>
+        <mesh position={[0, -0.19, 0]}>
+          <cylinderGeometry args={[0.092, 0.082, 0.36, 10]} />
+          <primitive object={MAT_JACKET} attach="material" />
         </mesh>
-        <mesh position={[0, -0.42, 0]} castShadow>
-          <cylinderGeometry args={[0.075, 0.07, 0.28, 8]} />
-          <meshStandardMaterial color="#8B5E3C" roughness={0.65} />
+        <mesh position={[0, -0.40, 0]}>
+          <sphereGeometry args={[0.074, 8, 6]} />
+          <primitive object={MAT_JACKET} attach="material" />
+        </mesh>
+        <mesh position={[0, -0.58, 0]}>
+          <cylinderGeometry args={[0.070, 0.060, 0.34, 10]} />
+          <primitive object={MAT_SKIN} attach="material" />
+        </mesh>
+        <mesh position={[0, -0.76, 0]}>
+          <sphereGeometry args={[0.058, 8, 6]} />
+          <primitive object={MAT_SKIN} attach="material" />
+        </mesh>
+        <mesh position={[0, -0.86, 0.01]}>
+          <boxGeometry args={[0.088, 0.095, 0.065]} />
+          <primitive object={MAT_SKIN} attach="material" />
         </mesh>
       </group>
 
-      {/* Head */}
-      <mesh position={[0, 1.58, 0]} castShadow>
-        <sphereGeometry args={[0.21, 14, 10]} />
-        <meshStandardMaterial color="#8B5E3C" roughness={0.6} />
+      {/* ════ HEAD & FACE ════ */}
+
+      {/* Neck */}
+      <mesh position={[0, 1.36, 0]}>
+        <cylinderGeometry args={[0.082, 0.095, 0.14, 10]} />
+        <primitive object={MAT_SKIN} attach="material" />
       </mesh>
 
-      {/* Hair */}
-      <mesh position={[0, 1.76, -0.01]} castShadow>
-        <sphereGeometry args={[0.225, 12, 8]} />
-        <meshStandardMaterial color="#2c1810" roughness={0.92} />
+      {/* Head base */}
+      <mesh position={[0, 1.60, 0]}>
+        <sphereGeometry args={[0.195, 18, 14]} />
+        <primitive object={MAT_SKIN} attach="material" />
       </mesh>
-      <mesh position={[-0.14, 1.64, 0.04]} castShadow>
-        <sphereGeometry args={[0.1, 8, 6]} />
-        <meshStandardMaterial color="#2c1810" roughness={0.92} />
+
+      {/* Brow ridge — subtle protrusion above eyes */}
+      <mesh position={[0, 1.685, -0.168]} rotation={[0.32, 0, 0]}>
+        <boxGeometry args={[0.22, 0.035, 0.055]} />
+        <primitive object={MAT_SKIN} attach="material" />
       </mesh>
-      <mesh position={[0.14, 1.64, 0.04]} castShadow>
-        <sphereGeometry args={[0.1, 8, 6]} />
-        <meshStandardMaterial color="#2c1810" roughness={0.92} />
+
+      {/* Nose bridge + tip */}
+      <mesh position={[0, 1.624, -0.187]}>
+        <boxGeometry args={[0.042, 0.095, 0.052]} />
+        <primitive object={MAT_SKIN} attach="material" />
       </mesh>
+      <mesh position={[0, 1.572, -0.196]}>
+        <sphereGeometry args={[0.028, 7, 5]} />
+        <primitive object={MAT_SKIN} attach="material" />
+      </mesh>
+
+      {/* Cheekbones — subtle volume */}
+      <mesh position={[-0.115, 1.605, -0.152]}>
+        <sphereGeometry args={[0.055, 7, 5]} />
+        <primitive object={MAT_SKIN} attach="material" />
+      </mesh>
+      <mesh position={[0.115, 1.605, -0.152]}>
+        <sphereGeometry args={[0.055, 7, 5]} />
+        <primitive object={MAT_SKIN} attach="material" />
+      </mesh>
+
+      {/* Jaw / chin */}
+      <mesh position={[0, 1.505, -0.148]}>
+        <boxGeometry args={[0.145, 0.055, 0.065]} />
+        <primitive object={MAT_SKIN} attach="material" />
+      </mesh>
+
+      {/* Lips */}
+      <mesh position={[0, 1.545, -0.189]}>
+        <boxGeometry args={[0.080, 0.022, 0.018]} />
+        <meshStandardMaterial color="#8a4040" roughness={0.75} />
+      </mesh>
+
+      {/* Left eye */}
+      <mesh position={[-0.065, 1.660, -0.178]}>
+        <sphereGeometry args={[0.026, 8, 6]} />
+        <meshStandardMaterial color="#f0ece8" roughness={0.2} />
+      </mesh>
+      <mesh position={[-0.065, 1.660, -0.195]}>
+        <sphereGeometry args={[0.018, 8, 6]} />
+        <primitive object={MAT_EYE} attach="material" />
+      </mesh>
+      {/* Eye catch-light */}
+      <mesh position={[-0.058, 1.666, -0.208]}>
+        <sphereGeometry args={[0.005, 5, 4]} />
+        <primitive object={MAT_WHITE} attach="material" />
+      </mesh>
+
+      {/* Right eye */}
+      <mesh position={[0.065, 1.660, -0.178]}>
+        <sphereGeometry args={[0.026, 8, 6]} />
+        <meshStandardMaterial color="#f0ece8" roughness={0.2} />
+      </mesh>
+      <mesh position={[0.065, 1.660, -0.195]}>
+        <sphereGeometry args={[0.018, 8, 6]} />
+        <primitive object={MAT_EYE} attach="material" />
+      </mesh>
+      <mesh position={[0.072, 1.666, -0.208]}>
+        <sphereGeometry args={[0.005, 5, 4]} />
+        <primitive object={MAT_WHITE} attach="material" />
+      </mesh>
+
+      {/* Ear left */}
+      <mesh position={[-0.196, 1.608, 0.008]}>
+        <sphereGeometry args={[0.038, 7, 5]} />
+        <primitive object={MAT_SKIN} attach="material" />
+      </mesh>
+      {/* Ear right */}
+      <mesh position={[0.196, 1.608, 0.008]}>
+        <sphereGeometry args={[0.038, 7, 5]} />
+        <primitive object={MAT_SKIN} attach="material" />
+      </mesh>
+
+      {/* ════ HAIR ════ */}
+
+      {/* Main hair mass — covers crown and back */}
+      <mesh position={[0, 1.77, 0.018]}>
+        <sphereGeometry args={[0.208, 14, 10]} />
+        <primitive object={MAT_HAIR} attach="material" />
+      </mesh>
+      {/* Side volume — left temple to ear */}
+      <mesh position={[-0.155, 1.695, 0.020]}>
+        <sphereGeometry args={[0.118, 10, 7]} />
+        <primitive object={MAT_HAIR} attach="material" />
+      </mesh>
+      {/* Side volume — right */}
+      <mesh position={[0.155, 1.695, 0.020]}>
+        <sphereGeometry args={[0.118, 10, 7]} />
+        <primitive object={MAT_HAIR} attach="material" />
+      </mesh>
+      {/* Back — tapers down nape */}
+      <mesh position={[0, 1.660, 0.145]}>
+        <sphereGeometry args={[0.130, 10, 7]} />
+        <primitive object={MAT_HAIR} attach="material" />
+      </mesh>
+      {/* Forehead strand / fringe */}
+      <mesh position={[0, 1.762, -0.135]} rotation={[0.55, 0, 0]}>
+        <boxGeometry args={[0.14, 0.12, 0.04]} />
+        <primitive object={MAT_HAIR} attach="material" />
+      </mesh>
+
     </group>
   )
 }

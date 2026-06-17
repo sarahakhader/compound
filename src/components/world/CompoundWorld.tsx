@@ -227,7 +227,7 @@ export function CompoundWorld({ onExit, onReady }: Props) {
           fontFamily: "'Courier New', monospace", fontSize: 8.5, letterSpacing: "0.18em",
           color: "rgba(237,228,216,0.22)", pointerEvents: "none", whiteSpace: "nowrap",
         }}>
-          CLICK TO LOOK   ·   WASD MOVE   ·   SHIFT RUN   ·   ESC EXIT
+          WASD MOVE   ·   ARROWS LOOK   ·   SHIFT RUN   ·   ESC EXIT
         </div>
       )}
       {interior && !inspecting && (

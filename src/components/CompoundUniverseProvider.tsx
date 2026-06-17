@@ -56,7 +56,7 @@ function LoadingScreen({ visible }: { visible: boolean }) {
   return (
     <div
       style={{
-        position: "fixed", inset: 0, zIndex: 99997,
+        position: "fixed", inset: 0, zIndex: 99999,
         pointerEvents: visible ? "auto" : "none",
         opacity: visible ? 1 : 0,
         transition: "opacity 0.9s ease",
@@ -247,12 +247,13 @@ export function CompoundUniverseProvider() {
   return (
     <>
       {active && createPortal(
-        <GameErrorBoundary onReset={deactivate}>
-          {/* 3D world renders under the loading screen */}
-          <CompoundWorld onExit={deactivate} onReady={() => setWorldReady(true)} />
-          {/* Loading screen fades out once world signals ready */}
+        <>
+          <GameErrorBoundary onReset={deactivate}>
+            <CompoundWorld onExit={deactivate} onReady={() => setWorldReady(true)} />
+          </GameErrorBoundary>
+          {/* Loading screen is OUTSIDE the error boundary and always z-top */}
           <LoadingScreen visible={!worldReady} />
-        </GameErrorBoundary>,
+        </>,
         document.body
       )}
     </>
