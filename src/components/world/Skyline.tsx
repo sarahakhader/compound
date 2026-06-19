@@ -1,5 +1,5 @@
 "use client"
-import { useMemo } from "react"
+import { useMemo, useEffect } from "react"
 import * as THREE from "three"
 
 /* Generate a window-pattern emissive texture on a canvas */
@@ -36,6 +36,7 @@ function SkyTower({
     Math.max(2, Math.round(w / 3)),
     Math.max(4, Math.round(h / 6))
   ), [w, h])
+  useEffect(() => () => { winTex.dispose() }, [winTex])
 
   return (
     <group position={[x, 0, z]}>

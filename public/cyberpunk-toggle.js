@@ -108,6 +108,20 @@
   @media (prefers-reduced-motion: reduce) {
     #cu-cloud-wrap { transition: none; }
   }
+
+  /* Mobile — smaller cloud, re-anchored so it doesn't obscure content */
+  @media (max-width: 768px) {
+    #cu-cloud-wrap {
+      width: 180px;
+      bottom: 20px;
+      right: 16px;
+    }
+    #cu-cloud-bumps::before { width: 54px; height: 54px; left: 6px; }
+    #cu-cloud-bumps::after  { width: 66px; height: 66px; left: 50px; }
+    #cu-cloud-bump-r        { width: 46px; height: 46px; right: 6px; }
+    #cu-cloud-bumps         { height: 38px; }
+    #cyberpunk-toggle-btn   { height: 42px; font-size: 8px; letter-spacing: 1.2px; }
+  }
   `;
   document.head.appendChild(style);
 
@@ -167,7 +181,11 @@
     document.head.appendChild(s);
   }
 
+  /* On touch devices, the 3D world has no keyboard controls — send users to the hub page instead */
+  const isTouch = () => window.matchMedia("(pointer: coarse)").matches;
+
   btn.addEventListener("click", () => {
+    if (isTouch()) { window.location.href = "/universe"; return; }
     const cu = window.CompoundUniverse;
     if (cu && cu.active) { cu.stop(); setActive(false); return; }
     ensureLoaded(() => {

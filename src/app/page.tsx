@@ -107,6 +107,7 @@ const LogoCircles = () => (
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [submitLabel, setSubmitLabel] = useState("SUBMIT ↗")
+  const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [cyberpunk, setCyberpunk] = useState(false)
 
   useEffect(() => {
@@ -200,10 +201,46 @@ const plLogoRef = useRef<SVGSVGElement>(null)
 
   const closeMenu = () => setMenuOpen(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSubmitLabel("SENT ✓")
-    gsap.to(".f-submit", { color: "#6ECECE", duration: 0.4 })
+    if (submitState === "sending" || submitState === "sent") return
+
+    const form = e.currentTarget
+    const data = new FormData(form)
+
+    setSubmitState("sending")
+    setSubmitLabel("SENDING…")
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: data.get("firstName"),
+          lastName:  data.get("lastName"),
+          company:   data.get("company"),
+          email:     data.get("email"),
+          message:   data.get("message"),
+        }),
+      })
+
+      if (res.ok) {
+        setSubmitState("sent")
+        setSubmitLabel("SENT ✓")
+        gsap.to(".f-submit", { color: "#6ECECE", duration: 0.4 })
+        form.reset()
+      } else {
+        const { error } = await res.json().catch(() => ({ error: "Something went wrong." }))
+        setSubmitState("error")
+        setSubmitLabel("RETRY ↗")
+        console.error("[contact form]", error)
+        gsap.to(".f-submit", { color: "#CC4A12", duration: 0.4 })
+      }
+    } catch {
+      setSubmitState("error")
+      setSubmitLabel("RETRY ↗")
+      gsap.to(".f-submit", { color: "#CC4A12", duration: 0.4 })
+    }
   }
 
   return (
@@ -233,6 +270,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           <li><a href="#about"   onClick={closeMenu}>About</a></li>
           <li><Link href="/blankets" onClick={closeMenu}>Blankets</Link></li>
           <li><Link href="/story" onClick={closeMenu}>Story</Link></li>
+          <li><Link href="/universe" onClick={closeMenu}>Universe</Link></li>
           <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
         </ul>
         <div className="m-foot">
@@ -256,7 +294,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           </svg>
         </div>
 
-        <div className="hero-bottom" ref={heroBottomRef} ref={heroBottomRef}>
+        <div className="hero-bottom" ref={heroBottomRef}>
           <p className="hero-bl">Design Studio<br />Toronto 2026</p>
 
           <div className="hero-bc" id="hero-bc">
@@ -411,12 +449,14 @@ const plLogoRef = useRef<SVGSVGElement>(null)
             <div className="c-entry"><div className="etype">Instagram</div><div className="edet"><a href="https://instagram.com/whoiscompound" target="_blank" rel="noopener noreferrer">@whoiscompound</a></div></div>
           </div>
           <form className="c-form" onSubmit={handleSubmit}>
-            <div className="field"><label>First Name *</label><input type="text" required autoComplete="off" /><div className="field-line" /></div>
-            <div className="field"><label>Last Name *</label><input type="text" required autoComplete="off" /><div className="field-line" /></div>
-            <div className="field"><label>Company</label><input type="text" autoComplete="off" /><div className="field-line" /></div>
-            <div className="field"><label>Email *</label><input type="email" required autoComplete="off" /><div className="field-line" /></div>
-            <div className="field"><label>Message</label><textarea rows={1} autoComplete="off" /><div className="field-line" /></div>
-            <button className="f-submit" type="submit">{submitLabel}</button>
+            {/* Honeypot — hidden from humans, bots fill this in */}
+            <input type="text" name="_hp" aria-hidden="true" tabIndex={-1} style={{ display: "none" }} autoComplete="off" />
+            <div className="field"><label>First Name *</label><input name="firstName" type="text" required autoComplete="given-name" /><div className="field-line" /></div>
+            <div className="field"><label>Last Name *</label><input name="lastName" type="text" required autoComplete="family-name" /><div className="field-line" /></div>
+            <div className="field"><label>Company</label><input name="company" type="text" autoComplete="organization" /><div className="field-line" /></div>
+            <div className="field"><label>Email *</label><input name="email" type="email" required autoComplete="email" /><div className="field-line" /></div>
+            <div className="field"><label>Message</label><textarea name="message" rows={1} autoComplete="off" /><div className="field-line" /></div>
+            <button className="f-submit" type="submit" disabled={submitState === "sending" || submitState === "sent"}>{submitLabel}</button>
           </form>
         </div>
         <footer>
