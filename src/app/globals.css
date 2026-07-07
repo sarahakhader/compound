@@ -244,13 +244,13 @@ nav {
   transform: translateY(-110%);
   transition: transform .9s cubic-bezier(0.16,1,0.3,1);
 }
-#menu.open { transform: translateY(0); }
+#menu.open { transform: translateY(0); overflow-y: auto; }
 .m-tag { font-size: .62rem; letter-spacing: .28em; text-transform: uppercase; color: var(--linen); opacity: .3; margin-bottom: auto; }
 .m-links { list-style: none; }
 .m-links li { overflow: hidden; }
 .m-links a {
   display: block; font-family: var(--serif);
-  font-size: clamp(3.5rem, 9vw, 8rem); font-weight: 600; line-height: 1.05;
+  font-size: clamp(3rem, 7.5vw, 6rem); font-weight: 600; line-height: 1.05;
   color: var(--linen); text-decoration: none;
   transform: translateY(106%);
   transition: transform .78s cubic-bezier(0.16,1,0.3,1), color .28s;
@@ -258,6 +258,10 @@ nav {
 #menu.open .m-links li:nth-child(1) a { transform:translateY(0); transition-delay:.07s }
 #menu.open .m-links li:nth-child(2) a { transform:translateY(0); transition-delay:.13s }
 #menu.open .m-links li:nth-child(3) a { transform:translateY(0); transition-delay:.19s }
+#menu.open .m-links li:nth-child(4) a { transform:translateY(0); transition-delay:.25s }
+#menu.open .m-links li:nth-child(5) a { transform:translateY(0); transition-delay:.31s }
+#menu.open .m-links li:nth-child(6) a { transform:translateY(0); transition-delay:.37s }
+#menu.open .m-links li:nth-child(7) a { transform:translateY(0); transition-delay:.43s }
 .m-links a:hover { color: var(--molten); }
 .m-foot {
   display: flex; justify-content: space-between;
