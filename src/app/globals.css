@@ -527,18 +527,65 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 
 /* ── Blankets mobile ──────────────────────────────────────── */
 @media (max-width: 768px) {
+  /* Prevent horizontal overflow */
+  .blankets-page { overflow-x: hidden; }
+
+  /* Nav */
+  .bl-nav { padding: 1.2rem 1.5rem; }
+
+  /* Stack left/right vertically */
   .bl-main { grid-template-columns: 1fr; }
-  .bl-left { padding: 3rem 1.5rem 2rem; border-right: none; border-bottom: 1px solid rgba(237,228,216,.08); }
-  .bl-right { padding: 2rem 1.5rem; }
-  .bl-cs-grid { grid-template-columns: repeat(3, 1fr); gap: .8rem; }
+  .bl-left {
+    padding: 2.5rem 1.5rem 1.8rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(237,228,216,.08);
+  }
+  .bl-right { padding: 1.5rem 1.5rem 2rem; }
+
+  /* Title — 4rem is too large on iPhone, scale it down */
+  .bl-title { font-size: clamp(2.6rem, 13vw, 4rem) !important; line-height: .92; }
+
+  /* Eyebrow margin */
+  .bl-eyebrow { margin-bottom: 1rem; }
+
+  /* Carousel image — cap height so it doesn't dominate the screen */
+  .bl-slide { aspect-ratio: unset; max-height: 56vh; }
+  .bl-slide-img { object-fit: contain; }
+
+  /* Hide annotations and moss on mobile */
   .bl-annotations { display: none; }
   .bl-moss-svg { display: none; }
+
+  /* Carousel footer — wrap when narrow */
+  .bl-carousel-footer { flex-wrap: wrap; gap: .6rem; }
+  .bl-caption { font-size: .75rem; }
+
+  /* Spec grid — 2 columns */
   .bl-specs { grid-template-columns: 1fr 1fr; }
   .bl-spec-item:nth-child(2) { border-right: none; }
-  .bl-spec-item:nth-child(3) { grid-column: 1 / -1; border-right: none; border-top: 1px solid rgba(181,204,69,.12); }
-  .bl-footer { flex-direction: column; gap: .5rem; text-align: center; }
-  .bl-nav { padding: 1.2rem 1.5rem; }
+  .bl-spec-item:nth-child(3) {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-top: 1px solid rgba(181,204,69,.12);
+  }
+  /* Spec text is tiny by default — make readable on mobile */
+  .bl-spec-num   { font-size: .58rem; }
+  .bl-spec-label { font-size: .58rem; }
+  .bl-spec-val   { font-size: .85rem; }
+
+  /* Inquire link */
+  .bl-inquire { font-size: .66rem; margin-top: 1.4rem; }
+
+  /* Coming soon — 2 columns keeps cards large enough to read */
   .bl-coming-soon { padding: 3rem 1.5rem; }
+  .bl-cs-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+
+  /* Story CTA */
+  .bl-story-cta { padding: 2.5rem 1.5rem; }
+  .bl-story-link { font-size: .72rem; }
+
+  /* Footer */
+  .bl-footer { flex-direction: column; gap: .5rem; text-align: center; }
 }
 
 /* ── BLANKETS PAGE ──────────────────────────────────────── */
