@@ -271,6 +271,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           <li><Link href="/blankets" onClick={closeMenu}>Blankets</Link></li>
           <li><Link href="/story" onClick={closeMenu}>Story</Link></li>
           <li><Link href="/universe" onClick={closeMenu}>Universe</Link></li>
+          <li><Link href="/studio" onClick={closeMenu}>Studio</Link></li>
           <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
         </ul>
         <div className="m-foot">
