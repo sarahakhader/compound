@@ -30,14 +30,14 @@ const INTERIOR_POS    = new THREE.Vector3(200, 0, 0)
 const EXTERIOR_RETURN = new THREE.Vector3(65, 0, -100)
 
 /* ── Constants ── */
-const WALK_SPEED    = 12.0
-const RUN_SPEED     = 22.0
+const WALK_SPEED    = 16.0
+const RUN_SPEED     = 30.0
 const CAM_DIST      = 5.2
 const CAM_LOOK_Y    = 1.35
-const CAM_STIFFNESS = 18
+const CAM_STIFFNESS = 24
 const CAM_MIN_Y     = 0.8
-const ARROW_TURN    = 2.4   // radians/sec for arrow key camera rotation
-const PITCH_TURN    = 1.4   // radians/sec for arrow key pitch
+const ARROW_TURN    = 3.2   // radians/sec for arrow key camera rotation
+const PITCH_TURN    = 1.8   // radians/sec for arrow key pitch
 const GAMEPAD_SENS  = 2.2
 const GAMEPAD_DEAD  = 0.12
 const PLAYER_R      = 0.42
@@ -148,7 +148,7 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
 
   /* ── Frame loop ── */
   useFrame((_, rawDt) => {
-    const dt = Math.min(rawDt, 0.05)
+    const dt = Math.min(rawDt, 0.04)
     const k  = keys.current
 
     /* Arrow keys rotate camera — independent of movement */
@@ -238,7 +238,9 @@ export function Player({ colliders, onExit, onPrompt, playerState }: PlayerProps
     }
 
     camera.position.lerp(computeCamTarget(p.x, p.z, y, pitch.current), 1 - Math.exp(-CAM_STIFFNESS * dt))
-    camera.lookAt(p.x, CAM_LOOK_Y, p.z)
+    const lookX = moving ? p.x + dx * 1.8 : p.x
+    const lookZ = moving ? p.z + dz * 1.8 : p.z
+    camera.lookAt(lookX, CAM_LOOK_Y, lookZ)
   })
 
   /* ── Realistic character mesh ── */

@@ -45,7 +45,7 @@ export function Rain({ count = 4000 }: { count?: number }) {
   }, [positions])
 
   return (
-    <points ref={ref} geometry={geo}>
+    <points ref={ref} geometry={geo} frustumCulled={false}>
       <pointsMaterial
         color="#aac8e8"
         size={0.08}

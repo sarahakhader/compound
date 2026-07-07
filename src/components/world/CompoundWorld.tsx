@@ -1,6 +1,6 @@
 "use client"
-import { Suspense, useState, useEffect, useCallback, useRef } from "react"
-import { useFrame } from "@react-three/fiber"
+import React, { Suspense, useState, useEffect, useCallback, useRef } from "react"
+import { useFrame, useThree } from "@react-three/fiber"
 import { Canvas } from "@react-three/fiber"
 import * as THREE from "three"
 import { Player, type PlayerSharedState } from "./Player"
@@ -12,6 +12,25 @@ import { Skyline } from "./Skyline"
 import { Lights } from "./Lights"
 import { Rain } from "./Rain"
 import { CityAmbience } from "./Audio"
+
+class GameErrorBoundary extends React.Component<
+  { children: React.ReactNode; onError: () => void },
+  { crashed: boolean }
+> {
+  constructor(props: any) { super(props); this.state = { crashed: false } }
+  static getDerivedStateFromError() { return { crashed: true } }
+  componentDidCatch() { this.props.onError() }
+  render() {
+    if (this.state.crashed) return null
+    return this.props.children
+  }
+}
+
+function ExposureUpdater({ interior }: { interior: boolean }) {
+  const { gl } = useThree()
+  useEffect(() => { gl.toneMappingExposure = interior ? 1.1 : 0.88 }, [gl, interior])
+  return null
+}
 
 /* ── NPC patrol layout ── */
 const NPC_LAYOUT: NPCDef[] = [
@@ -88,18 +107,19 @@ const QUALITY_DPR:        Record<Quality, [number, number]> = {
   medium: [1, 1.00],
   low:    [1, 1.00],
 }
-const QUALITY_RAIN_COUNT: Record<Quality, number> = { high: 2000, medium: 1000, low: 0 }
+const QUALITY_RAIN_COUNT: Record<Quality, number> = { high: 1000, medium: 500, low: 0 }
 
 interface Props { onExit: () => void; onReady?: () => void }
 
 type SceneProps = Props & {
   fogDensity:  number
+  interior:    boolean
   onPrompt:    (t: string | null) => void
   playerState: React.MutableRefObject<PlayerSharedState>
   rainCount:   number
 }
 
-function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount, onReady }: SceneProps) {
+function Scene({ onExit, fogDensity, interior, onPrompt, playerState, rainCount, onReady }: SceneProps) {
   const firedReady = useRef(false)
   useFrame(() => {
     if (!firedReady.current) {
@@ -111,6 +131,7 @@ function Scene({ onExit, fogDensity, onPrompt, playerState, rainCount, onReady }
     <>
       <color attach="background" args={["#05070B"]} />
       <fogExp2 attach="fog" args={["#07100D", fogDensity]} />
+      <ExposureUpdater interior={interior} />
 
       <Lights />
 
@@ -184,22 +205,23 @@ export function CompoundWorld({ onExit, onReady }: Props) {
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 99998, background: "#05070B", overflow: "hidden" }}>
-      <Canvas
-        dpr={dpr}
-        gl={{
-          antialias:           quality === "high",
-          powerPreference:     "high-performance",
-          outputColorSpace:    THREE.SRGBColorSpace,
-          toneMapping:         THREE.ACESFilmicToneMapping,
-          toneMappingExposure: interior ? 1.1 : 0.88,
-        }}
-        camera={{ fov: 72, near: 0.1, far: 600, position: [0, 1.6, 12] }}
-      >
-        <Scene
-          onExit={onExit} fogDensity={fogDensity} onPrompt={handlePrompt}
-          playerState={playerState} rainCount={rainCount} onReady={onReady}
-        />
-      </Canvas>
+      <GameErrorBoundary onError={onExit}>
+        <Canvas
+          dpr={dpr}
+          gl={{
+            antialias:       quality === "high",
+            powerPreference: "high-performance",
+            outputColorSpace: THREE.SRGBColorSpace,
+            toneMapping:     THREE.ACESFilmicToneMapping,
+          }}
+          camera={{ fov: 72, near: 0.1, far: 600, position: [0, 1.6, 12] }}
+        >
+          <Scene
+            onExit={onExit} fogDensity={fogDensity} interior={interior} onPrompt={handlePrompt}
+            playerState={playerState} rainCount={rainCount} onReady={onReady}
+          />
+        </Canvas>
+      </GameErrorBoundary>
 
       <CityAmbience interior={interior} />
 

@@ -2,6 +2,8 @@
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 
+const WHITE = new THREE.Color("#ffffff")
+
 interface VideoTextureScreenProps {
   src: string;
   width?: number;
@@ -21,11 +23,11 @@ export function VideoTextureScreen({
     const element = document.createElement("video");
 
     element.src = src;
-    element.crossOrigin = "anonymous";
     element.loop = true;
     element.muted = muted;
     element.playsInline = true;
     element.preload = "metadata";
+    element.crossOrigin = "anonymous";
 
     return element;
   }, [src, muted]);
@@ -73,7 +75,7 @@ export function VideoTextureScreen({
       <meshStandardMaterial
         map={texture}
         emissiveMap={texture}
-        emissive={new THREE.Color("#ffffff")}
+        emissive={WHITE}
         emissiveIntensity={emissiveIntensity}
         toneMapped
       />

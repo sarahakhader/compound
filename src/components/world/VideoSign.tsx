@@ -2,6 +2,8 @@
 import { useRef, useEffect } from "react"
 import * as THREE from "three"
 
+let _signSeq = 0
+
 interface VideoSignProps {
   src:        string              // public/-relative path, e.g. "/sign-concrete.mp4"
   width:      number              // screen width in world units
@@ -18,11 +20,14 @@ export function VideoSign({
   intensity  = 1.5,
   fallback   = "#111318",
 }: VideoSignProps) {
-  const meshRef = useRef<THREE.Mesh>(null!)
+  const meshRef    = useRef<THREE.Mesh>(null!)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const mesh = meshRef.current
     if (!mesh) return
+
+    const staggerIdx = _signSeq++
 
     /* Create video element — muted so autoplay is never blocked */
     const vid = document.createElement("video")
@@ -30,7 +35,8 @@ export function VideoSign({
     vid.loop        = true
     vid.muted       = true
     vid.playsInline = true
-    vid.play().catch(() => {/* autoplay blocked — video stays paused, fallback colour shows */})
+    vid.preload     = "none"
+    vid.crossOrigin = "anonymous"
 
     /* VideoTexture polls readyState each frame; Three.js updates it automatically */
     const tex = new THREE.VideoTexture(vid)
@@ -44,9 +50,18 @@ export function VideoSign({
     mat.emissiveIntensity = intensity
     mat.needsUpdate       = true
 
+    timeoutRef.current = setTimeout(() => {
+      vid.play().catch(() => {/* autoplay blocked — video stays paused, fallback colour shows */})
+    }, staggerIdx * 400)
+
     return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
       vid.pause()
       vid.src = ""
+      vid.load()
       tex.dispose()
       if (mesh.material) {
         const m = mesh.material as THREE.MeshStandardMaterial
