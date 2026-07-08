@@ -392,9 +392,9 @@ nav {
   line-height: 2; margin-bottom: 4rem; max-width: 52ch;
 }
 
-/* Stanza 5 — indented italic body */
+/* Stanza 5 — body matches welcome headline font */
 .at-body {
-  font-family: var(--serif); font-style: italic;
+  font-family: var(--sans); font-weight: 400;
   font-size: clamp(1.1rem, 1.8vw, 1.55rem);
   line-height: 1.75; color: var(--smoked-plum);
   padding-left: 4rem; border-left: 1px solid rgba(61,38,69,.2);

@@ -21,13 +21,7 @@ const images = [
 ]
 
 const SLIDE_INTERVAL = 5000
-const PRICE = 280
 
-const COLOURWAYS = [
-  { id: "molten", name: "Molten",      fringe: "Purple",     hex: "#E8720A", fringeHex: "#7B3FA0" },
-  { id: "plum",   name: "Smoked Plum", fringe: "Acid",       hex: "#3D2645", fringeHex: "#B5CC45" },
-  { id: "cobalt", name: "Cobalt",      fringe: "Terracotta", hex: "#2B4FD4", fringeHex: "#D45A1A" },
-]
 
 const subParagraphs = [
   "The architecture of warmth, weight, and atmosphere.",
@@ -143,14 +137,21 @@ function BlanketAnnotations({ imageId }: { imageId: string }) {
 
 function MossDecor() {
   const lime = "#B5CC45"
+  // leaf: [cx, cy, rx, ry, rotateDeg, opacity]
+  // SVG is inset -24px on all sides; text block ≈ 520×85px
+  // top leaves: cy ≈ 5-18 | bottom: cy ≈ 110-128 | left: cx ≈ 3-14 | right: cx ≈ 550-562
   const leaves: [number,number,number,number,number,number][] = [
+    // top row
     [38,  10, 24, 9, -36, .80], [100,  6, 20, 8, -10, .72], [174,  4, 22, 8,   4, .74],
     [258,  3, 21, 8,  -2, .70], [342,  4, 22, 8,   7, .72], [428,  6, 20, 8, -12, .70],
     [508, 10, 22, 9,  22, .74],
+    // bottom row
     [54, 120, 22, 9,  28, .74], [134, 124, 20, 8,   8, .68], [220, 126, 22, 9,  -4, .72],
     [308, 126, 20, 8,   4, .68], [396, 124, 22, 8, -10, .70], [480, 121, 20, 8, -24, .72],
     [548, 116, 22, 9, -34, .74],
+    // left side
     [10,  40, 20, 8, -62, .72], [7,   72, 18, 7, -75, .66], [11, 100, 20, 8, -55, .70],
+    // right side
     [556, 38, 20, 8,  62, .72], [559, 70, 18, 7,  75, .66], [555, 100, 20, 8, 52, .70],
   ]
   const dots: [number,number,number,number][] = [
@@ -190,22 +191,9 @@ function Counter() {
   )
 }
 
-type OrderState = "idle" | "sending" | "sent" | "error"
-
 export default function BlanketsPage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  /* Order modal state */
-  const [orderOpen,  setOrderOpen]  = useState(false)
-  const [selColour,  setSelColour]  = useState(COLOURWAYS[0].id)
-  const [orderQty,   setOrderQty]   = useState(1)
-  const [orderState, setOrderState] = useState<OrderState>("idle")
-  const [oFirst,     setOFirst]     = useState("")
-  const [oLast,      setOLast]      = useState("")
-  const [oEmail,     setOEmail]     = useState("")
-  const [oAddress,   setOAddress]   = useState("")
-  const [oNotes,     setONotes]     = useState("")
 
   const scheduleAdvance = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
@@ -220,56 +208,6 @@ export default function BlanketsPage() {
   }, [currentIndex, scheduleAdvance])
 
   const handleIndexChange = (i: number) => setCurrentIndex(i)
-
-  const openOrder = useCallback((colourId: string) => {
-    setSelColour(colourId)
-    setOrderState("idle")
-    setOrderOpen(true)
-    document.body.style.overflow = "hidden"
-  }, [])
-
-  const closeOrder = useCallback(() => {
-    setOrderOpen(false)
-    document.body.style.overflow = ""
-  }, [])
-
-  const handleOrder = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault()
-    setOrderState("sending")
-    const cw = COLOURWAYS.find(c => c.id === selColour)!
-    const colourLabel = `${cw.name} · ${cw.fringe} Fringe`
-    const total = PRICE * orderQty
-    const msg = [
-      `BLANKET ORDER`,
-      ``,
-      `Colourway: ${colourLabel}`,
-      `Quantity:  ${orderQty}`,
-      `Total:     CA $${total}`,
-      ``,
-      `Shipping address:`,
-      oAddress,
-      oNotes ? `\nNotes: ${oNotes}` : "",
-    ].filter(l => l !== null).join("\n")
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: oFirst,
-          lastName:  oLast,
-          email:     oEmail,
-          company:   "BLANKET ORDER",
-          message:   msg,
-        }),
-      })
-      setOrderState(res.ok ? "sent" : "error")
-    } catch {
-      setOrderState("error")
-    }
-  }, [selColour, orderQty, oFirst, oLast, oEmail, oAddress, oNotes])
-
-  const selectedCw = COLOURWAYS.find(c => c.id === selColour)!
 
   return (
     <div className="blankets-page">
@@ -302,7 +240,7 @@ export default function BlanketsPage() {
             Bedrock Collection · 2026
           </motion.p>
 
-          {/* Title */}
+          {/* Title — engraved into rock */}
           <div style={{ marginBottom: "2.5rem" }}>
             <h1 className="bl-title" style={{
               marginBottom: 0,
@@ -325,7 +263,7 @@ export default function BlanketsPage() {
             </h1>
           </div>
 
-          {/* Body paragraphs */}
+          {/* Body paragraphs — staggered on scroll */}
           <div className="bl-sub">
             {subParagraphs.map((text, i) => (
               <motion.p
@@ -342,7 +280,7 @@ export default function BlanketsPage() {
           </div>
         </div>
 
-        {/* Right — carousel */}
+        {/* Right — carousel slides in from right */}
         <motion.div
           className="bl-right"
           initial={{ opacity: 0, x: 40 }}
@@ -379,7 +317,7 @@ export default function BlanketsPage() {
                 alwaysShow
               />
             </div>
-            {/* Textile specs */}
+            {/* Textile specs — displayed under the carousel */}
             <div className="bl-specs">
               {[
                 { num: "01", label: "Material",   val: "100% Cotton · 200–250 GSM" },
@@ -393,48 +331,11 @@ export default function BlanketsPage() {
                 </div>
               ))}
             </div>
+            <a href="mailto:thecompoundlabs@gmail.com" className="bl-inquire">
+              thecompoundlabs@gmail.com
+            </a>
           </Carousel>
         </motion.div>
-      </div>
-
-      {/* ── BUY SECTION ─────────────────────────────────────────────── */}
-      <div className="bl-buy-section">
-        <motion.div
-          className="bl-buy-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease }}
-        >
-          <p className="bl-buy-eyebrow">Available Now · CA ${PRICE}</p>
-          <h2 className="bl-buy-title">Order the Bedrock Blanket</h2>
-          <p className="bl-buy-sub">100% Cotton · 180 × 240 cm · Stonewashed · Raw Fringe<br />Select a colourway to place your order.</p>
-        </motion.div>
-
-        <div className="bl-buy-cards">
-          {COLOURWAYS.map((c, i) => (
-            <motion.button
-              key={c.id}
-              className="bl-buy-card"
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: i * 0.1, ease }}
-              onClick={() => openOrder(c.id)}
-              aria-label={`Order ${c.name} · ${c.fringe} Fringe`}
-            >
-              <div className="bl-buy-swatch-wrap">
-                <div className="bl-buy-swatch" style={{ background: c.hex }} />
-                <div className="bl-buy-fringe" style={{ background: c.fringeHex }} />
-              </div>
-              <div className="bl-buy-card-info">
-                <p className="bl-buy-card-name">{c.name}</p>
-                <p className="bl-buy-card-sub">{c.fringe} Fringe</p>
-              </div>
-              <span className="bl-buy-card-cta">Order →</span>
-            </motion.button>
-          ))}
-        </div>
       </div>
 
       {/* Coming Soon colourways */}
@@ -500,129 +401,6 @@ export default function BlanketsPage() {
         <span>Earth, Remembered Through Design.</span>
         <a href="https://instagram.com/whoiscompound" target="_blank" rel="noopener noreferrer">@whoiscompound</a>
       </motion.footer>
-
-      {/* ── ORDER MODAL ──────────────────────────────────────────────── */}
-      {orderOpen && (
-        <div className="bl-modal-overlay" onClick={closeOrder} role="dialog" aria-modal="true" aria-label="Place an order">
-          <motion.div
-            className="bl-modal"
-            onClick={e => e.stopPropagation()}
-            initial={{ opacity: 0, y: 56 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.38, ease }}
-          >
-            <div className="bl-modal-head">
-              <div>
-                <h3 className="bl-modal-title">Place an Order</h3>
-                <p className="bl-modal-subtitle">Bedrock Blanket · CA ${PRICE} each</p>
-              </div>
-              <button className="bl-modal-close" onClick={closeOrder} aria-label="Close">✕</button>
-            </div>
-
-            {orderState === "sent" ? (
-              <div className="bl-modal-success">
-                <div className="bl-modal-success-icon">✓</div>
-                <p className="bl-modal-success-title">Order received.</p>
-                <p className="bl-modal-success-body">
-                  We&apos;ll confirm your order and send payment details to <strong>{oEmail}</strong> within 24 hours.
-                </p>
-                <button className="bl-modal-done-btn" onClick={closeOrder}>Close</button>
-              </div>
-            ) : orderState === "error" ? (
-              <div className="bl-modal-error">
-                <p>Something went wrong. Email us at <a href="mailto:thecompoundlabs@gmail.com">thecompoundlabs@gmail.com</a></p>
-                <button className="bl-modal-retry-btn" onClick={() => setOrderState("idle")}>Try again</button>
-              </div>
-            ) : (
-              <form className="bl-modal-form" onSubmit={handleOrder} noValidate>
-
-                {/* Colourway */}
-                <div className="bl-modal-colourways">
-                  {COLOURWAYS.map(c => (
-                    <button
-                      key={c.id}
-                      type="button"
-                      className={`bl-modal-cw-btn${selColour === c.id ? " active" : ""}`}
-                      onClick={() => setSelColour(c.id)}
-                    >
-                      <span className="bl-modal-cw-dot" style={{ background: c.hex, borderColor: c.fringeHex }} />
-                      <span className="bl-modal-cw-label">{c.name}</span>
-                    </button>
-                  ))}
-                </div>
-
-                {/* Fringe preview */}
-                <div className="bl-modal-cw-preview">
-                  <div className="bl-modal-cw-preview-swatch" style={{ background: selectedCw.hex }} />
-                  <div className="bl-modal-cw-preview-fringe" style={{ background: selectedCw.fringeHex }} />
-                  <div className="bl-modal-cw-preview-info">
-                    <span className="bl-modal-cw-preview-name">{selectedCw.name}</span>
-                    <span className="bl-modal-cw-preview-sub">{selectedCw.fringe} Fringe</span>
-                  </div>
-                </div>
-
-                <div className="bl-modal-row">
-                  <div className="bl-modal-field">
-                    <label className="bl-modal-label">First name</label>
-                    <input className="bl-modal-input" type="text" required autoComplete="given-name"
-                      placeholder="First" value={oFirst} onChange={e => setOFirst(e.target.value)} />
-                  </div>
-                  <div className="bl-modal-field">
-                    <label className="bl-modal-label">Last name</label>
-                    <input className="bl-modal-input" type="text" required autoComplete="family-name"
-                      placeholder="Last" value={oLast} onChange={e => setOLast(e.target.value)} />
-                  </div>
-                </div>
-
-                <div className="bl-modal-field">
-                  <label className="bl-modal-label">Email</label>
-                  <input className="bl-modal-input" type="email" required autoComplete="email"
-                    placeholder="your@email.com" value={oEmail} onChange={e => setOEmail(e.target.value)} />
-                </div>
-
-                <div className="bl-modal-field">
-                  <label className="bl-modal-label">Quantity</label>
-                  <select className="bl-modal-input bl-modal-select" value={orderQty}
-                    onChange={e => setOrderQty(Number(e.target.value))}>
-                    {[1, 2, 3, 4, 5].map(n => (
-                      <option key={n} value={n}>{n} blanket{n > 1 ? "s" : ""} — CA ${PRICE * n}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="bl-modal-field">
-                  <label className="bl-modal-label">Shipping address</label>
-                  <textarea className="bl-modal-input bl-modal-textarea" required autoComplete="street-address"
-                    placeholder="Street, City, Province/State, Postal Code, Country"
-                    value={oAddress} onChange={e => setOAddress(e.target.value)} rows={3} />
-                </div>
-
-                <div className="bl-modal-field">
-                  <label className="bl-modal-label">Notes <span className="bl-modal-optional">(optional)</span></label>
-                  <textarea className="bl-modal-input bl-modal-textarea"
-                    placeholder="Gift message, special instructions..."
-                    value={oNotes} onChange={e => setONotes(e.target.value)} rows={2} />
-                </div>
-
-                <div className="bl-modal-total">
-                  <span>Total</span>
-                  <span>CA ${PRICE * orderQty}</span>
-                </div>
-
-                <button type="submit" className="bl-modal-submit" disabled={orderState === "sending"}>
-                  {orderState === "sending" ? "Sending…" : "Place Order"}
-                </button>
-
-                <p className="bl-modal-note">
-                  We&apos;ll confirm your order and send payment details within 24 hours.
-                  No card required to submit.
-                </p>
-
-              </form>
-            )}
-          </motion.div>
-        </div>
-      )}
 
     </div>
   )
