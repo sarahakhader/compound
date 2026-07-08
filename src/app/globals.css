@@ -371,6 +371,38 @@ nav {
   flex: 1; height: 1px; background: var(--smoked-plum); opacity: .25; display: block;
 }
 
+/* White cloud highlight behind the pull quote */
+.at-pq-cloud {
+  position: relative;
+  display: inline-block;
+  padding: 1.3rem 2.6rem 1.5rem;
+  background: white;
+  border-radius: 9999px;
+  color: var(--smoked-plum);
+}
+/* Left cloud bump */
+.at-pq-cloud::before {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  width: 44%;
+  height: 58px;
+  top: -30px;
+  left: 10%;
+}
+/* Right cloud bump */
+.at-pq-cloud::after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  width: 34%;
+  height: 46px;
+  top: -22px;
+  right: 12%;
+}
+
 /* Stanza 3 — large interactive definitions */
 .at-definitions {
   margin-bottom: 4rem;

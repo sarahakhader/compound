@@ -387,7 +387,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           {/* Stanza 2 — centred pull quote */}
           <div className="at-pullquote">
             <span className="at-rule" />
-            The name holds more than one truth.
+            <span className="at-pq-cloud">The name holds more than one truth.</span>
             <span className="at-rule" />
           </div>
 
