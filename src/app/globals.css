@@ -261,7 +261,6 @@ nav {
 #menu.open .m-links li:nth-child(4) a { transform:translateY(0); transition-delay:.25s }
 #menu.open .m-links li:nth-child(5) a { transform:translateY(0); transition-delay:.31s }
 #menu.open .m-links li:nth-child(6) a { transform:translateY(0); transition-delay:.37s }
-#menu.open .m-links li:nth-child(7) a { transform:translateY(0); transition-delay:.43s }
 .m-links a:hover { color: var(--molten); }
 .m-foot {
   display: flex; justify-content: space-between;
