@@ -393,9 +393,11 @@ const plLogoRef = useRef<SVGSVGElement>(null)
 
           {/* Stanza 3 — large interactive definitions */}
           <div className="at-definitions">
-            <div className="at-def-line"><HoverPopText text="Compound, as elemental composition." /></div>
-            <div className="at-def-line"><HoverPopText text="Compound, as a place of gathering." /></div>
-            <div className="at-def-line"><HoverPopText text="Compound, as value deepening across time." /></div>
+            <div className="at-def-cloud">
+              <div className="at-def-line"><HoverPopText text="Compound, as elemental composition." /></div>
+              <div className="at-def-line"><HoverPopText text="Compound, as a place of gathering." /></div>
+              <div className="at-def-line"><HoverPopText text="Compound, as value deepening across time." /></div>
+            </div>
           </div>
 
           {/* Stanza 4 — uppercase spaced philosophy */}

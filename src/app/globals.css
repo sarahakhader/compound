@@ -409,6 +409,36 @@ nav {
   border-left: 2px solid var(--smoked-plum);
   padding-left: 2.5rem; opacity: .9;
 }
+.at-def-cloud {
+  display: block;
+  width: fit-content;
+  position: relative;
+  padding: 1.6rem 2.4rem 1.8rem 1.8rem;
+  background: white;
+  border-radius: 28px;
+}
+/* Left bump */
+.at-def-cloud::before {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  width: 42%;
+  height: 56px;
+  top: -30px;
+  left: 8%;
+}
+/* Right bump */
+.at-def-cloud::after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  width: 32%;
+  height: 44px;
+  top: -22px;
+  right: 14%;
+}
 .at-def-line {
   font-family: var(--serif); font-weight: 600;
   font-size: clamp(1.3rem, 3vw, 3rem);
