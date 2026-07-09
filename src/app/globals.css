@@ -410,9 +410,9 @@ nav {
   padding-left: 2.5rem; opacity: .9;
 }
 .at-def-line {
-  font-family: var(--font-hand), cursive; font-weight: 500;
-  font-size: clamp(1.8rem, 3.5vw, 3.4rem);
-  line-height: 1.4; color: var(--smoked-plum);
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(2rem, 5vw, 5rem);
+  line-height: 1.1; color: var(--smoked-plum); letter-spacing: -.02em;
   display: block;
 }
 

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Space_Grotesk, Geist, Caveat } from "next/font/google";
+import { Cormorant_Garamond, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Cursor } from "@/components/cursor";
@@ -19,11 +19,6 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-const caveat = Caveat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-hand",
-});
 
 
 const BASE_URL = "https://www.whatiscompound.com"
@@ -83,7 +78,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className={`${cormorant.variable} ${spaceGrotesk.variable} ${caveat.variable}`}>
+      <body className={`${cormorant.variable} ${spaceGrotesk.variable}`}>
         <Cursor />
         {children}
         <CompoundUniverseProvider />
