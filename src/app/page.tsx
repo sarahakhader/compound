@@ -394,6 +394,14 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           {/* Stanza 3 — large interactive definitions */}
           <div className="at-definitions">
             <div className="at-def-cloud">
+              <svg className="at-def-cloud-svg" viewBox="0 0 500 230" preserveAspectRatio="none" aria-hidden>
+                <rect x="6" y="95" width="488" height="130" rx="34" fill="white"/>
+                <ellipse cx="62"  cy="118" rx="66"  ry="86" fill="white"/>
+                <ellipse cx="162" cy="90"  rx="78"  ry="92" fill="white"/>
+                <ellipse cx="272" cy="78"  rx="86"  ry="96" fill="white"/>
+                <ellipse cx="382" cy="86"  rx="76"  ry="90" fill="white"/>
+                <ellipse cx="458" cy="110" rx="62"  ry="80" fill="white"/>
+              </svg>
               <div className="at-def-line"><HoverPopText text="Compound, as elemental composition." /></div>
               <div className="at-def-line"><HoverPopText text="Compound, as a place of gathering." /></div>
               <div className="at-def-line"><HoverPopText text="Compound, as value deepening across time." /></div>
