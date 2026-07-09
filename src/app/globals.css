@@ -411,8 +411,8 @@ nav {
 }
 .at-def-line {
   font-family: var(--serif); font-weight: 600;
-  font-size: clamp(2rem, 5vw, 5rem);
-  line-height: 1.1; color: var(--smoked-plum); letter-spacing: -.02em;
+  font-size: clamp(1.3rem, 3vw, 3rem);
+  line-height: 1.35; color: var(--smoked-plum); letter-spacing: -.01em;
   display: block;
 }
 
