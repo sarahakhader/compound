@@ -418,10 +418,10 @@ nav {
 
 /* Stanza 4 — uppercase spaced philosophy */
 .at-philosophy {
-  font-family: var(--sans); font-size: .68rem; font-weight: 500;
-  letter-spacing: .28em; text-transform: uppercase;
+  font-family: var(--sans); font-size: clamp(1rem, 1.6vw, 1.4rem); font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
   color: var(--smoked-plum);
-  line-height: 2; margin-bottom: 4rem; max-width: 52ch;
+  line-height: 1.8; margin-bottom: 4rem; max-width: 52ch;
 }
 
 /* Stanza 5 — body matches welcome headline font */
