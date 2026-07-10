@@ -772,15 +772,6 @@ export function DeepVioletDistrict() {
         ))
       ))}
 
-      {/* Zone ambient — very dark violet fill */}
-      <ambientLight intensity={0.12} color="#1a0828" />
-      {/* Moonlight column */}
-      <directionalLight
-        position={[10, 40, -180]}
-        color="#c0b0e0"
-        intensity={0.28}
-        castShadow={false}
-      />
       {/* Master fill */}
       <pointLight position={[0, 25, -222]} color="#4020a0" intensity={45} distance={120} decay={1.2} />
     </group>

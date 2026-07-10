@@ -13,19 +13,37 @@ const SERVICES = [
   { n: "03", name: "Interior styling concepts" },
   { n: "04", name: "Product and collection storytelling" },
   { n: "05", name: "Website art direction" },
-  { n: "06", name: "Launch visuals" },
-  { n: "07", name: "Sourcing guidance" },
+  { n: "06", name: "Launch visuals and campaign direction" },
+  { n: "07", name: "Sourcing and maker guidance" },
   { n: "08", name: "Brand world-building" },
 ]
 
 const FOR_LIST = [
-  "Boutique spaces",
-  "Product launches",
-  "Creative studios",
-  "Hospitality concepts",
-  "Interiors",
-  "Campaigns",
-  "Brands in need of a stronger visual world",
+  "Boutique retail and hospitality spaces",
+  "Product and collection launches",
+  "Creative studios and agencies",
+  "Founders building a brand from scratch",
+  "Interiors seeking a stronger visual identity",
+  "Campaign and editorial projects",
+  "Brands in need of a sharper visual world",
+]
+
+const PROCESS_STEPS = [
+  {
+    n: "01",
+    title: "Discovery",
+    body: "We begin with an immersive brief — your brand history, spatial context, existing references, and the feeling you're reaching for. This is where we learn what you are, and what you're building toward.",
+  },
+  {
+    n: "02",
+    title: "Direction",
+    body: "We compose a complete visual and material language: colour systems, texture palettes, atmosphere references, and creative direction tailored to your specific project and audience.",
+  },
+  {
+    n: "03",
+    title: "Delivery",
+    body: "Final direction documents, curated reference systems, and assets delivered in a format your team, photographer, contractor, or maker can execute from immediately.",
+  },
 ]
 
 export default function StudioPage() {
@@ -64,11 +82,15 @@ export default function StudioPage() {
       scrollTrigger: { trigger: ".stt-services-grid", start: "top 82%" },
       opacity: 0, y: 20, duration: 0.7, ease: "power3.out", stagger: 0.07,
     })
+    gsap.from(".stt-services-note", {
+      scrollTrigger: { trigger: ".stt-services-note", start: "top 88%" },
+      opacity: 0, y: 14, duration: 0.8, ease: "power3.out",
+    })
 
-    /* Process */
-    gsap.from(".stt-process-body", {
-      scrollTrigger: { trigger: ".stt-process-section", start: "top 78%" },
-      opacity: 0, y: 40, duration: 1.2, ease: "power3.out",
+    /* Process steps */
+    gsap.from(".stt-process-step", {
+      scrollTrigger: { trigger: ".stt-process-steps", start: "top 80%" },
+      opacity: 0, y: 30, duration: 0.8, ease: "power3.out", stagger: 0.18,
     })
 
     /* CTA */
@@ -77,6 +99,10 @@ export default function StudioPage() {
       start: "top 88%",
       once: true,
       onEnter: () => gsap.to(".stt-cta-word", { clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power4.out", stagger: 0.12 }),
+    })
+    gsap.from(".stt-cta-sub", {
+      scrollTrigger: { trigger: ".stt-cta-sub", start: "top 92%" },
+      opacity: 0, y: 12, duration: 0.9, ease: "power3.out",
     })
 
     return () => ScrollTrigger.getAll().forEach(t => t.kill())
@@ -88,7 +114,7 @@ export default function StudioPage() {
       {/* ── NAV ────────────────────────────────────────────────────── */}
       <nav className="stt-nav">
         <Link href="/" className="stt-back">← COMPOUND</Link>
-        <span className="stt-nav-tag">STUDIO</span>
+        <span className="stt-nav-tag">STUDIO · CONSULTING</span>
       </nav>
 
       {/* ── HERO ────────────────────────────────────────────────────── */}
@@ -97,6 +123,8 @@ export default function StudioPage() {
           <span>Design Consulting</span>
           <span className="stt-dot">·</span>
           <span>Toronto</span>
+          <span className="stt-dot">·</span>
+          <span>Available for new projects</span>
         </div>
 
         <h1 className="stt-headline">
@@ -106,8 +134,8 @@ export default function StudioPage() {
 
         <div className="stt-hero-bottom">
           <p className="stt-hero-sub">
-            Design consulting for atmospheres,<br />
-            objects, interiors, and brand worlds.
+            A consulting studio that shapes the visual and<br />
+            material identity of spaces, brands, and objects.
           </p>
           <span className="stt-scroll-hint">↓</span>
         </div>
@@ -116,17 +144,22 @@ export default function StudioPage() {
       {/* ── INTRO ───────────────────────────────────────────────────── */}
       <section className="stt-intro-section">
         <p className="stt-lead">
-          Compound Studio works with founders, creatives, and space-makers
-          to translate feeling into form.
+          Compound Studio partners with founders, creative directors,
+          and space-makers to translate feeling into a tangible visual language.
         </p>
         <div className="stt-intro-body">
           <p className="stt-para">
-            Through material direction, colour systems, spatial concepts, product
-            storytelling, and visual world-building, we help shape environments and
-            brands that feel considered, memorable, and alive.
+            We function as an embedded creative partner — directing the visual
+            and material language of your project from concept through to execution.
+            Our work spans interiors, brand identities, campaigns, and product launches.
+          </p>
+          <p className="stt-para">
+            We take on a limited number of engagements each season, working closely
+            with each client to ensure the direction is singular, considered,
+            and entirely built around who they are.
           </p>
           <p className="stt-para stt-para-em">
-            This is not decoration for decoration's sake.<br />
+            This is not decoration for decoration&apos;s sake.<br />
             It is the architecture of atmosphere.
           </p>
         </div>
@@ -134,7 +167,7 @@ export default function StudioPage() {
 
       {/* ── FOR WHOM ────────────────────────────────────────────────── */}
       <section className="stt-for-section">
-        <div className="stt-for-eyebrow">Made for</div>
+        <div className="stt-for-eyebrow">We work with</div>
         <ul className="stt-for-list">
           {FOR_LIST.map((item, i) => (
             <li key={i} className="stt-for-item">
@@ -159,17 +192,28 @@ export default function StudioPage() {
             </div>
           ))}
         </div>
+        <p className="stt-services-note">
+          All engagements include a written creative brief, a curated direction
+          document, and a reference system your team — photographer, contractor,
+          or maker — can execute from immediately.
+        </p>
       </section>
 
       {/* ── PROCESS ─────────────────────────────────────────────────── */}
       <section className="stt-process-section">
         <div className="stt-process-body">
-          <p className="stt-process-text">
-            Every project begins with excavation: the mood, the memory, the
-            material, the feeling beneath the surface. From there, Compound
-            composes a visual language that can be lived in, touched,
-            photographed, sold, remembered, and returned to.
-          </p>
+          <p className="stt-process-intro">How a project works.</p>
+          <div className="stt-process-steps">
+            {PROCESS_STEPS.map(s => (
+              <div key={s.n} className="stt-process-step">
+                <span className="stt-process-step-num">{s.n}</span>
+                <div className="stt-process-step-content">
+                  <p className="stt-process-step-title">{s.title}</p>
+                  <p className="stt-process-step-body">{s.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -177,11 +221,14 @@ export default function StudioPage() {
       <section className="stt-cta-section">
         <p className="stt-cta-tag">Ready to begin?</p>
         <Link href="/#contact" className="stt-cta-link">
-          <span className="stt-cta-word">Inquire</span>
-          <span className="stt-cta-word">to build</span>
-          <span className="stt-cta-word">a world.</span>
+          <span className="stt-cta-word">Start a</span>
+          <span className="stt-cta-word">project.</span>
           <span className="stt-cta-arrow">↗</span>
         </Link>
+        <p className="stt-cta-sub">
+          We take on a limited number of engagements per season.<br />
+          Send us your brief — we respond within 48 hours.
+        </p>
       </section>
 
       {/* ── FOOTER ──────────────────────────────────────────────────── */}

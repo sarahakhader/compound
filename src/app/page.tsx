@@ -105,7 +105,6 @@ const LogoCircles = () => (
 )
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false)
   const [submitLabel, setSubmitLabel] = useState("SUBMIT ↗")
   const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [cyberpunk, setCyberpunk] = useState(false)
@@ -199,8 +198,6 @@ const plLogoRef = useRef<SVGSVGElement>(null)
     return () => { ScrollTrigger.getAll().forEach(t => t.kill()) }
   }, [])
 
-  const closeMenu = () => setMenuOpen(false)
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (submitState === "sending" || submitState === "sent") return
@@ -252,31 +249,6 @@ const plLogoRef = useRef<SVGSVGElement>(null)
         <svg id="pl-logo" ref={plLogoRef} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <LogoCircles />
         </svg>
-      </div>
-
-      {/* NAV */}
-      <nav>
-        <a href="#hero" className="nav-brand">C O M P O U N D</a>
-        <button className="nav-btn" onClick={() => setMenuOpen(o => !o)}>
-          {menuOpen ? "CLOSE" : "MENU"}
-        </button>
-      </nav>
-
-      {/* MENU OVERLAY */}
-      <div id="menu" className={menuOpen ? "open" : ""}>
-        <p className="m-tag">Navigation</p>
-        <ul className="m-links">
-          <li><a href="#hero"    onClick={closeMenu}>Home</a></li>
-          <li><a href="#about"   onClick={closeMenu}>About</a></li>
-          <li><Link href="/blankets" onClick={closeMenu}>Blankets</Link></li>
-          <li><Link href="/universe" onClick={closeMenu}>Universe</Link></li>
-          <li><Link href="/studio" onClick={closeMenu}>Studio</Link></li>
-          <li><a href="#contact" onClick={closeMenu}>Contact</a></li>
-        </ul>
-        <div className="m-foot">
-          <p>Taste, redefined</p>
-          <p>© COMPOUND 2026</p>
-        </div>
       </div>
 
       {/* ══ HERO ══════════════════════════════════ */}
@@ -394,13 +366,13 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           {/* Stanza 3 — large interactive definitions */}
           <div className="at-definitions">
             <div className="at-def-cloud">
-              <svg className="at-def-cloud-svg" viewBox="0 0 500 230" preserveAspectRatio="none" aria-hidden>
-                <rect x="6" y="95" width="488" height="130" rx="34" fill="white"/>
-                <ellipse cx="62"  cy="118" rx="66"  ry="86" fill="white"/>
-                <ellipse cx="162" cy="90"  rx="78"  ry="92" fill="white"/>
-                <ellipse cx="272" cy="78"  rx="86"  ry="96" fill="white"/>
-                <ellipse cx="382" cy="86"  rx="76"  ry="90" fill="white"/>
-                <ellipse cx="458" cy="110" rx="62"  ry="80" fill="white"/>
+              <svg className="at-def-cloud-svg" viewBox="0 0 500 260" preserveAspectRatio="none" aria-hidden>
+                <rect x="6" y="130" width="488" height="126" rx="32" fill="white"/>
+                <ellipse cx="62"  cy="140" rx="62"  ry="78"  fill="white"/>
+                <ellipse cx="160" cy="122" rx="74"  ry="86"  fill="white"/>
+                <ellipse cx="268" cy="116" rx="82"  ry="86"  fill="white"/>
+                <ellipse cx="370" cy="121" rx="74"  ry="86"  fill="white"/>
+                <ellipse cx="455" cy="142" rx="60"  ry="76"  fill="white"/>
               </svg>
               <div className="at-def-line"><HoverPopText text="Compound, as elemental composition." /></div>
               <div className="at-def-line"><HoverPopText text="Compound, as a place of gathering." /></div>
@@ -409,12 +381,12 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           </div>
 
           {/* Stanza 4 — uppercase spaced philosophy */}
-          <p className="at-philosophy">
+          <p className="at-philosophy" style={{ fontFamily: 'var(--font-cormorant)', fontWeight: 600, letterSpacing: '-0.02em', textTransform: 'none', lineHeight: 1.2 }}>
             From these meanings, a philosophy: beauty is layered. Interconnected. Made to endure.
           </p>
 
           {/* Stanza 5 — indented italic body */}
-          <p className="at-body">
+          <p className="at-body" style={{color:'#aaff00'}}>
             Here, the familiar becomes strange. Nature appears as if imagined. Objects emerge as though excavated, from a past beyond memory, or a future not yet arrived.
           </p>
 

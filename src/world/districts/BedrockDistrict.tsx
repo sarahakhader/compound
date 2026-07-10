@@ -632,8 +632,7 @@ export function BedrockDistrict() {
         </group>
       ))}
 
-      {/* ── District ambient fill light ── */}
-      <ambientLight intensity={0.22} color="#3a1a08" />
+      {/* Master fill — limited radius so it doesn't bleed globally */}
       <pointLight position={[-45, 15, -75]} color={COLORS.amber} intensity={60} distance={65} decay={1.4} />
     </group>
   )

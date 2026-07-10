@@ -59,9 +59,9 @@ export function Lights() {
       {/* Ambient base */}
       <ambientLight intensity={0.14} color="#0e1428" />
 
-      {/* Boulevard streetlights — emissive mesh at all positions, point light every 3rd pair */}
+      {/* Boulevard streetlights — emissive mesh at all positions, point light only at every 5th pair */}
       {LAMP_POSITIONS.map((pos, i) => (
-        <StreetLight key={i} position={pos} lit={i % 6 < 2} />
+        <StreetLight key={i} position={pos} lit={i % 10 < 2} />
       ))}
 
       {/* Plaza flood — Glacier accent */}

@@ -2,6 +2,7 @@
 import React, { Suspense, useState, useEffect, useCallback, useRef } from "react"
 import { useFrame, useThree } from "@react-three/fiber"
 import { Canvas } from "@react-three/fiber"
+import { EffectComposer, Bloom } from "@react-three/postprocessing"
 import * as THREE from "three"
 import { Player, type PlayerSharedState } from "./Player"
 import { CatCompanion } from "./CatCompanion"
@@ -28,7 +29,7 @@ class GameErrorBoundary extends React.Component<
 
 function ExposureUpdater({ interior }: { interior: boolean }) {
   const { gl } = useThree()
-  useEffect(() => { gl.toneMappingExposure = interior ? 1.1 : 0.88 }, [gl, interior])
+  useEffect(() => { gl.toneMappingExposure = interior ? 1.05 : 0.82 }, [gl, interior])
   return null
 }
 
@@ -92,22 +93,49 @@ const INSPECTABLES: InspectableDef[] = [
   },
 ]
 
-/* ── Quality tier detection (runs once in browser, never on server) ── */
+/* ────────────────────────────────────────────────────────────────────────────
+   Quality tier detection
+   Priority order:
+   1. Mobile → always "low"
+   2. Integrated/Apple GPU string → "medium"  (this is the laptop fix)
+   3. Core count → high/medium/low
+────────────────────────────────────────────────────────────────────────────── */
 type Quality = "high" | "medium" | "low"
 
 function detectQuality(): Quality {
-  if (typeof window === "undefined") return "high"
+  if (typeof window === "undefined") return "medium"
   if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return "low"
+
+  // Check GPU renderer string — integrated GPUs get medium, never high
+  try {
+    const testCanvas = document.createElement("canvas")
+    const gl = testCanvas.getContext("webgl") ?? testCanvas.getContext("experimental-webgl") as WebGLRenderingContext | null
+    if (gl) {
+      const ext = gl.getExtension("WEBGL_debug_renderer_info")
+      if (ext) {
+        const renderer = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) as string
+        const lc = renderer.toLowerCase()
+        // Intel HD / Iris, Apple Silicon GPU, ARM Mali, Adreno → medium
+        if (/intel|apple m\d|apple gpu|mali|adreno/i.test(lc)) return "medium"
+      }
+    }
+  } catch { /* ignore — can't read renderer string in some browser configs */ }
+
   const cores = navigator.hardwareConcurrency ?? 4
-  return cores >= 8 ? "high" : cores >= 4 ? "medium" : "low"
+  return cores >= 12 ? "high" : cores >= 6 ? "medium" : "low"
 }
 
-const QUALITY_DPR:        Record<Quality, [number, number]> = {
-  high:   [1, 1.25],
-  medium: [1, 1.00],
-  low:    [1, 1.00],
+/* DPR: capped at 1.0 on all tiers to prevent Retina pixel count doubling GPU load */
+const QUALITY_DPR: Record<Quality, [number, number]> = {
+  high:   [1, 1.0],
+  medium: [1, 1.0],
+  low:    [1, 1.0],
 }
-const QUALITY_RAIN_COUNT: Record<Quality, number> = { high: 1000, medium: 500, low: 0 }
+const QUALITY_RAIN_COUNT: Record<Quality, number> = {
+  high:   500,
+  medium: 0,
+  low:    0,
+}
 
 interface Props { onExit: () => void; onReady?: () => void }
 
@@ -117,9 +145,24 @@ type SceneProps = Props & {
   onPrompt:    (t: string | null) => void
   playerState: React.MutableRefObject<PlayerSharedState>
   rainCount:   number
+  quality:     Quality
 }
 
-function Scene({ onExit, fogDensity, interior, onPrompt, playerState, rainCount, onReady }: SceneProps) {
+function PostFX({ quality }: { quality: Quality }) {
+  if (quality === "low") return null
+  return (
+    <EffectComposer enableNormalPass={false} multisampling={0}>
+      <Bloom
+        intensity={quality === "high" ? 1.8 : 1.1}
+        luminanceThreshold={0.72}
+        luminanceSmoothing={0.45}
+        height={quality === "high" ? 360 : 220}
+      />
+    </EffectComposer>
+  )
+}
+
+function Scene({ onExit, fogDensity, interior, onPrompt, playerState, rainCount, onReady, quality }: SceneProps) {
   const firedReady = useRef(false)
   useFrame(() => {
     if (!firedReady.current) {
@@ -129,14 +172,14 @@ function Scene({ onExit, fogDensity, interior, onPrompt, playerState, rainCount,
   })
   return (
     <>
-      <color attach="background" args={["#05070B"]} />
+      <color attach="background" args={["#04060A"]} />
       <fogExp2 attach="fog" args={["#07100D", fogDensity]} />
       <ExposureUpdater interior={interior} />
 
       <Lights />
 
       <Suspense fallback={null}>
-        <City />
+        <City interior={interior} />
         <Skyline />
         {rainCount > 0 && <Rain count={rainCount} />}
         <Player colliders={COLLIDERS} onExit={onExit} onPrompt={onPrompt} playerState={playerState} />
@@ -146,6 +189,8 @@ function Scene({ onExit, fogDensity, interior, onPrompt, playerState, rainCount,
           <InspectableObject key={def.id} def={def} playerState={playerState} />
         ))}
       </Suspense>
+
+      <PostFX quality={quality} />
     </>
   )
 }
@@ -154,15 +199,28 @@ export function CompoundWorld({ onExit, onReady }: Props) {
   const [prompt, setPrompt]         = useState<string | null>(null)
   const [interior, setInterior]     = useState(false)
   const [inspecting, setInspecting] = useState<InspectableDef | null>(null)
+  const [crashed, setCrashed]       = useState(false)
 
   const playerState       = useRef<PlayerSharedState>({ pos: new THREE.Vector3(0, 0, 8), yaw: 0, moving: false })
   const nearInspectable   = useRef<InspectableDef | null>(null)
   const [inspectPrompt, setInspectPrompt] = useState<string | null>(null)
+  const canvasRef         = useRef<HTMLCanvasElement | null>(null)
 
-  /* Quality tier — detected once, drives dpr / rain count */
   const [quality]  = useState<Quality>(detectQuality)
   const dpr        = QUALITY_DPR[quality]
   const rainCount  = QUALITY_RAIN_COUNT[quality]
+
+  /* ── WebGL context lost → exit game cleanly ── */
+  useEffect(() => {
+    const handleContextLost = (e: Event) => {
+      e.preventDefault()
+      console.warn("[CompoundWorld] WebGL context lost — exiting game")
+      onExit()
+    }
+    const canvas = document.querySelector("canvas") as HTMLCanvasElement | null
+    canvas?.addEventListener("webglcontextlost", handleContextLost)
+    return () => canvas?.removeEventListener("webglcontextlost", handleContextLost)
+  }, [onExit])
 
   /* Interior state */
   useEffect(() => {
@@ -186,7 +244,7 @@ export function CompoundWorld({ onExit, onReady }: Props) {
     return () => window.removeEventListener(INSPECT_NEAR_EVENT, handler)
   }, [])
 
-  /* E key — open inspection panel (estate entrance takes priority via Player) */
+  /* E key */
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.code !== "KeyE") return
@@ -198,27 +256,40 @@ export function CompoundWorld({ onExit, onReady }: Props) {
   }, [inspecting])
 
   const handlePrompt = useCallback((t: string | null) => setPrompt(t), [])
-  const fogDensity   = interior ? 0.001 : 0.011
+  const handleError  = useCallback(() => { setCrashed(true); setTimeout(onExit, 50) }, [onExit])
+  const fogDensity   = interior ? 0.001 : 0.010
 
-  /* Estate prompt takes priority over inspect prompt */
   const shownPrompt = prompt || (!inspecting ? inspectPrompt : null)
 
+  if (crashed) return null
+
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 99998, background: "#05070B", overflow: "hidden" }}>
-      <GameErrorBoundary onError={onExit}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 99998, background: "#04060A", overflow: "hidden" }}>
+      <GameErrorBoundary onError={handleError}>
         <Canvas
           dpr={dpr}
           gl={{
-            antialias:       quality === "high",
-            powerPreference: "high-performance",
+            antialias:        quality === "high",
+            powerPreference:  "high-performance",
             outputColorSpace: THREE.SRGBColorSpace,
-            toneMapping:     THREE.ACESFilmicToneMapping,
+            toneMapping:      THREE.ACESFilmicToneMapping,
+            alpha:            false,
+            stencil:          false,
+            depth:            true,
           }}
-          camera={{ fov: 72, near: 0.1, far: 600, position: [0, 1.6, 12] }}
+          camera={{ fov: 70, near: 0.15, far: 550, position: [0, 1.6, 12] }}
+          frameloop="always"
+          performance={{ min: 0.5 }}
         >
           <Scene
-            onExit={onExit} fogDensity={fogDensity} interior={interior} onPrompt={handlePrompt}
-            playerState={playerState} rainCount={rainCount} onReady={onReady}
+            onExit={onExit}
+            fogDensity={fogDensity}
+            interior={interior}
+            onPrompt={handlePrompt}
+            playerState={playerState}
+            rainCount={rainCount}
+            onReady={onReady}
+            quality={quality}
           />
         </Canvas>
       </GameErrorBoundary>
@@ -228,7 +299,7 @@ export function CompoundWorld({ onExit, onReady }: Props) {
       {/* Cinematic vignette */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        background: "radial-gradient(ellipse at 50% 50%, transparent 38%, rgba(0,0,0,0.72) 100%)",
+        background: "radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(0,0,0,0.78) 100%)",
       }} />
 
       {/* HUD wordmark */}
@@ -240,6 +311,15 @@ export function CompoundWorld({ onExit, onReady }: Props) {
       }}>
         <span style={{ opacity: 0.5 }}>COMPOUND</span>{" "}
         <span style={{ color: "rgba(237,228,216,0.25)" }}>{interior ? "ESTATE · INTERIOR" : "WORLD"}</span>
+      </div>
+
+      {/* Quality badge — helps user know what mode they're in */}
+      <div style={{
+        position: "absolute", top: 16, left: "50%", transform: "translateX(-50%)",
+        fontFamily: "'Courier New', monospace", fontSize: 7.5, letterSpacing: "0.22em",
+        color: "rgba(237,228,216,0.12)", pointerEvents: "none",
+      }}>
+        {quality.toUpperCase()}
       </div>
 
       {/* Controls hint */}
@@ -262,7 +342,7 @@ export function CompoundWorld({ onExit, onReady }: Props) {
         </div>
       )}
 
-      {/* Entrance / inspect prompt */}
+      {/* Prompt */}
       {shownPrompt && !inspecting && (
         <div style={{
           position: "absolute", bottom: 56, left: "50%", transform: "translateX(-50%)",

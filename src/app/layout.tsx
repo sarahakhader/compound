@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Cursor } from "@/components/cursor";
 import Script from "next/script";
 import { CompoundUniverseProvider } from "@/components/CompoundUniverseProvider";
+import { SiteNav } from "@/components/SiteNav";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -80,6 +81,7 @@ export default function RootLayout({
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className={`${cormorant.variable} ${spaceGrotesk.variable}`}>
         <Cursor />
+        <SiteNav />
         {children}
         <CompoundUniverseProvider />
         <Script src="/cyberpunk-toggle.js" strategy="afterInteractive" />

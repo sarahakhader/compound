@@ -183,9 +183,6 @@ function Building({ x, z, w, d, h, accent, side, name }: BuildingDef) {
   /* Main tower */
   const towerY = baseH + h / 2
 
-  /* Facade detail: shallow horizontal banding (articulation) */
-  const bandCount = Math.floor(h / 12)
-
   return (
     <group position={[x, 0, z]}>
       {/* ── Foundation base ── */}
@@ -213,18 +210,6 @@ function Building({ x, z, w, d, h, accent, side, name }: BuildingDef) {
           opacity={0.95}
         />
       </mesh>
-
-      {/* ── Horizontal banding (facade depth) ── */}
-      {Array.from({ length: bandCount }, (_, i) => (
-        <mesh
-          key={i}
-          position={[0, baseH + (i + 1) * (h / (bandCount + 1)), facadeSign * (d / 2 + 0.05)]}
-          castShadow={false}
-        >
-          <boxGeometry args={[w + 0.1, 0.18, 0.12]} />
-          <meshStandardMaterial color="#0a0b0e" roughness={0.85} metalness={0.15} />
-        </mesh>
-      ))}
 
       {/* ── Vertical accent pilasters ── */}
       <mesh position={[0, towerY, facadeSign * (d / 2 + 0.06)]} castShadow>
@@ -959,7 +944,7 @@ function MansionApproach() {
 }
 
 /* ── Mansion interior (world origin [200, 0, 0]) ── */
-export function MansionInterior() {
+export function MansionInterior({ interior }: { interior: boolean }) {
   const floorTex = useMemo(() => {
     const W = 512, H = 512
     const c = document.createElement("canvas")
@@ -1102,7 +1087,7 @@ export function MansionInterior() {
             <sphereGeometry args={[0.08, 8, 6]} />
             <meshStandardMaterial color="#E6B87A" emissive="#E6B87A" emissiveIntensity={6} roughness={0.3} />
           </mesh>
-          <pointLight position={[0, -0.8, 0]} color="#E6B87A" intensity={38} distance={8} decay={2} />
+          {interior && <pointLight position={[0, -0.8, 0]} color="#E6B87A" intensity={38} distance={8} decay={2} />}
         </group>
       ))}
 
@@ -1127,7 +1112,7 @@ export function MansionInterior() {
         <meshStandardMaterial color="#1a0e0a" roughness={0.92} />
       </mesh>
       {/* Nook warm light */}
-      <pointLight position={[-11.5, 3.5, -5]} color="#E6B87A" intensity={30} distance={7} decay={2} />
+      {interior && <pointLight position={[-11.5, 3.5, -5]} color="#E6B87A" intensity={30} distance={7} decay={2} />}
       {/* Side table */}
       <mesh position={[-10, 0.38, -3.5]} castShadow>
         <cylinderGeometry args={[0.28, 0.22, 0.76, 8]} />
@@ -1160,19 +1145,20 @@ export function MansionInterior() {
         />
       </group>
 
-      {/* ── Interior lighting rig ── */}
-      {/* Warm ambient fill */}
-      <ambientLight intensity={1.4} color="#c8a46a" />
-      {/* Soft overhead diffuse — boosted to cover corners without extra lights */}
-      <pointLight position={[0, 6.5, 0]} color="#f0e2c8" intensity={160} distance={32} decay={1.2} />
-      {/* Glacier accent from counter */}
-      <pointLight position={[13, 1, 0]} color="#55D9D2" intensity={18} distance={8} decay={2} />
+      {/* ── Interior lighting rig — only active when player is inside ── */}
+      {interior && (
+        <>
+          <ambientLight intensity={1.4} color="#c8a46a" />
+          <pointLight position={[0, 6.5, 0]} color="#f0e2c8" intensity={160} distance={32} decay={1.2} />
+          <pointLight position={[13, 1, 0]} color="#55D9D2" intensity={18} distance={8} decay={2} />
+        </>
+      )}
     </group>
   )
 }
 
 /* ── Main city export ── */
-export function City() {
+export function City({ interior = false }: { interior?: boolean }) {
   return (
     <group>
       {/* ── Ground plane (wet asphalt) ── */}
@@ -1286,7 +1272,7 @@ export function City() {
       <MansionExterior />
 
       {/* ── Mansion interior (player teleports here via E key at approach road end) ── */}
-      <MansionInterior />
+      <MansionInterior interior={interior} />
 
       {/* ── Video signs ── */}
       {/* Concrete/architectural loop — east facade at mid-boulevard */}

@@ -877,8 +877,7 @@ export function ChromeDistrict() {
         <meshStandardMaterial color="#1a1e24" transparent opacity={0.55} depthWrite={false} />
       </mesh>
 
-      {/* ── District ambient ── */}
-      <ambientLight intensity={0.18} color="#b0c0d8" />
+      {/* Master fill — limited radius so it doesn't bleed globally */}
       <pointLight position={[65, 20, -85]} color="#d8eeff" intensity={55} distance={80} decay={1.2} />
     </group>
   )
