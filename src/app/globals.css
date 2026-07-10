@@ -1327,10 +1327,10 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   color: #B5CC45; font-weight: 600; margin-bottom: 1.2rem;
 }
 .bl-buy-title {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(2rem, 4.5vw, 3.8rem);
   letter-spacing: -.02em; line-height: 1.1;
-  color: #ede4d8; margin-bottom: 1.2rem; font-weight: 400;
+  color: #ede4d8; margin-bottom: 1.2rem; font-weight: 900;
 }
 .bl-buy-sub {
   font-size: clamp(.8rem, 1.1vw, .9rem);
