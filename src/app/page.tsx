@@ -386,7 +386,7 @@ const plLogoRef = useRef<SVGSVGElement>(null)
           </p>
 
           {/* Stanza 5 — indented italic body */}
-          <p className="at-body" style={{color:'#aaff00'}}>
+          <p className="at-body">
             Here, the familiar becomes strange. Nature appears as if imagined. Objects emerge as though excavated, from a past beyond memory, or a future not yet arrived.
           </p>
 

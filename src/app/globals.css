@@ -364,7 +364,7 @@ nav {
 .at-pullquote {
   font-family: var(--sans); font-size: clamp(1.6rem, 3.2vw, 3rem);
   font-weight: 700; line-height: 1.2; color: var(--smoked-plum);
-  text-align: center; margin-bottom: 13rem;
+  text-align: center; margin-bottom: 5rem;
   display: flex; align-items: center; gap: 2rem;
 }
 .at-rule {
