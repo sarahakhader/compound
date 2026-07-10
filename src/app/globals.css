@@ -445,18 +445,18 @@ nav {
 /* Stanza 5 — body in cloud */
 .at-body-cloud {
   display: block;
+  width: fit-content;
   position: relative;
-  padding: 3.5rem 5rem 4rem 5rem;
+  padding: 1.2rem 2.2rem 1.5rem 2.2rem;
   z-index: 1;
   margin-bottom: 5rem;
-  max-width: 52ch;
 }
 .at-body-cloud-svg {
   position: absolute;
-  top: -20px;
-  left: -24px;
-  width: calc(100% + 48px);
-  height: calc(100% + 40px);
+  top: -18px;
+  left: -16px;
+  width: calc(100% + 32px);
+  height: calc(100% + 32px);
   z-index: -1;
   pointer-events: none;
   overflow: visible;
