@@ -1319,8 +1319,17 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   border-top: 1px solid rgba(181,204,69,.1);
 }
 .bl-buy-header {
-  max-width: 640px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 100%;
   margin-bottom: 4rem;
+  overflow: visible;
+}
+.bl-buy-header-left {
+  flex-shrink: 0;
+  max-width: 320px;
 }
 .bl-buy-eyebrow {
   font-size: .6rem; letter-spacing: .36em; text-transform: uppercase;
@@ -1328,9 +1337,14 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 }
 .bl-buy-title {
   font-family: var(--sans);
-  font-size: clamp(2rem, 4.5vw, 3.8rem);
-  letter-spacing: -.02em; line-height: 1.1;
-  color: #ede4d8; margin-bottom: 1.2rem; font-weight: 900;
+  font-size: clamp(2.8rem, 6vw, 6.5rem);
+  letter-spacing: -.03em; line-height: 1.0;
+  color: #ede4d8; margin-bottom: 0; font-weight: 900;
+  transform: rotate(-13deg);
+  transform-origin: bottom right;
+  flex-shrink: 0;
+  max-width: 48%;
+  text-align: right;
 }
 .bl-buy-sub {
   font-family: var(--sans);

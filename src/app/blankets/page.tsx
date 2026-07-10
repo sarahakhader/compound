@@ -406,9 +406,11 @@ export default function BlanketsPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease }}
         >
-          <p className="bl-buy-eyebrow">Available Now · CA ${PRICE}</p>
+          <div className="bl-buy-header-left">
+            <p className="bl-buy-eyebrow">Available Now · CA ${PRICE}</p>
+            <p className="bl-buy-sub" style={{ color: '#aaff00' }}>100% Cotton · 180 × 240 cm · Stonewashed · Raw Fringe<br />Select a colourway to place your order inquiry.</p>
+          </div>
           <h2 className="bl-buy-title">Order the Bedrock Blanket</h2>
-          <p className="bl-buy-sub" style={{ color: '#aaff00' }}>100% Cotton · 180 × 240 cm · Stonewashed · Raw Fringe<br />Select a colourway to place your order inquiry.</p>
         </motion.div>
 
         <div className="bl-buy-cards">
