@@ -411,10 +411,11 @@ nav {
 }
 .at-def-cloud {
   display: block;
-  width: fit-content;
+  width: 100%;
   position: relative;
   padding: 1.6rem 2.4rem 1.8rem 1.8rem;
   z-index: 1;
+  text-align: center;
 }
 .at-def-cloud-svg {
   position: absolute;
