@@ -442,13 +442,31 @@ nav {
   line-height: 1.2; margin-bottom: 4rem; max-width: 52ch;
 }
 
-/* Stanza 5 — body matches welcome headline font */
+/* Stanza 5 — body in cloud */
+.at-body-cloud {
+  display: block;
+  width: fit-content;
+  position: relative;
+  padding: 1.6rem 2.4rem 1.8rem 1.8rem;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 5rem;
+}
+.at-body-cloud-svg {
+  position: absolute;
+  top: -16px;
+  left: -12px;
+  width: calc(100% + 24px);
+  height: calc(100% + 24px);
+  z-index: -1;
+  pointer-events: none;
+  overflow: visible;
+}
 .at-body {
   font-family: var(--sans); font-weight: 400;
   font-size: clamp(1.1rem, 1.8vw, 1.55rem);
   line-height: 1.75; color: var(--smoked-plum);
-  padding-left: 4rem; border-left: 1px solid rgba(61,38,69,.2);
-  margin-bottom: 5rem;
+  margin-bottom: 0;
 }
 
 /* Stanza 6 — large display closing */

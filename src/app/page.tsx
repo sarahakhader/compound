@@ -381,10 +381,20 @@ const plLogoRef = useRef<SVGSVGElement>(null)
             From these meanings, a philosophy: beauty is layered. Interconnected. Made to endure.
           </p>
 
-          {/* Stanza 5 — indented italic body */}
-          <p className="at-body">
-            Here, the familiar becomes strange. Nature appears as if imagined. Objects emerge as though excavated, from a past beyond memory, or a future not yet arrived.
-          </p>
+          {/* Stanza 5 — body in cloud */}
+          <div className="at-body-cloud">
+            <svg className="at-body-cloud-svg" viewBox="0 0 500 260" preserveAspectRatio="none" aria-hidden>
+              <rect x="6" y="130" width="488" height="126" rx="32" fill="white"/>
+              <ellipse cx="62"  cy="140" rx="62"  ry="78"  fill="white"/>
+              <ellipse cx="160" cy="122" rx="74"  ry="86"  fill="white"/>
+              <ellipse cx="268" cy="116" rx="82"  ry="86"  fill="white"/>
+              <ellipse cx="370" cy="121" rx="74"  ry="86"  fill="white"/>
+              <ellipse cx="455" cy="142" rx="60"  ry="76"  fill="white"/>
+            </svg>
+            <p className="at-body">
+              Here, the familiar becomes strange. Nature appears as if imagined. Objects emerge as though excavated, from a past beyond memory, or a future not yet arrived.
+            </p>
+          </div>
 
           {/* Stanza 6 — large closing lines */}
           <div className="at-closing">
