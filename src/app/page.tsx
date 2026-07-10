@@ -170,10 +170,6 @@ const plLogoRef = useRef<SVGSVGElement>(null)
         y: -25, ease: "none",
       })
     })
-    gsap.from(".pillar", {
-      scrollTrigger: { trigger: ".pillars", start: "top 82%" },
-      opacity: 0, y: 40, duration: 0.9, ease: "power3.out", stagger: 0.15,
-    })
     gsap.from(".cb-block", {
       scrollTrigger: { trigger: "#swatches", start: "top 88%" },
       scaleY: 0, transformOrigin: "bottom", duration: 1.0, ease: "power3.out", stagger: 0.08,
@@ -396,12 +392,6 @@ const plLogoRef = useRef<SVGSVGElement>(null)
             <p>A future remembered through design.</p>
           </div>
 
-        </div>
-        <div className="about-divider" />
-        <div className="pillars">
-          <div className="pillar"><h3>Sensory Ritual</h3><p>Material poetry. A brand that makes the ordinary sacred.</p></div>
-          <div className="pillar"><h3>Form &amp; Purpose</h3><p>Space as language. Structure that outlasts trend.</p></div>
-          <div className="pillar"><h3>Objects as Artifacts</h3><p>Curation over collection. Beauty with intellectual weight.</p></div>
         </div>
         <div className="colour-blocks" id="swatches">
           {[
