@@ -411,7 +411,7 @@ nav {
 }
 .at-def-cloud {
   display: block;
-  width: 100%;
+  width: fit-content;
   position: relative;
   padding: 1.6rem 2.4rem 1.8rem 1.8rem;
   z-index: 1;
