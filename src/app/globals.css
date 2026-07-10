@@ -1336,7 +1336,7 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   font-family: var(--sans);
   font-size: clamp(.8rem, 1.1vw, .9rem);
   font-weight: 600; letter-spacing: .36em; text-transform: uppercase;
-  line-height: 1.8; color: rgba(237,228,216,.38);
+  line-height: 1.8; color: #aaff00;
 }
 
 /* ── Buy cards grid ── */
