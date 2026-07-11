@@ -1110,9 +1110,10 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 }
 .stt-para:last-child { margin-bottom: 0; }
 .stt-para-em {
+  font-family: var(--sans);
   font-size: clamp(1.1rem, 1.8vw, 1.45rem);
   color: var(--linen);
-  font-weight: 500;
+  font-weight: 900;
   font-style: normal;
   font-family: var(--sans);
   letter-spacing: .01em;
