@@ -127,9 +127,9 @@ export default function StudioPage() {
           <span>Available for new projects</span>
         </div>
 
-        <h1 className="stt-headline">
+        <h1 className="stt-headline" style={{ fontFamily: 'var(--sans)', fontWeight: 900, fontStyle: 'normal' }}>
           <span className="stt-hl-line">The Architecture</span>
-          <span className="stt-hl-line stt-hl-italic">of Atmosphere.</span>
+          <span className="stt-hl-line" style={{ fontStyle: 'normal' }}>of Atmosphere.</span>
         </h1>
 
         <div className="stt-hero-bottom">
