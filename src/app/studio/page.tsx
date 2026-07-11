@@ -158,7 +158,7 @@ export default function StudioPage() {
             with each client to ensure the direction is singular, considered,
             and entirely built around who they are.
           </p>
-          <p className="stt-para stt-para-em">
+          <p className="stt-para stt-para-em" style={{ fontFamily: 'var(--sans)', fontWeight: 900, fontStyle: 'normal' }}>
             This is not decoration for decoration&apos;s sake.<br />
             It is the architecture of atmosphere.
           </p>
