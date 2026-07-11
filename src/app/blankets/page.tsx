@@ -92,30 +92,35 @@ function BrandMark({ className = "bl-slide-logo", style }: { className?: string;
 type Ann = { id: string; label: string; top: string; side: "left" | "right"; pos: string }
 
 const SLIDE_ANNS: Record<string, Ann[]> = {
+  // Image 1 — Molten (orange) · Purple Fringe
   "1": [
-    { id: "01", label: "Double-Layered Cotton", top: "30%", side: "left",  pos: "40%" },
-    { id: "02", label: "Woven Compound Label",  top: "63%", side: "left",  pos: "40%" },
-    { id: "03", label: "Contrast Tassel Edge",  top: "85%", side: "right", pos: "22%" },
+    { id: "01", label: "Double-Layered Cotton", top: "20%", side: "left",  pos: "44%" },
+    { id: "02", label: "Woven Compound Label",  top: "66%", side: "left",  pos: "59%" },
+    { id: "03", label: "Contrast Tassel Edge",  top: "81%", side: "right", pos: "26%" },
   ],
+  // Image 2 — Smoked Plum · Acid Fringe
   "2": [
-    { id: "01", label: "Stonewashed Cotton",    top: "22%", side: "left",  pos: "36%" },
-    { id: "02", label: "Compound Label",        top: "60%", side: "left",  pos: "36%" },
-    { id: "03", label: "Acid Fringe Trim",      top: "88%", side: "right", pos: "14%" },
+    { id: "01", label: "Stonewashed Cotton",    top: "20%", side: "left",  pos: "44%" },
+    { id: "02", label: "Compound Label",        top: "64%", side: "left",  pos: "59%" },
+    { id: "03", label: "Acid Fringe Trim",      top: "79%", side: "right", pos: "26%" },
   ],
+  // Image 3 — Cobalt · Terracotta Fringe
   "3": [
-    { id: "01", label: "100% Cotton Weave",     top: "19%", side: "left",  pos: "34%" },
-    { id: "02", label: "Compound Label",        top: "58%", side: "left",  pos: "36%" },
-    { id: "03", label: "Terracotta Fringe",     top: "87%", side: "right", pos: "12%" },
+    { id: "01", label: "100% Cotton Weave",     top: "18%", side: "left",  pos: "44%" },
+    { id: "02", label: "Compound Label",        top: "62%", side: "left",  pos: "59%" },
+    { id: "03", label: "Terracotta Fringe",     top: "77%", side: "right", pos: "26%" },
   ],
+  // Image 4 — Smoked Plum detail
   "4": [
-    { id: "01", label: "Double-Layer Weave",    top: "24%", side: "left",  pos: "36%" },
-    { id: "02", label: "Woven Mark",            top: "58%", side: "left",  pos: "36%" },
-    { id: "03", label: "Hand-Knotted Tassel",   top: "88%", side: "right", pos: "14%" },
+    { id: "01", label: "Double-Layer Weave",    top: "20%", side: "left",  pos: "44%" },
+    { id: "02", label: "Woven Mark",            top: "64%", side: "left",  pos: "59%" },
+    { id: "03", label: "Hand-Knotted Tassel",   top: "79%", side: "right", pos: "26%" },
   ],
+  // Image 5 — Molten detail
   "5": [
-    { id: "01", label: "Brushed Cotton Surface",top: "27%", side: "left",  pos: "40%" },
-    { id: "02", label: "Compound Mark",         top: "64%", side: "left",  pos: "38%" },
-    { id: "03", label: "Purple Tassel Fringe",  top: "84%", side: "right", pos: "20%" },
+    { id: "01", label: "Brushed Cotton Surface",top: "20%", side: "left",  pos: "44%" },
+    { id: "02", label: "Compound Mark",         top: "66%", side: "left",  pos: "59%" },
+    { id: "03", label: "Purple Tassel Fringe",  top: "81%", side: "right", pos: "26%" },
   ],
 }
 
