@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Compound Studio",
-  description: "Design consulting for atmospheres, objects, interiors, and brand worlds. Compound Studio works with founders, creatives, and space-makers to translate feeling into form.",
+  description: "Design consulting for atmospheres, objects, interiors, and brand worlds. Compound Studio works with founders, creatives, and space makers to translate feeling into form.",
   openGraph: {
     title:       "Compound Studio · COMPOUND",
     description: "Design consulting for atmospheres, objects, interiors, and brand worlds.",
