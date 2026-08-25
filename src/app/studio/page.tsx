@@ -127,10 +127,20 @@ export default function StudioPage() {
           <span>Available for new projects</span>
         </div>
 
-        <h1 className="stt-headline" style={{ fontFamily: 'var(--sans)', fontWeight: 900, fontStyle: 'normal' }}>
-          <span className="stt-hl-line">The Architecture</span>
-          <span className="stt-hl-line" style={{ fontStyle: 'normal' }}>of Atmosphere.</span>
-        </h1>
+        <div className="stt-headline-cloud">
+          <svg className="stt-headline-cloud-svg" viewBox="0 0 500 260" preserveAspectRatio="none" aria-hidden>
+            <rect x="6" y="130" width="488" height="126" rx="32" fill="white"/>
+            <ellipse cx="62"  cy="140" rx="62"  ry="78"  fill="white"/>
+            <ellipse cx="160" cy="122" rx="74"  ry="86"  fill="white"/>
+            <ellipse cx="268" cy="116" rx="82"  ry="86"  fill="white"/>
+            <ellipse cx="370" cy="121" rx="74"  ry="86"  fill="white"/>
+            <ellipse cx="455" cy="142" rx="60"  ry="76"  fill="white"/>
+          </svg>
+          <h1 className="stt-headline" style={{ fontFamily: 'var(--sans)', fontWeight: 900, fontStyle: 'normal' }}>
+            <span className="stt-hl-line">The Architecture</span>
+            <span className="stt-hl-line" style={{ fontStyle: 'normal' }}>of Your Own Atmosphere.</span>
+          </h1>
+        </div>
 
         <div className="stt-hero-bottom">
           <p className="stt-hero-sub">
