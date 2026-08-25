@@ -15,7 +15,7 @@ const SERVICES = [
   { n: "05", name: "Website art direction" },
   { n: "06", name: "Launch visuals and campaign direction" },
   { n: "07", name: "Sourcing and maker guidance" },
-  { n: "08", name: "Brand world-building" },
+  { n: "08", name: "Brand world building" },
 ]
 
 const FOR_LIST = [
@@ -32,7 +32,7 @@ const PROCESS_STEPS = [
   {
     n: "01",
     title: "Discovery",
-    body: "We begin with an immersive brief — your brand history, spatial context, existing references, and the feeling you're reaching for. This is where we learn what you are, and what you're building toward.",
+    body: "We begin with an immersive brief: your brand history, spatial context, existing references, and the feeling you're reaching for. This is where we learn what you are, and what you're building toward.",
   },
   {
     n: "02",
@@ -145,11 +145,11 @@ export default function StudioPage() {
       <section className="stt-intro-section">
         <p className="stt-lead">
           Compound Studio partners with founders, creative directors,
-          and space-makers to translate feeling into a tangible visual language.
+          and space makers to translate feeling into a tangible visual language.
         </p>
         <div className="stt-intro-body">
           <p className="stt-para">
-            We function as an embedded creative partner — directing the visual
+            We function as an embedded creative partner, directing the visual
             and material language of your project from concept through to execution.
             Our work spans interiors, brand identities, campaigns, and product launches.
           </p>
@@ -194,8 +194,8 @@ export default function StudioPage() {
         </div>
         <p className="stt-services-note">
           All engagements include a written creative brief, a curated direction
-          document, and a reference system your team — photographer, contractor,
-          or maker — can execute from immediately.
+          document, and a reference system your team (photographer, contractor,
+          or maker) can execute from immediately.
         </p>
       </section>
 
@@ -227,7 +227,7 @@ export default function StudioPage() {
         </Link>
         <p className="stt-cta-sub">
           We take on a limited number of engagements per season.<br />
-          Send us your brief — we respond within 48 hours.
+          Send us your brief. We respond within 48 hours.
         </p>
       </section>
 

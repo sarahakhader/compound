@@ -5,6 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --site-nav-h:  calc(4.3rem + env(safe-area-inset-top, 0px));
   --molten:      #CC4A12;
   --deep-jungle: #1B3A2D;
   --smoked-plum: #3D2645;
@@ -213,7 +214,7 @@ body.hov #cursor-ring { width: 64px; height: 64px; opacity: .3; }
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   display: flex; justify-content: space-between; align-items: center;
-  padding: 1.6rem 2.5rem;
+  padding: max(1.6rem, env(safe-area-inset-top)) max(2.5rem, env(safe-area-inset-right)) 1.6rem max(2.5rem, env(safe-area-inset-left));
   mix-blend-mode: difference;
 }
 .nav-brand {
@@ -239,7 +240,7 @@ nav {
   position: fixed; inset: 0; z-index: 400;
   background: var(--smoked-plum);
   display: flex; flex-direction: column;
-  padding: 7rem 2.5rem 3rem;
+  padding: 7rem max(2.5rem, env(safe-area-inset-right)) max(3rem, env(safe-area-inset-bottom)) max(2.5rem, env(safe-area-inset-left));
   overflow: hidden;
   transform: translateY(-110%);
   transition: transform .9s cubic-bezier(0.16,1,0.3,1);
@@ -540,6 +541,8 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 }
 
 @media (max-width: 768px) {
+  :root { --site-nav-h: calc(3.5rem + env(safe-area-inset-top, 0px)); }
+
   /* Hero */
   #hero { padding: 4.5rem 1.5rem 2rem; }
   .hero-top-word:nth-child(2), .hero-top-word:nth-child(3) { display: none; }
@@ -578,69 +581,6 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   footer { flex-direction: column; gap: .75rem; text-align: center; }
 }
 
-/* ── Blankets mobile ──────────────────────────────────────── */
-@media (max-width: 768px) {
-  /* Prevent horizontal overflow */
-  .blankets-page { overflow-x: hidden; }
-
-  /* Nav */
-  .bl-nav { padding: 1.2rem 1.5rem; }
-
-  /* Stack left/right vertically */
-  .bl-main { grid-template-columns: 1fr; }
-  .bl-left {
-    padding: 2.5rem 1.5rem 1.8rem;
-    border-right: none;
-    border-bottom: 1px solid rgba(237,228,216,.08);
-  }
-  .bl-right { padding: 1.5rem 1.5rem 2rem; }
-
-  /* Title — 4rem is too large on iPhone, scale it down */
-  .bl-title { font-size: clamp(2.6rem, 13vw, 4rem) !important; line-height: .92; }
-
-  /* Eyebrow margin */
-  .bl-eyebrow { margin-bottom: 1rem; }
-
-  /* Carousel image — cap height so it doesn't dominate the screen */
-  .bl-slide { aspect-ratio: unset; max-height: 56vh; }
-  .bl-slide-img { object-fit: contain; }
-
-  /* Hide annotations and moss on mobile */
-  .bl-annotations { display: none; }
-  .bl-moss-svg { display: none; }
-
-  /* Carousel footer — wrap when narrow */
-  .bl-carousel-footer { flex-wrap: wrap; gap: .6rem; }
-  .bl-caption { font-size: .75rem; }
-
-  /* Spec grid — 2 columns */
-  .bl-specs { grid-template-columns: 1fr 1fr; }
-  .bl-spec-item:nth-child(2) { border-right: none; }
-  .bl-spec-item:nth-child(3) {
-    grid-column: 1 / -1;
-    border-right: none;
-    border-top: 1px solid rgba(181,204,69,.12);
-  }
-  /* Spec text is tiny by default — make readable on mobile */
-  .bl-spec-num   { font-size: .58rem; }
-  .bl-spec-label { font-size: .58rem; }
-  .bl-spec-val   { font-size: .85rem; }
-
-  /* Inquire link */
-  .bl-inquire { font-size: .66rem; margin-top: 1.4rem; }
-
-  /* Coming soon — 2 columns keeps cards large enough to read */
-  .bl-coming-soon { padding: 3rem 1.5rem; }
-  .bl-cs-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
-
-  /* Story CTA */
-  .bl-story-cta { padding: 2.5rem 1.5rem; }
-  .bl-story-link { font-size: .72rem; }
-
-  /* Footer */
-  .bl-footer { flex-direction: column; gap: .5rem; text-align: center; }
-}
-
 /* ── BLANKETS PAGE ──────────────────────────────────────── */
 .blankets-page {
   min-height: 100vh;
@@ -668,6 +608,7 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 .bl-nav {
   display: flex; justify-content: space-between; align-items: center;
   padding: 1.8rem 2.5rem;
+  margin-top: var(--site-nav-h);
   border-bottom: 1px solid rgba(237,228,216,.07);
 }
 .bl-back {
@@ -910,12 +851,74 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 }
 .bl-footer a { color: inherit; text-decoration: none; }
 
+/* ── Blankets mobile ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow */
+  .blankets-page { overflow-x: hidden; }
+
+  /* Nav */
+  .bl-nav { padding: 1.2rem 1.5rem; }
+
+  /* Stack left/right vertically */
+  .bl-main { grid-template-columns: 1fr; }
+  .bl-left {
+    padding: 2.5rem 1.5rem 1.8rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(237,228,216,.08);
+  }
+  .bl-right { padding: 1.5rem 1.5rem 2rem; }
+
+  /* Title — 4rem is too large on iPhone, scale it down */
+  .bl-title { font-size: clamp(2.6rem, 13vw, 4rem) !important; line-height: .92; }
+
+  /* Eyebrow margin */
+  .bl-eyebrow { margin-bottom: 1rem; }
+
+  /* Carousel image — cap height so it doesn't dominate the screen */
+  .bl-slide { aspect-ratio: unset; max-height: 56vh; }
+  .bl-slide-img { object-fit: contain; }
+
+  /* Hide annotations and moss on mobile */
+  .bl-annotations { display: none; }
+  .bl-moss-svg { display: none; }
+
+  /* Carousel footer — wrap when narrow */
+  .bl-carousel-footer { flex-wrap: wrap; gap: .6rem; }
+  .bl-caption { font-size: .75rem; }
+
+  /* Spec grid — 2 columns */
+  .bl-specs { grid-template-columns: 1fr 1fr; }
+  .bl-spec-item:nth-child(2) { border-right: none; }
+  .bl-spec-item:nth-child(3) {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-top: 1px solid rgba(181,204,69,.12);
+  }
+  /* Spec text is tiny by default — make readable on mobile */
+  .bl-spec-num   { font-size: .58rem; }
+  .bl-spec-label { font-size: .58rem; }
+  .bl-spec-val   { font-size: .85rem; }
+
+  /* Inquire link */
+  .bl-inquire { font-size: .66rem; margin-top: 1.4rem; }
+
+  /* Coming soon — 2 columns keeps cards large enough to read */
+  .bl-coming-soon { padding: 3rem 1.5rem; }
+  .bl-cs-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+
+  /* Story CTA */
+  .bl-story-cta { padding: 2.5rem 1.5rem; }
+  .bl-story-link { font-size: .72rem; }
+
+  /* Footer */
+  .bl-footer { flex-direction: column; gap: .5rem; text-align: center; }
+}
 
 /* ── Story Page ── */
 .story-page { font-family: var(--sans); background: #000; color: var(--linen); }
 
 .st-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  position: fixed; top: var(--site-nav-h); left: 0; right: 0; z-index: 100;
   display: flex; justify-content: space-between; align-items: center;
   padding: 1.8rem 2.5rem;
   background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
@@ -987,6 +990,16 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   .st-footer { flex-direction: column; gap: .4rem; text-align: center; }
 }
 
+/* .universe-nav is a real <nav> element inside the /universe hub —
+   without this it inherits the global `nav{}` rule's fixed
+   top:0 positioning and z-index, landing directly on top of the
+   site-wide nav instead of flowing normally inside its own panel. */
+.universe-nav {
+  position: static;
+  z-index: auto;
+  mix-blend-mode: normal;
+}
+
 /* ── Universe page mobile ─────────────────────────────────── */
 @media (max-width: 768px) {
   .universe-grid {
@@ -1022,7 +1035,7 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 
 /* ── Nav ── */
 .stt-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  position: fixed; top: var(--site-nav-h); left: 0; right: 0; z-index: 100;
   display: flex; justify-content: space-between; align-items: center;
   padding: 1.8rem 2.5rem;
   background: rgba(0,71,171,0.55); backdrop-filter: blur(12px);
@@ -1045,7 +1058,7 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   background: var(--cobalt);
   display: grid;
   grid-template-rows: auto 1fr auto;
-  padding: 7rem 2.5rem 3rem;
+  padding: calc(7rem + var(--site-nav-h)) 2.5rem 3rem;
   position: relative; overflow: hidden;
 }
 .stt-hero::after {
@@ -1292,7 +1305,7 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 /* ── Studio mobile ── */
 @media (max-width: 768px) {
   .stt-nav { padding: 1.2rem 1.5rem; }
-  .stt-hero { padding: 6rem 1.5rem 2.5rem; }
+  .stt-hero { padding: calc(6rem + var(--site-nav-h)) 1.5rem 2.5rem; }
   .stt-hero-bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
   .stt-intro-section { padding: 5rem 1.5rem 4rem; }
   .stt-intro-body { margin-left: 0; }

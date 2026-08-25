@@ -166,7 +166,7 @@ class GameErrorBoundary extends Component<{ children: ReactNode; onReset: () => 
         fontFamily: "'Courier New', monospace", color: "rgba(237,228,216,0.7)",
       }}>
         <div style={{ fontSize: 11, letterSpacing: "0.3em", color: "rgba(237,228,216,0.35)" }}>
-          COMPOUND WORLD — SYSTEM FAULT
+          COMPOUND WORLD · SYSTEM FAULT
         </div>
         <div style={{ fontSize: 9, color: "rgba(237,228,216,0.25)", maxWidth: 400, textAlign: "center" }}>
           {this.state.message}

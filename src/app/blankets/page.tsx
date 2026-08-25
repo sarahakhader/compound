@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/carousel"
 
 const images = [
-  { id: "1", src: "/blankets/BB1AF208-8C25-4288-8121-BD95818FAEA7_p1.jpg", alt: "Bedrock — Molten · Purple Fringe" },
-  { id: "2", src: "/blankets/46374E19-8AEA-44CD-AD06-982C92824D6C_p1.jpg", alt: "Bedrock — Smoked Plum · Acid Fringe" },
-  { id: "3", src: "/blankets/5A7262C9-E38E-4FD2-B6EC-82398DA3E229_p1.jpg", alt: "Bedrock — Cobalt · Terracotta Fringe" },
-  { id: "4", src: "/blankets/5A7262C9-E38E-4FD2-B6EC-82398DA3E229_p2.jpg", alt: "Bedrock — Smoked Plum · Acid Fringe (detail)" },
-  { id: "5", src: "/blankets/5A7262C9-E38E-4FD2-B6EC-82398DA3E229_p3.jpg", alt: "Bedrock — Molten · Purple Fringe (detail)" },
+  { id: "1", src: "/blankets/BB1AF208-8C25-4288-8121-BD95818FAEA7_p1.jpg", alt: "Bedrock · Molten · Purple Fringe" },
+  { id: "2", src: "/blankets/46374E19-8AEA-44CD-AD06-982C92824D6C_p1.jpg", alt: "Bedrock · Smoked Plum · Acid Fringe" },
+  { id: "3", src: "/blankets/5A7262C9-E38E-4FD2-B6EC-82398DA3E229_p1.jpg", alt: "Bedrock · Cobalt · Terracotta Fringe" },
+  { id: "4", src: "/blankets/5A7262C9-E38E-4FD2-B6EC-82398DA3E229_p2.jpg", alt: "Bedrock · Smoked Plum · Acid Fringe (detail)" },
+  { id: "5", src: "/blankets/5A7262C9-E38E-4FD2-B6EC-82398DA3E229_p3.jpg", alt: "Bedrock · Molten · Purple Fringe (detail)" },
 ]
 
 const SLIDE_INTERVAL = 5000
@@ -94,7 +94,7 @@ type Ann = { id: string; label: string; top: string; side: "left" | "right"; pos
 const SLIDE_ANNS: Record<string, Ann[]> = {
   // Image 1 — Molten (orange) · Purple Fringe
   "1": [
-    { id: "01", label: "Double-Layered Cotton", top: "20%", side: "left",  pos: "44%" },
+    { id: "01", label: "Double Layered Cotton", top: "20%", side: "left",  pos: "44%" },
     { id: "02", label: "Woven Compound Label",  top: "66%", side: "left",  pos: "59%" },
     { id: "03", label: "Contrast Tassel Edge",  top: "81%", side: "right", pos: "26%" },
   ],
@@ -112,9 +112,9 @@ const SLIDE_ANNS: Record<string, Ann[]> = {
   ],
   // Image 4 — Smoked Plum detail
   "4": [
-    { id: "01", label: "Double-Layer Weave",    top: "20%", side: "left",  pos: "44%" },
+    { id: "01", label: "Double Layer Weave",    top: "20%", side: "left",  pos: "44%" },
     { id: "02", label: "Woven Mark",            top: "64%", side: "left",  pos: "59%" },
-    { id: "03", label: "Hand-Knotted Tassel",   top: "79%", side: "right", pos: "26%" },
+    { id: "03", label: "Hand Knotted Tassel",   top: "79%", side: "right", pos: "26%" },
   ],
   // Image 5 — Molten detail
   "5": [
@@ -387,7 +387,7 @@ export default function BlanketsPage() {
             {/* Textile specs */}
             <div className="bl-specs">
               {[
-                { num: "01", label: "Material",   val: "100% Cotton · 200–250 GSM" },
+                { num: "01", label: "Material",   val: "100% Cotton · 200 to 250 GSM" },
                 { num: "02", label: "Dimensions", val: "180 × 240 cm · 71″ × 94.5″" },
                 { num: "03", label: "Finish",     val: "Stonewashed · Raw Fringe" },
               ].map((s) => (
@@ -592,7 +592,7 @@ export default function BlanketsPage() {
                   <select className="bl-modal-input bl-modal-select" value={orderQty}
                     onChange={e => setOrderQty(Number(e.target.value))}>
                     {[1, 2, 3, 4, 5].map(n => (
-                      <option key={n} value={n}>{n} blanket{n > 1 ? "s" : ""} — CA ${PRICE * n}</option>
+                      <option key={n} value={n}>{n} blanket{n > 1 ? "s" : ""} · CA ${PRICE * n}</option>
                     ))}
                   </select>
                 </div>

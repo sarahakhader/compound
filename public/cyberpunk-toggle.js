@@ -109,18 +109,23 @@
     #cu-cloud-wrap { transition: none; }
   }
 
-  /* Mobile — smaller cloud, re-anchored so it doesn't obscure content */
+  /* Mobile — collapse to a small icon-only puck so it stops covering
+     paragraph text; the full pill only fits on wide screens. */
   @media (max-width: 768px) {
     #cu-cloud-wrap {
-      width: 180px;
-      bottom: 20px;
-      right: 16px;
+      width: 60px;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      right: max(14px, env(safe-area-inset-right));
     }
-    #cu-cloud-bumps::before { width: 54px; height: 54px; left: 6px; }
-    #cu-cloud-bumps::after  { width: 66px; height: 66px; left: 50px; }
-    #cu-cloud-bump-r        { width: 46px; height: 46px; right: 6px; }
-    #cu-cloud-bumps         { height: 38px; }
-    #cyberpunk-toggle-btn   { height: 42px; font-size: 8px; letter-spacing: 1.2px; }
+    #cu-cloud-bumps { display: none; }
+    #cyberpunk-toggle-btn {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+      font-size: 20px;
+      letter-spacing: 0;
+      padding: 0;
+    }
   }
   `;
   document.head.appendChild(style);
@@ -150,14 +155,19 @@
   wrap.appendChild(btn);
 
   /* ── State helpers ── */
+  const isCompact = () => window.matchMedia("(max-width: 768px)").matches;
+  let active = false;
   function setActive(on) {
-    btn.textContent = on
-      ? "↩ RETURN TO THE MUNDANE"
-      : "☁ ENTER COMPOUND'S UNIVERSE";
+    active = on;
+    btn.textContent = isCompact()
+      ? (on ? "↩" : "☁")
+      : (on ? "↩ RETURN TO THE MUNDANE" : "☁ ENTER COMPOUND'S UNIVERSE");
     btn.setAttribute("aria-pressed", String(on));
+    btn.setAttribute("aria-label", on ? "Return to the mundane" : "Enter Compound's Universe");
     wrap.classList.toggle("game-active", on);
   }
   setActive(false);
+  window.matchMedia("(max-width: 768px)").addEventListener("change", () => setActive(active));
 
   /* ── Lazy-load compound-universe.js on first click ── */
   let loaded = false;
@@ -199,4 +209,21 @@
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", mount);
   else mount();
+
+  /* The /universe page is itself the universe entry hub — showing this
+     launcher there is redundant and overlaps the page's own CTA. Re-check
+     on every client-side (SPA) navigation, not just full page loads. */
+  function syncVisibility() {
+    wrap.style.display = window.location.pathname.startsWith("/universe") ? "none" : "";
+  }
+  syncVisibility();
+  window.addEventListener("popstate", syncVisibility);
+  for (const fn of ["pushState", "replaceState"]) {
+    const orig = history[fn];
+    history[fn] = function (...args) {
+      const ret = orig.apply(this, args);
+      syncVisibility();
+      return ret;
+    };
+  }
 })();

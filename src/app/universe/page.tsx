@@ -9,7 +9,7 @@ const DISTRICTS = [
     num:      "01",
     name:     "BEDROCK",
     sub:      "Geological District",
-    identity: "Carved earth, basalt paving, terracotta towers. The oldest layer of Compound — where material culture began.",
+    identity: "Carved earth, basalt paving, terracotta towers. The oldest layer of Compound, where material culture began.",
     accent:   "#A74B2A",
     dim:      "#3a1a08",
     img:      "/districts/bedrock.png",
@@ -18,7 +18,7 @@ const DISTRICTS = [
       "Calibrating terracotta resonance",
       "Heating mineral pathways",
       "Mapping geological strata",
-      "Compound World — BEDROCK ready",
+      "Compound World · BEDROCK ready",
     ],
   },
   {
@@ -26,7 +26,7 @@ const DISTRICTS = [
     num:      "02",
     name:     "ACID CANOPY",
     sub:      "Biophilic District",
-    identity: "Vertical gardens cascade from every cornice. Living walls, growing infrastructure, acid-green canopy light.",
+    identity: "Vertical gardens cascade from every cornice. Living walls, growing infrastructure, acid green canopy light.",
     accent:   "#97D700",
     dim:      "#1a2d04",
     img:      "/districts/acid-canopy.png",
@@ -35,7 +35,7 @@ const DISTRICTS = [
       "Charging canopy bioluminescence",
       "Seeding living infrastructure",
       "Calibrating root systems",
-      "Compound World — ACID CANOPY ready",
+      "Compound World · ACID CANOPY ready",
     ],
   },
   {
@@ -52,7 +52,7 @@ const DISTRICTS = [
       "Initialising material bays",
       "Calibrating prototype arrays",
       "Pressurising vacuum chambers",
-      "Compound World — CHROME WORKS ready",
+      "Compound World · CHROME WORKS ready",
     ],
   },
   {
@@ -69,7 +69,7 @@ const DISTRICTS = [
       "Channelling subterranean water",
       "Freezing structural geometry",
       "Condensing atmospheric data",
-      "Compound World — GLACIER ready",
+      "Compound World · GLACIER ready",
     ],
   },
   {
@@ -86,7 +86,7 @@ const DISTRICTS = [
       "Lighting cultural quarters",
       "Mapping residential pathways",
       "Loading collective memory",
-      "Compound World — CRIMSON QUARTER ready",
+      "Compound World · CRIMSON QUARTER ready",
     ],
   },
   {
@@ -103,7 +103,7 @@ const DISTRICTS = [
       "Charging ultraviolet arrays",
       "Initialising unknown protocols",
       "Mapping undefined geometries",
-      "Compound World — DEEP VIOLET ready",
+      "Compound World · DEEP VIOLET ready",
     ],
   },
 ] as const
@@ -298,7 +298,7 @@ function DistrictLoadingScreen({ district, pct, line }: { district: District; pc
           marginBottom: 16,
           opacity: 0.8,
         }}>
-          {district.num} — ENTERING
+          {district.num} · ENTERING
         </div>
 
         {/* District name */}
@@ -501,7 +501,7 @@ function DistrictCard({
         transition: "opacity 0.2s ease",
         position: "relative",
       }}>
-        SELECTED — ENTER TO LAUNCH ↗
+        SELECTED · ENTER TO LAUNCH ↗
       </div>
     </button>
   )
@@ -600,7 +600,7 @@ export default function UniversePage() {
 
   return (
     <div style={{
-      position: "fixed", inset: 0,
+      position: "fixed", top: "var(--site-nav-h)", left: 0, right: 0, bottom: 0,
       background: "#05070B",
       display: "flex", flexDirection: "column",
       overflow: "hidden",

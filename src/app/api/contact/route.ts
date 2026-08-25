@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
           from:     fromAddress,
           to:       [toEmail],
           reply_to: email,
-          subject:  `Compound inquiry — ${firstName} ${lastName}`,
+          subject:  `Compound inquiry from ${firstName} ${lastName}`,
           text:     body,
         }),
       })
