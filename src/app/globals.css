@@ -1075,29 +1075,45 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 .stt-dot { opacity: .4; }
 
 .stt-headline-cloud {
-  display: flex; align-items: center;
-  width: 100%; min-width: 0;
-  align-self: center;
-  position: relative; z-index: 1;
-  padding: 2.2rem 3rem;
+  position: relative;
+  display: block;
+  width: fit-content; min-width: 0; max-width: 100%;
+  align-self: center; justify-self: start;
+  z-index: 1;
+  padding: 1.4rem 2.6rem;
+  background: white;
+  border-radius: 44px;
   box-sizing: border-box;
 }
-.stt-headline-cloud-svg {
+/* Scalloped bumps along the top edge give it a cloud silhouette */
+.stt-headline-cloud::before,
+.stt-headline-cloud::after {
+  content: '';
   position: absolute;
-  top: -18px; left: -14px;
-  width: calc(100% + 28px);
-  height: calc(100% + 28px);
-  z-index: -1;
+  top: 0;
+  background: white;
+  border-radius: 50%;
+  aspect-ratio: 1.5 / 1;
   pointer-events: none;
-  overflow: visible;
+}
+.stt-headline-cloud::before {
+  width: 30%;
+  left: 9%;
+  transform: translateY(-42%);
+}
+.stt-headline-cloud::after {
+  width: 22%;
+  right: 11%;
+  transform: translateY(-34%);
 }
 .stt-headline {
-  display: flex; flex-direction: column; justify-content: center;
-  width: 100%; min-width: 0;
+  display: block;
+  width: fit-content; max-width: 100%; min-width: 0;
   font-family: var(--serif);
-  font-size: clamp(3.8rem, 9vw, 11rem);
+  font-size: clamp(3.2rem, 8vw, 10rem);
   font-weight: 600; line-height: .96; letter-spacing: -.03em;
   color: var(--smoked-plum);
+  text-align: center;
   clip-path: inset(0 100% 0 0);
   position: relative; z-index: 1;
 }
@@ -1325,8 +1341,9 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   .stt-nav { padding: 1.2rem 1.5rem; }
   .stt-hero { padding: calc(6rem + var(--site-nav-h)) 1.5rem 2.5rem; }
   .stt-hero-bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-  .stt-headline-cloud { padding: 1.2rem .5rem; }
-  .stt-headline-cloud-svg { top: -10px; left: -8px; width: calc(100% + 16px); height: calc(100% + 16px); }
+  .stt-headline-cloud { padding: 1rem 1.4rem; border-radius: 28px; }
+  .stt-headline-cloud::before { width: 26%; transform: translateY(-38%); }
+  .stt-headline-cloud::after  { width: 20%; transform: translateY(-30%); }
   .stt-intro-section { padding: 5rem 1.5rem 4rem; }
   .stt-intro-body { margin-left: 0; }
   .stt-for-section { padding: 4rem 1.5rem; }
