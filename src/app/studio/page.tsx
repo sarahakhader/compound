@@ -128,6 +128,17 @@ export default function StudioPage() {
         </div>
 
         <div className="stt-headline-cloud">
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
+          <span className="stt-cloud-bump" aria-hidden="true" />
           <h1 className="stt-headline" style={{ fontFamily: 'var(--sans)', fontWeight: 900, fontStyle: 'normal' }}>
             <span className="stt-hl-line">The Architecture</span>
             <span className="stt-hl-line" style={{ fontStyle: 'normal' }}>of Your Own Atmosphere.</span>
