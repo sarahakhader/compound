@@ -40,10 +40,10 @@ export default function WeddingsPage() {
     })
 
     document.querySelectorAll<HTMLElement>(".stt-cta-link").forEach(link => {
-      const words = link.querySelectorAll(".stt-cta-word")
+      const parts = link.querySelectorAll(".stt-cta-word, .stt-cta-arrow")
       ScrollTrigger.create({
         trigger: link, start: "top 88%", once: true,
-        onEnter: () => gsap.to(words, { clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power4.out", stagger: 0.12 }),
+        onEnter: () => gsap.to(parts, { clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power4.out", stagger: 0.12 }),
       })
     })
     gsap.from(".stt-cta-sub", {

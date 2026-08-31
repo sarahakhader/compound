@@ -27,10 +27,10 @@ export default function WorkDetailPage() {
       },
     )
     document.querySelectorAll<HTMLElement>(".cta-link").forEach(link => {
-      const words = link.querySelectorAll(".cta-word")
+      const parts = link.querySelectorAll(".cta-word, .cta-arrow")
       ScrollTrigger.create({
         trigger: link, start: "top 88%", once: true,
-        onEnter: () => gsap.to(words, { clipPath: "inset(0 0% 0 0)", duration: 1.2, ease: "power4.out", stagger: 0.1 }),
+        onEnter: () => gsap.to(parts, { clipPath: "inset(0 0% 0 0)", duration: 1.2, ease: "power4.out", stagger: 0.1 }),
       })
     })
     return () => ScrollTrigger.getAll().forEach(t => t.kill())
