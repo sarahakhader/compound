@@ -499,6 +499,254 @@ nav {
 .cb-name    { font-family:var(--sans); font-size:.55rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.85); line-height:1.6; }
 .cb-pantone { font-family:var(--serif); font-size:.58rem; font-style:italic; color:rgba(255,255,255,.45); }
 
+/* ══════════════════════════════════════════════════════════════
+   GENERIC ARROW-LINK CTA — reused across the new homepage sections
+══════════════════════════════════════════════════════════════ */
+.cta-link {
+  display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .5em;
+  text-decoration: none; cursor: pointer;
+  font-family: var(--sans); font-weight: 700;
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  letter-spacing: -.01em;
+  color: var(--acid); transition: color .3s;
+}
+.cta-link:hover { color: var(--linen); }
+.cta-word { display: inline-block; clip-path: inset(0 100% 0 0); }
+.cta-arrow {
+  display: inline-block; font-size: .8em;
+  transition: transform .45s cubic-bezier(0.16,1,0.3,1);
+  clip-path: inset(0 100% 0 0);
+}
+.cta-link:hover .cta-arrow { transform: translate(8%, -8%); }
+
+/* ══════════════════════════════════════════════════════════════
+   WHAT WE DO
+══════════════════════════════════════════════════════════════ */
+.wwd-section {
+  background: var(--obsidian); color: var(--linen);
+  padding: 6.5rem 2.5rem 7rem;
+}
+.wwd-descriptor {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  color: var(--linen); opacity: .85; max-width: 46ch; margin-bottom: 1rem;
+}
+.wwd-services-line {
+  font-size: .64rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--linen); opacity: .4; font-weight: 500; margin-bottom: 2.4rem;
+}
+.wwd-cta { margin-bottom: 6rem; }
+.wwd-headline {
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(2.2rem, 5.2vw, 4.6rem);
+  line-height: 1.08; letter-spacing: -.02em;
+  color: var(--linen); max-width: 18ch; margin-bottom: 1.6rem;
+}
+.wwd-body {
+  font-family: var(--sans); font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.7; color: var(--linen); opacity: .7;
+  max-width: 60ch; margin-bottom: 4.5rem;
+}
+.wwd-disciplines { grid-template-columns: repeat(4, 1fr); color: var(--linen); }
+.wwd-disciplines .pillar::before { background: var(--acid); opacity: .5; }
+.wwd-disciplines .pillar h3 { opacity: .55; }
+.wwd-disciplines .pillar p { opacity: .68; }
+
+/* ══════════════════════════════════════════════════════════════
+   WEDDINGS
+══════════════════════════════════════════════════════════════ */
+.wed-section {
+  background: var(--obsidian); color: var(--linen);
+  padding: 2rem 2.5rem 7rem;
+  border-top: 1px solid rgba(237,228,216,.08);
+}
+.wed-eyebrow {
+  font-size: .64rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--acid); font-weight: 600; margin-bottom: 1.4rem;
+}
+.wed-body {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(1.3rem, 2.6vw, 2rem); line-height: 1.4;
+  color: var(--linen); max-width: 30ch; margin-bottom: 2.6rem;
+}
+.wed-list {
+  list-style: none;
+  display: grid; grid-template-columns: repeat(5, auto); gap: .6rem 2rem;
+  margin-bottom: 3rem;
+}
+.wed-list li {
+  font-size: .78rem; letter-spacing: .04em;
+  color: var(--linen); opacity: .55;
+}
+.wed-list li::before { content: '— '; opacity: .5; }
+
+/* ══════════════════════════════════════════════════════════════
+   FIVE SENSES
+══════════════════════════════════════════════════════════════ */
+.fs-section {
+  background: var(--obsidian); color: var(--linen);
+  padding: 2rem 2.5rem 7.5rem;
+  border-top: 1px solid rgba(237,228,216,.08);
+}
+.fs-headline {
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(2rem, 4.6vw, 4rem);
+  letter-spacing: -.02em; color: var(--linen); margin-bottom: .8rem;
+}
+.fs-intro {
+  font-size: clamp(.95rem, 1.3vw, 1.1rem);
+  color: var(--linen); opacity: .55; margin-bottom: 3.5rem;
+}
+.fs-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem;
+}
+.fs-item { display: flex; flex-direction: column; gap: .6rem; }
+.fs-word {
+  font-family: var(--serif); font-weight: 600; font-style: italic;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  color: var(--glacier); letter-spacing: -.01em;
+}
+.fs-desc {
+  font-size: .8rem; line-height: 1.5; color: var(--linen); opacity: .5;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SELECTED WORK
+══════════════════════════════════════════════════════════════ */
+.sw-section {
+  background: var(--obsidian); color: var(--linen);
+  padding: 6rem 2.5rem 7rem;
+  border-top: 1px solid rgba(237,228,216,.08);
+}
+.sw-top { margin-bottom: 3rem; }
+.sw-tag {
+  font-size: .64rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--linen); opacity: .35; font-weight: 500; margin-bottom: 1rem;
+}
+.sw-sub {
+  font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: var(--linen); opacity: .8;
+}
+.sw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+.sw-card {
+  position: relative; aspect-ratio: 16/10; border-radius: 2px;
+  padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;
+  overflow: hidden;
+  text-decoration: none; color: inherit;
+  transition: transform .3s ease;
+}
+.sw-card:hover { transform: translateY(-4px); }
+.sw-cta { display: inline-flex; }
+.sw-card-badge {
+  align-self: flex-start;
+  font-size: .56rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--linen); opacity: .55; font-weight: 600;
+  border: 1px solid rgba(237,228,216,.3); border-radius: 100px;
+  padding: .3rem .8rem;
+}
+.sw-card-title {
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(1.4rem, 2.6vw, 2rem); color: var(--linen); margin-bottom: .3rem;
+}
+.sw-card-meta {
+  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--linen); opacity: .6; font-weight: 500;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   WORK PAGE (/work index + /work/[slug] detail)
+══════════════════════════════════════════════════════════════ */
+.wk-hero {
+  background: var(--cobalt); color: var(--linen);
+  padding: calc(7rem + var(--site-nav-h)) 2.5rem 4rem;
+}
+.wk-eyebrow {
+  font-size: .64rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--yellow); font-weight: 600; margin-bottom: 1.2rem;
+}
+.wk-headline {
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(2rem, 4.4vw, 3.6rem); letter-spacing: -.02em;
+  line-height: 1.15; max-width: 22ch;
+}
+
+.wk-section { background: var(--obsidian); padding: 4rem 2.5rem 7rem; }
+.wk-filters { display: flex; flex-wrap: wrap; gap: .7rem; margin-bottom: 3rem; }
+.wk-filter {
+  background: none; cursor: pointer;
+  border: 1px solid rgba(237,228,216,.18); border-radius: 100px;
+  padding: .55rem 1.2rem;
+  font-family: var(--sans); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--linen); opacity: .55; font-weight: 500;
+  transition: opacity .2s, border-color .2s, background .2s;
+}
+.wk-filter:hover { opacity: .85; }
+.wk-filter.active {
+  opacity: 1; border-color: var(--acid); background: rgba(181,204,69,.08); color: var(--acid);
+}
+.wk-grid { margin-bottom: 0; }
+
+/* ── Detail page ── */
+.wk-detail-hero {
+  padding: calc(6rem + var(--site-nav-h)) 2.5rem 4rem;
+  color: var(--linen);
+}
+.wk-detail-badge {
+  display: inline-block; margin-bottom: 1.4rem;
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--linen); opacity: .7; font-weight: 600;
+  border: 1px solid rgba(237,228,216,.35); border-radius: 100px;
+  padding: .35rem .9rem;
+}
+.wk-detail-title {
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(2.4rem, 6vw, 5.5rem); letter-spacing: -.02em;
+  line-height: 1.05; margin-bottom: 1rem;
+}
+.wk-detail-meta {
+  font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+  opacity: .75; font-weight: 500;
+}
+.wk-detail-body { background: var(--obsidian); padding: 6rem 2.5rem; }
+.wk-stanzas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; }
+.wk-stanza-num {
+  display: block; font-size: .5rem; letter-spacing: .22em;
+  color: var(--acid); font-weight: 700; margin-bottom: .8rem;
+}
+.wk-stanza-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem); color: var(--linen); margin-bottom: .5rem;
+}
+.wk-stanza-body {
+  font-size: .82rem; line-height: 1.7; color: var(--linen); opacity: .6;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FINAL CTA
+══════════════════════════════════════════════════════════════ */
+.fcta-section {
+  background: var(--obsidian); color: var(--linen);
+  padding: 7rem 2.5rem 8rem;
+  border-top: 1px solid rgba(237,228,216,.08);
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+}
+.fcta-headline {
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  line-height: 1.05; letter-spacing: -.02em;
+  color: var(--linen); max-width: 18ch; margin-bottom: 1.2rem;
+}
+.fcta-sub {
+  font-size: clamp(.95rem, 1.3vw, 1.15rem);
+  color: var(--linen); opacity: .55; margin-bottom: 2.5rem;
+}
+.fcta-cta {
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  color: var(--molten);
+}
+.fcta-cta:hover { color: var(--acid); }
+
 /* CONTACT */
 #contact { background:var(--deep-jungle); position:relative; overflow:hidden; }
 .c-top { padding:5.5rem 2.5rem 3rem; border-bottom:1px solid rgba(237,228,216,.08); }
@@ -568,6 +816,32 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 
   /* Pillars */
   .pillars { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  /* What We Do */
+  .wwd-section { padding: 4.5rem 1.5rem 5rem; }
+  .wwd-cta { margin-bottom: 4rem; }
+
+  /* Weddings */
+  .wed-section { padding: 1.5rem 1.5rem 5rem; }
+  .wed-list { grid-template-columns: repeat(2, auto); gap: .6rem 1.5rem; }
+
+  /* Five Senses */
+  .fs-section { padding: 1.5rem 1.5rem 5.5rem; }
+  .fs-grid { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
+
+  /* Selected Work */
+  .sw-section { padding: 4.5rem 1.5rem 5rem; }
+  .sw-grid { grid-template-columns: 1fr; }
+
+  /* Work page */
+  .wk-hero { padding: calc(4.5rem + var(--site-nav-h)) 1.5rem 3rem; }
+  .wk-section { padding: 3rem 1.5rem 5rem; }
+  .wk-detail-hero { padding: calc(4.5rem + var(--site-nav-h)) 1.5rem 3rem; }
+  .wk-detail-body { padding: 4rem 1.5rem; }
+  .wk-stanzas { grid-template-columns: 1fr; gap: 2rem; }
+
+  /* Final CTA */
+  .fcta-section { padding: 5rem 1.5rem 6rem; }
 
   /* Contact */
   .c-top { padding: 3.5rem 1.5rem 2.5rem; }
@@ -1158,28 +1432,116 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
 .stt-services-divider {
   flex: 1; height: 1px; background: rgba(237,228,216,.08);
 }
-.stt-services-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+/* ── Disciplines (4-category service breakdown) ── */
+.stt-disciplines { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; }
+.stt-discipline { position: relative; padding-top: 1.4rem; }
+.stt-discipline::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 22px; height: 1px; background: var(--acid); opacity: .5;
 }
-.stt-service {
-  display: flex; align-items: baseline; gap: 1.4rem;
-  padding: 1.4rem 0;
-  border-bottom: 1px solid rgba(237,228,216,.07);
+.stt-discipline-name {
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(237,228,216,.55); font-weight: 500; margin-bottom: .9rem;
 }
-.stt-service:nth-child(odd)  { padding-right: 3rem; border-right: 1px solid rgba(237,228,216,.07); }
-.stt-service:nth-child(even) { padding-left:  3rem; }
-.stt-service:nth-last-child(-n+2) { border-bottom: none; }
-.stt-service-num {
-  font-size: .5rem; letter-spacing: .22em;
-  color: var(--acid); font-weight: 700; flex-shrink: 0;
+.stt-discipline-list { list-style: none; }
+.stt-discipline-list li {
+  font-size: .82rem; line-height: 1.9;
+  color: rgba(237,228,216,.55);
 }
-.stt-service-name {
+.stt-discipline-list li::before { content: '— '; opacity: .5; }
+
+/* ── Weddings ── */
+.stt-wed-section {
+  background: var(--obsidian);
+  padding: 7rem 2.5rem 8rem;
+  border-top: 1px solid rgba(237,228,216,.06);
+}
+.stt-wed-eyebrow {
+  font-size: .64rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--acid); font-weight: 600; margin-bottom: 1.2rem;
+}
+.stt-wed-title {
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  letter-spacing: -.02em; color: var(--linen); margin-bottom: 1.4rem;
+}
+.stt-wed-body {
+  font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.7;
+  color: var(--linen); opacity: .65; max-width: 62ch; margin-bottom: 3.5rem;
+}
+.stt-wed-stanzas {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+.stt-wed-stanza-num {
+  display: block; font-size: .5rem; letter-spacing: .22em;
+  color: var(--acid); font-weight: 700; margin-bottom: .8rem;
+}
+.stt-wed-stanza-title {
   font-family: var(--serif); font-style: italic;
-  font-size: clamp(1rem, 1.6vw, 1.3rem);
-  line-height: 1.3; color: rgba(237,228,216,.85);
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem); color: var(--linen); margin-bottom: .4rem;
 }
+.stt-wed-stanza-body {
+  font-size: .82rem; line-height: 1.6; color: var(--linen); opacity: .55;
+}
+
+/* ── Dedicated Weddings page — 5-stanza detail breakdown ── */
+.stt-wed-detail-section {
+  background: var(--obsidian);
+  padding: 3rem 2.5rem 8rem;
+}
+.stt-wed-stanzas-5 { grid-template-columns: repeat(5, 1fr); }
+
+/* ── Small businesses ── */
+.stt-sb-section {
+  background: var(--smoked-plum);
+  padding: 7rem 2.5rem;
+  border-top: 1px solid rgba(237,228,216,.06);
+}
+.stt-sb-tag {
+  font-size: .64rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--acid); font-weight: 600; margin-bottom: 1.2rem;
+}
+.stt-sb-title {
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  letter-spacing: -.01em; color: var(--linen); max-width: 20ch; margin-bottom: 1.2rem;
+}
+.stt-sb-body {
+  font-size: clamp(.95rem, 1.3vw, 1.1rem); line-height: 1.7;
+  color: var(--linen); opacity: .65; max-width: 60ch; margin-bottom: 2.4rem;
+}
+.stt-sb-list {
+  list-style: none;
+  display: grid; grid-template-columns: repeat(3, auto); gap: .6rem 2rem;
+}
+.stt-sb-list li {
+  font-size: .78rem; color: var(--linen); opacity: .55;
+}
+.stt-sb-list li::before { content: '— '; opacity: .5; }
+
+/* ── Philosophy (Studio page) ── */
+.stt-philosophy-section {
+  background: var(--molten); color: var(--smoked-plum);
+  padding: 7rem 2.5rem;
+}
+.stt-philosophy-line {
+  font-family: var(--font-cormorant); font-weight: 600;
+  font-size: clamp(1.6rem, 3vw, 2.6rem); letter-spacing: -.02em;
+  line-height: 1.3; color: var(--smoked-plum);
+  max-width: 34ch; margin-bottom: 2.6rem;
+}
+.stt-philosophy-body {
+  font-family: var(--sans); font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.7; color: var(--smoked-plum); opacity: .8;
+  max-width: 62ch; margin-bottom: 3.2rem;
+}
+.stt-philosophy-closing {
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(1.6rem, 3.6vw, 3rem); line-height: 1.15;
+  letter-spacing: -.02em; color: var(--smoked-plum);
+}
+.stt-philosophy-closing p { margin-bottom: .15em; }
 
 /* ── Process ── */
 .stt-process-section {
@@ -1294,10 +1656,13 @@ footer { background:var(--deep-jungle); border-top:1px solid rgba(237,228,216,.0
   .stt-intro-body { margin-left: 0; }
   .stt-for-section { padding: 4rem 1.5rem; }
   .stt-services-section { padding: 4rem 1.5rem 5rem; }
-  .stt-services-grid { grid-template-columns: 1fr; }
-  .stt-service { padding: 1.2rem 0 !important; border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
-  .stt-service:nth-last-child(-n+2) { border-bottom: 1px solid rgba(237,228,216,.07); }
-  .stt-service:last-child { border-bottom: none; }
+  .stt-disciplines { grid-template-columns: 1fr; gap: 2.2rem; }
+  .stt-wed-section { padding: 4.5rem 1.5rem 5rem; }
+  .stt-wed-stanzas { grid-template-columns: 1fr; gap: 1.8rem; }
+  .stt-wed-detail-section { padding: 1.5rem 1.5rem 5.5rem; }
+  .stt-sb-section { padding: 4.5rem 1.5rem; }
+  .stt-sb-list { grid-template-columns: repeat(2, auto); }
+  .stt-philosophy-section { padding: 4.5rem 1.5rem; }
   .stt-process-section { padding: 5rem 1.5rem; }
   .stt-process-steps { gap: 2rem; }
   .stt-process-step { gap: 1.2rem; }

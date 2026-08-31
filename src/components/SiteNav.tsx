@@ -9,9 +9,7 @@ export function SiteNav() {
   const close = () => setMenuOpen(false)
 
   // On the home page use in-page anchors; from other pages prefix with /
-  const home = pathname === "/" ? "#hero"    : "/#hero"
-  const about   = pathname === "/" ? "#about"   : "/#about"
-  const contact  = pathname === "/" ? "#contact" : "/#contact"
+  const contact = pathname === "/" ? "#contact" : "/#contact"
 
   return (
     <>
@@ -25,10 +23,11 @@ export function SiteNav() {
       <div id="menu" className={menuOpen ? "open" : ""}>
         <p className="m-tag">Navigation</p>
         <ul className="m-links">
-          <li><a href={home}    onClick={close}>Home</a></li>
-          <li><a href={about}   onClick={close}>About</a></li>
-          <li><Link href="/blankets" onClick={close}>Blankets</Link></li>
-          <li><Link href="/studio"   onClick={close}>Studio</Link></li>
+          <li><Link href="/studio" onClick={close}>Studio</Link></li>
+          <li><Link href="/services" onClick={close}>Services</Link></li>
+          <li><Link href="/work" onClick={close}>Work</Link></li>
+          <li><Link href="/objects" onClick={close}>Objects</Link></li>
+          <li><Link href="/universe" onClick={close}>Universe</Link></li>
           <li><a href={contact} onClick={close}>Contact</a></li>
         </ul>
         <div className="m-foot">

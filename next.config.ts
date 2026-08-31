@@ -59,6 +59,11 @@ const PERMISSIONS_POLICY = [
 ].join(", ")
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/blankets", destination: "/objects", permanent: true },
+    ]
+  },
   async headers() {
     return [
       /* ── All routes ───────────────────────────────────────────────────── */

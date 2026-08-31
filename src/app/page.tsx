@@ -6,12 +6,16 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import TextCursorProximity from "@/components/ui/text-cursor-proximity"
 import { motion, AnimatePresence } from "motion/react"
+import { WORK } from "@/data/work"
 
 const HELLOS = [
   "Hello", "Bonjour", "Hola", "Ciao", "Hallo", "Olá",
   "Merhaba", "Salut", "Hei", "こんにちは", "안녕하세요",
   "你好", "مرحبا", "नमस्ते", "Sawubona", "Привет",
 ]
+
+/* Homepage shows a short preview; the full set lives at /work */
+const SELECTED_WORK = WORK.slice(0, 4)
 
 function CyclingHello() {
   const [index, setIndex] = useState(0)
@@ -150,6 +154,65 @@ const plLogoRef = useRef<SVGSVGElement>(null)
     gsap.from(".at-intro, .at-pullquote, .at-definitions, .at-philosophy, .at-body, .at-closing p", {
       scrollTrigger: { trigger: "#manifesto", start: "top 85%", end: "bottom 15%", scrub: 0.5 },
       opacity: 0, y: 40, stagger: { each: 0.1 }, ease: "power2.out",
+    })
+
+    /* What We Do */
+    gsap.from(".wwd-descriptor, .wwd-services-line", {
+      scrollTrigger: { trigger: "#what-we-do", start: "top 85%" },
+      opacity: 0, y: 20, duration: 0.8, ease: "power3.out", stagger: 0.1,
+    })
+    gsap.from(".wwd-headline, .wwd-body", {
+      scrollTrigger: { trigger: ".wwd-headline", start: "top 88%" },
+      opacity: 0, y: 30, duration: 0.9, ease: "power3.out", stagger: 0.12,
+    })
+    gsap.from(".wwd-disciplines .pillar", {
+      scrollTrigger: { trigger: ".wwd-disciplines", start: "top 85%" },
+      opacity: 0, y: 30, duration: 0.75, ease: "power3.out", stagger: 0.1,
+    })
+
+    /* Weddings */
+    gsap.from(".wed-eyebrow, .wed-body", {
+      scrollTrigger: { trigger: "#weddings", start: "top 82%" },
+      opacity: 0, y: 24, duration: 0.85, ease: "power3.out", stagger: 0.1,
+    })
+    gsap.from(".wed-list li", {
+      scrollTrigger: { trigger: ".wed-list", start: "top 85%" },
+      opacity: 0, y: 14, duration: 0.6, ease: "power3.out", stagger: 0.05,
+    })
+
+    /* Five Senses */
+    gsap.from(".fs-headline, .fs-intro", {
+      scrollTrigger: { trigger: "#five-senses", start: "top 82%" },
+      opacity: 0, y: 24, duration: 0.85, ease: "power3.out", stagger: 0.1,
+    })
+    gsap.from(".fs-item", {
+      scrollTrigger: { trigger: ".fs-grid", start: "top 85%" },
+      opacity: 0, y: 24, duration: 0.7, ease: "power3.out", stagger: 0.08,
+    })
+
+    /* Selected Work */
+    gsap.from(".sw-tag, .sw-sub", {
+      scrollTrigger: { trigger: "#selected-work", start: "top 85%" },
+      opacity: 0, y: 18, duration: 0.7, ease: "power3.out", stagger: 0.08,
+    })
+    gsap.from(".sw-card", {
+      scrollTrigger: { trigger: ".sw-grid", start: "top 85%" },
+      opacity: 0, y: 34, duration: 0.8, ease: "power3.out", stagger: 0.1,
+    })
+
+    /* Final CTA */
+    gsap.from(".fcta-headline, .fcta-sub", {
+      scrollTrigger: { trigger: "#final-cta", start: "top 85%" },
+      opacity: 0, y: 24, duration: 0.85, ease: "power3.out", stagger: 0.1,
+    })
+
+    /* Big arrow-link CTAs — clip-path reveal, one instance per link */
+    document.querySelectorAll<HTMLElement>(".cta-link").forEach(link => {
+      const words = link.querySelectorAll(".cta-word")
+      ScrollTrigger.create({
+        trigger: link, start: "top 88%", once: true,
+        onEnter: () => gsap.to(words, { clipPath: "inset(0 0% 0 0)", duration: 1.2, ease: "power4.out", stagger: 0.1 }),
+      })
     })
 
     gsap.from(".about-top", {
@@ -322,6 +385,80 @@ const plLogoRef = useRef<SVGSVGElement>(null)
         </div>
       </div>
 
+      {/* ══ WHAT WE DO ═══════════════════════════════ */}
+      <section id="what-we-do" className="wwd-section">
+        <p className="wwd-descriptor">Creative direction &amp; spatial design for brands, gatherings, and experiences.</p>
+        <p className="wwd-services-line">Weddings · Events · Pop-ups · Brand Experiences · Spatial Worlds</p>
+        <Link href="/studio" className="cta-link wwd-cta">
+          <span className="cta-word">Explore</span>
+          <span className="cta-word">the studio</span>
+          <span className="cta-arrow">↗</span>
+        </Link>
+
+        <h2 className="wwd-headline">We create worlds, not just things.</h2>
+        <p className="wwd-body">
+          Compound is an independent creative direction and spatial design studio working across
+          objects, spaces, brands, gatherings, and experiences.
+        </p>
+
+        <div className="pillars wwd-disciplines">
+          <div className="pillar">
+            <h3>Creative Direction</h3>
+            <p>Concept development, art direction, visual identity, mood and material direction, creative strategy.</p>
+          </div>
+          <div className="pillar">
+            <h3>Events &amp; Experiences</h3>
+            <p>Weddings, private dinners, pop-ups, brand activations, launches, installations.</p>
+          </div>
+          <div className="pillar">
+            <h3>Spatial Design</h3>
+            <p>Tablescapes, florals and materiality, signage, spatial styling, guest experience, environmental details.</p>
+          </div>
+          <div className="pillar">
+            <h3>Brand Worlds</h3>
+            <p>Small business launches, retail environments, product launches, campaign concepts, content direction.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ WEDDINGS ═════════════════════════════════ */}
+      <section id="weddings" className="wed-section">
+        <p className="wed-eyebrow">Wedding Creative Direction</p>
+        <p className="wed-body">
+          We design the world around the occasion, from the first visual idea to the smallest material detail.
+        </p>
+        <ul className="wed-list">
+          <li>Concept</li>
+          <li>Colour</li>
+          <li>Materials</li>
+          <li>Florals</li>
+          <li>Tablescapes</li>
+          <li>Stationery</li>
+          <li>Signage</li>
+          <li>Spatial moments</li>
+          <li>Lighting direction</li>
+          <li>Guest experience</li>
+        </ul>
+        <Link href="/services/weddings" className="cta-link wed-cta">
+          <span className="cta-word">Design your</span>
+          <span className="cta-word">wedding</span>
+          <span className="cta-arrow">↗</span>
+        </Link>
+      </section>
+
+      {/* ══ FIVE SENSES ══════════════════════════════ */}
+      <section id="five-senses" className="fs-section">
+        <h2 className="fs-headline">Designing the five senses.</h2>
+        <p className="fs-intro">Compound doesn&apos;t only design how something looks.</p>
+        <div className="fs-grid">
+          <div className="fs-item"><span className="fs-word">Sight</span><span className="fs-desc">Colour, form, composition.</span></div>
+          <div className="fs-item"><span className="fs-word">Touch</span><span className="fs-desc">Material, texture, tactility.</span></div>
+          <div className="fs-item"><span className="fs-word">Sound</span><span className="fs-desc">Music, acoustics, atmosphere.</span></div>
+          <div className="fs-item"><span className="fs-word">Scent</span><span className="fs-desc">Floral, environmental, sensory memory.</span></div>
+          <div className="fs-item"><span className="fs-word">Taste</span><span className="fs-desc">Food, drink, presentation.</span></div>
+        </div>
+      </section>
+
       {/* ══ ABOUT ══════════════════════════════════ */}
       <section id="about">
 
@@ -406,6 +543,41 @@ const plLogoRef = useRef<SVGSVGElement>(null)
             <div key={s.name} className="cb-block" style={{ background: s.hex }} />
           ))}
         </div>
+      </section>
+
+      {/* ══ SELECTED WORK ════════════════════════════ */}
+      <section id="selected-work" className="sw-section">
+        <div className="sw-top">
+          <p className="sw-tag">Selected Work</p>
+          <p className="sw-sub">Worlds composed by Compound: commissioned and conceptual.</p>
+        </div>
+        <div className="sw-grid">
+          {SELECTED_WORK.map(p => (
+            <Link key={p.slug} href={`/work/${p.slug}`} className="sw-card" style={{ background: p.hex }}>
+              <span className="sw-card-badge">{p.status}</span>
+              <div className="sw-card-text">
+                <h3 className="sw-card-title">{p.title}</h3>
+                <p className="sw-card-meta">{p.category} · {p.location} · {p.year}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <Link href="/work" className="cta-link sw-cta">
+          <span className="cta-word">View all</span>
+          <span className="cta-word">work</span>
+          <span className="cta-arrow">↗</span>
+        </Link>
+      </section>
+
+      {/* ══ FINAL CTA ════════════════════════════════ */}
+      <section id="final-cta" className="fcta-section">
+        <h2 className="fcta-headline">Have something worth designing?</h2>
+        <p className="fcta-sub">Weddings. Gatherings. Spaces. Brands. Objects. Experiences.</p>
+        <a href="#contact" className="cta-link fcta-cta">
+          <span className="cta-word">Let&apos;s</span>
+          <span className="cta-word">compound it</span>
+          <span className="cta-arrow">↗</span>
+        </a>
       </section>
 
       {/* ══ CONTACT ════════════════════════════════ */}

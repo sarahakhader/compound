@@ -27,11 +27,11 @@ const BASE_URL = "https://www.whatiscompound.com"
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default:  "COMPOUND · Earth, Remembered Through Design.",
+    default:  "Compound · Creative Direction & Spatial Design Studio",
     template: "%s · COMPOUND",
   },
-  description: "A living archive of objects, materials, and ideas. Toronto based design studio rooted in material culture, colour, and form.",
-  keywords:    ["compound", "design studio", "toronto", "blankets", "material culture", "objects", "archive"],
+  description: "Compound is an independent creative direction and spatial design studio designing weddings, events, pop-ups, brand experiences, spaces, objects, and sensory worlds.",
+  keywords:    ["compound", "creative direction", "spatial design", "design studio", "toronto", "wedding design", "event design", "brand experience", "material culture", "objects"],
   authors:     [{ name: "COMPOUND" }],
   creator:     "COMPOUND",
   openGraph: {
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
     locale:      "en_CA",
     url:         BASE_URL,
     siteName:    "COMPOUND",
-    title:       "COMPOUND · Earth, Remembered Through Design.",
-    description: "A living archive of objects, materials, and ideas. Toronto based design studio rooted in material culture, colour, and form.",
+    title:       "Compound · Creative Direction & Spatial Design Studio",
+    description: "Compound is an independent creative direction and spatial design studio designing weddings, events, pop-ups, brand experiences, spaces, objects, and sensory worlds.",
     images: [{
       url:    "/compound-loading-bg.jpg",
       width:  1920,
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card:        "summary_large_image",
-    title:       "COMPOUND · Earth, Remembered Through Design.",
-    description: "A living archive of objects, materials, and ideas. Toronto based design studio.",
+    title:       "Compound · Creative Direction & Spatial Design Studio",
+    description: "An independent creative direction and spatial design studio designing weddings, events, pop-ups, brand experiences, and spaces.",
     images:      ["/compound-loading-bg.jpg"],
     creator:     "@whoiscompound",
   },

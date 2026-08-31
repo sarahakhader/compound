@@ -45,6 +45,12 @@ const comingSoon = [
   { name: "Deep Violet",  hex: "#7B3FA0", pantone: "Pantone 2607 C" },
 ]
 
+const moreObjects = [
+  { name: "Future Objects",   hex: "#3D2645", pantone: "In Development" },
+  { name: "Limited Editions", hex: "#E8720A", pantone: "In Development" },
+  { name: "Custom Pieces",    hex: "#2B4FD4", pantone: "In Development" },
+]
+
 type Ann = { id: string; label: string; top: string; side: "left" | "right"; pos: string }
 
 const SLIDE_ANNS: Record<string, Ann[]> = {
@@ -204,7 +210,7 @@ export default function BlanketsPage() {
           <ArrowLeft size={14} strokeWidth={1.5} />
           <span>C O M P O U N D</span>
         </Link>
-        <span className="bl-nav-tag">BEDROCK</span>
+        <span className="bl-nav-tag">OBJECTS · BEDROCK</span>
       </header>
 
       {/* Split: text left, carousel right */}
@@ -310,6 +316,20 @@ export default function BlanketsPage() {
         <p className="bl-cs-eyebrow">More Colourways · Dropping Soon</p>
         <div className="bl-cs-grid">
           {comingSoon.map((s) => (
+            <div key={s.name} className="bl-cs-card">
+              <div className="bl-cs-swatch" style={{ background: s.hex }} />
+              <span className="bl-cs-name">{s.name}</span>
+              <span className="bl-cs-pantone">{s.pantone}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* More from Objects */}
+      <div className="bl-coming-soon">
+        <p className="bl-cs-eyebrow">More from Objects · In Development</p>
+        <div className="bl-cs-grid">
+          {moreObjects.map((s) => (
             <div key={s.name} className="bl-cs-card">
               <div className="bl-cs-swatch" style={{ background: s.hex }} />
               <span className="bl-cs-name">{s.name}</span>
