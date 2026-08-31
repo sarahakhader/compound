@@ -503,7 +503,7 @@ nav {
    GENERIC ARROW-LINK CTA — reused across the new homepage sections
 ══════════════════════════════════════════════════════════════ */
 .cta-link {
-  display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .5em;
+  display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .22em;
   text-decoration: none; cursor: pointer;
   font-family: var(--sans); font-weight: 700;
   font-size: clamp(1.3rem, 2.6vw, 1.9rem);
@@ -527,7 +527,7 @@ nav {
   padding: 6.5rem 2.5rem 7rem;
 }
 .wwd-descriptor {
-  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-family: var(--sans); font-style: normal; font-weight: 500;
   font-size: clamp(1.2rem, 2.2vw, 1.6rem);
   color: var(--linen); opacity: .85; max-width: 46ch; margin-bottom: 1rem;
 }
