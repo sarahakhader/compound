@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
-import { motion } from "motion/react"
 import {
   Carousel,
   CarouselContent,
@@ -45,49 +44,6 @@ const comingSoon = [
   { name: "Acid Canopy",  hex: "#8FD44A", pantone: "Pantone 375 C" },
   { name: "Deep Violet",  hex: "#7B3FA0", pantone: "Pantone 2607 C" },
 ]
-
-const ease = [0.76, 0, 0.24, 1] as [number, number, number, number]
-
-const LETTER_COLORS = [
-  "#E8720A", // Molten
-  "#2ECBC8", // Glacier
-  "#B5CC45", // Acid
-  "#2B4FD4", // Cobalt Electric
-  "#C2003A", // Crimson
-  "#8FD44A", // Acid Canopy
-  "#ffff02", // Yellow
-  "#7B3FA0", // Deep Violet
-]
-
-function BrandMark({ className = "bl-slide-logo", style }: { className?: string; style?: React.CSSProperties }) {
-  return (
-    <div className={className} style={style} aria-hidden>
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "100%", display: "block" }}>
-        <defs>
-          <clipPath id="bl-logo-clip">
-            <circle cx="50" cy="50" r="48" />
-          </clipPath>
-        </defs>
-        <circle cx="50" cy="50" r="48" fill="#9B5CC4" />
-        <circle cx="50" cy="50" r="36" fill="#6B3A9A" />
-        <circle cx="50" cy="50" r="25" fill="#3D2645" />
-        <circle cx="50" cy="50" r="15" fill="#B5CC45" />
-        <circle cx="50" cy="50" r="5.5" fill="#0c0814" />
-        <g clipPath="url(#bl-logo-clip)">
-          <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.75)" strokeWidth="0.9" />
-          <animateTransform
-            attributeName="transform"
-            type="rotate"
-            from="0 50 50"
-            to="360 50 50"
-            dur="6s"
-            repeatCount="indefinite"
-          />
-        </g>
-      </svg>
-    </div>
-  )
-}
 
 type Ann = { id: string; label: string; top: string; side: "left" | "right"; pos: string }
 
@@ -143,43 +99,6 @@ function BlanketAnnotations({ imageId }: { imageId: string }) {
         </div>
       ))}
     </div>
-  )
-}
-
-function MossDecor() {
-  const lime = "#B5CC45"
-  const leaves: [number,number,number,number,number,number][] = [
-    [38,  10, 24, 9, -36, .80], [100,  6, 20, 8, -10, .72], [174,  4, 22, 8,   4, .74],
-    [258,  3, 21, 8,  -2, .70], [342,  4, 22, 8,   7, .72], [428,  6, 20, 8, -12, .70],
-    [508, 10, 22, 9,  22, .74],
-    [54, 120, 22, 9,  28, .74], [134, 124, 20, 8,   8, .68], [220, 126, 22, 9,  -4, .72],
-    [308, 126, 20, 8,   4, .68], [396, 124, 22, 8, -10, .70], [480, 121, 20, 8, -24, .72],
-    [548, 116, 22, 9, -34, .74],
-    [10,  40, 20, 8, -62, .72], [7,   72, 18, 7, -75, .66], [11, 100, 20, 8, -55, .70],
-    [556, 38, 20, 8,  62, .72], [559, 70, 18, 7,  75, .66], [555, 100, 20, 8, 52, .70],
-  ]
-  const dots: [number,number,number,number][] = [
-    [70,  8, 4.5, .55], [138,  5, 4.0, .50], [300,  3, 4.5, .52], [464,  6, 4.0, .48],
-    [164, 122, 4.0, .50], [376, 126, 4.5, .52], [526, 119, 4.0, .48],
-  ]
-  return (
-    <svg
-      aria-hidden
-      className="bl-moss-svg"
-      style={{
-        position: "absolute", top: "-24px", left: "-24px",
-        width: "calc(100% + 48px)", height: "calc(100% + 48px)",
-        overflow: "visible", pointerEvents: "none", zIndex: 0,
-      }}
-    >
-      {leaves.map(([cx,cy,rx,ry,rot,op], i) => (
-        <ellipse key={`l${i}`} cx={cx} cy={cy} rx={rx} ry={ry}
-          fill={lime} opacity={op} transform={`rotate(${rot},${cx},${cy})`} />
-      ))}
-      {dots.map(([cx,cy,r,op], i) => (
-        <circle key={`d${i}`} cx={cx} cy={cy} r={r} fill={lime} opacity={op} />
-      ))}
-    </svg>
   )
 }
 
@@ -280,80 +199,34 @@ export default function BlanketsPage() {
     <div className="blankets-page">
 
       {/* Nav */}
-      <motion.header
-        className="bl-nav"
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease }}
-      >
+      <header className="bl-nav">
         <Link href="/" className="bl-back">
           <ArrowLeft size={14} strokeWidth={1.5} />
           <span>C O M P O U N D</span>
         </Link>
         <span className="bl-nav-tag">BEDROCK</span>
-      </motion.header>
+      </header>
 
       {/* Split: text left, carousel right */}
       <div className="bl-main">
 
         {/* Left */}
         <div className="bl-left">
-          <motion.p
-            className="bl-eyebrow"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.55, delay: 0.15, ease }}
-          >
-            Bedrock Collection · 2026
-          </motion.p>
+          <p className="bl-eyebrow">Bedrock Collection · 2026</p>
 
           {/* Title */}
-          <div style={{ marginBottom: "2.5rem" }}>
-            <h1 className="bl-title" style={{
-              marginBottom: 0,
-              fontFamily: "var(--sans)",
-              fontWeight: 900,
-              lineHeight: 1.0,
-              letterSpacing: "-.02em",
-              color: "#B5CC45",
-            }} aria-label="Blankets">
-              {"Blankets".split("").map((char, i) => (
-                <motion.span
-                  key={i}
-                  style={{ display: "inline-block", color: "inherit" }}
-                  whileHover={{ color: LETTER_COLORS[i % LETTER_COLORS.length], scale: 1.1, filter: "brightness(1.5)" }}
-                  transition={{ duration: 0.15, ease: "easeOut" }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </h1>
-          </div>
+          <h1 className="bl-title">Blankets</h1>
 
           {/* Body paragraphs */}
           <div className="bl-sub">
             {subParagraphs.map((text, i) => (
-              <motion.p
-                key={i}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                whileHover={i > 0 ? { y: -6, scale: 1.02, opacity: 1 } : undefined}
-                transition={{ duration: 0.65, delay: i * 0.13, ease }}
-              >
-                {text}
-              </motion.p>
+              <p key={i}>{text}</p>
             ))}
           </div>
         </div>
 
         {/* Right — carousel */}
-        <motion.div
-          className="bl-right"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease }}
-        >
+        <div className="bl-right">
           <Carousel
             index={currentIndex}
             onIndexChange={handleIndexChange}
@@ -399,34 +272,22 @@ export default function BlanketsPage() {
               ))}
             </div>
           </Carousel>
-        </motion.div>
+        </div>
       </div>
 
       {/* ── BUY SECTION ─────────────────────────────────────────────── */}
       <div className="bl-buy-section">
-        <motion.div
-          className="bl-buy-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease }}
-        >
-          <div className="bl-buy-header-left">
-            <p className="bl-buy-eyebrow">Available Now · CA ${PRICE}</p>
-            <p className="bl-buy-sub" style={{ color: '#aaff00' }}>100% Cotton · 180 × 240 cm · Stonewashed · Raw Fringe<br />Select a colourway to place your order inquiry.</p>
-          </div>
+        <div className="bl-buy-header">
+          <p className="bl-buy-eyebrow">Available Now · CA ${PRICE}</p>
           <h2 className="bl-buy-title">Order the Bedrock Blanket</h2>
-        </motion.div>
+          <p className="bl-buy-sub">100% Cotton · 180 × 240 cm · Stonewashed · Raw Fringe<br />Select a colourway to place your order inquiry.</p>
+        </div>
 
         <div className="bl-buy-cards">
-          {COLOURWAYS.map((c, i) => (
-            <motion.button
+          {COLOURWAYS.map((c) => (
+            <button
               key={c.id}
               className="bl-buy-card"
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: i * 0.1, ease }}
               onClick={() => openOrder(c.id)}
               aria-label={`Order ${c.name} · ${c.fringe} Fringe`}
             >
@@ -439,84 +300,49 @@ export default function BlanketsPage() {
                 <p className="bl-buy-card-sub">{c.fringe} Fringe</p>
               </div>
               <span className="bl-buy-card-cta">Order →</span>
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>
 
       {/* Coming Soon colourways */}
       <div className="bl-coming-soon">
-        <motion.p
-          className="bl-cs-eyebrow"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease }}
-        >
-          More Colourways · Dropping Soon
-        </motion.p>
+        <p className="bl-cs-eyebrow">More Colourways · Dropping Soon</p>
         <div className="bl-cs-grid">
-          {comingSoon.map((s, i) => (
-            <motion.div
-              key={s.name}
-              className="bl-cs-card"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.55, delay: i * 0.08, ease }}
-            >
+          {comingSoon.map((s) => (
+            <div key={s.name} className="bl-cs-card">
               <div className="bl-cs-swatch" style={{ background: s.hex }} />
               <span className="bl-cs-name">{s.name}</span>
               <span className="bl-cs-pantone">{s.pantone}</span>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Story CTA */}
-      <motion.div
-        className="bl-story-cta"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease }}
-      >
+      <div className="bl-story-cta">
         <Link href="/story" className="bl-story-link">
-          <motion.svg
-            className="bl-story-star"
-            viewBox="0 0 24 24"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-          >
+          <svg className="bl-story-star" viewBox="0 0 24 24">
             <path d="M12,2 L14.35,8.76 L21.51,8.91 L15.8,13.24 L17.88,20.09 L12,16 L6.12,20.09 L8.2,13.24 L2.49,8.91 L9.65,8.76 Z" fill="currentColor" />
-          </motion.svg>
+          </svg>
           <span>Explore the Colour Story</span>
           <span className="bl-story-arrow">→</span>
         </Link>
-      </motion.div>
+      </div>
 
       {/* Footer */}
-      <motion.footer
-        className="bl-footer"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7, ease }}
-      >
+      <footer className="bl-footer">
         <span>© COMPOUND 2026</span>
         <span>Earth, Remembered Through Design.</span>
         <a href="https://instagram.com/whoiscompound" target="_blank" rel="noopener noreferrer">@whoiscompound</a>
-      </motion.footer>
+      </footer>
 
       {/* ── ORDER MODAL ──────────────────────────────────────────────── */}
       {orderOpen && (
         <div className="bl-modal-overlay" onClick={closeOrder} role="dialog" aria-modal="true" aria-label="Place an order">
-          <motion.div
+          <div
             className="bl-modal"
             onClick={e => e.stopPropagation()}
-            initial={{ opacity: 0, y: 56 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.38, ease }}
           >
             <div className="bl-modal-head">
               <div>
@@ -627,7 +453,7 @@ export default function BlanketsPage() {
 
               </form>
             )}
-          </motion.div>
+          </div>
         </div>
       )}
 
