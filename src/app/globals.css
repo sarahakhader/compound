@@ -529,11 +529,11 @@ nav {
 .wwd-descriptor {
   font-family: var(--sans); font-style: normal; font-weight: 500;
   font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-  color: var(--molten); opacity: 1; max-width: 46ch; margin-bottom: 1rem;
+  color: var(--acid); opacity: 1; max-width: 46ch; margin-bottom: 1rem;
 }
 .wwd-services-line {
   font-size: .64rem; letter-spacing: .28em; text-transform: uppercase;
-  color: var(--molten); opacity: .75; font-weight: 500; margin-bottom: 2.4rem;
+  color: var(--acid); opacity: .75; font-weight: 500; margin-bottom: 2.4rem;
 }
 .wwd-cta { margin-bottom: 6rem; }
 .wwd-headline {
