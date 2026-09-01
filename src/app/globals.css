@@ -490,7 +490,7 @@ nav {
 .pillar { position:relative; padding-top:1.4rem; }
 .pillar::before { content:''; position:absolute; top:0; left:0; width:22px; height:1px; background:var(--smoked-plum); opacity:.3; }
 .pillar h3 { font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; opacity:.45; margin-bottom:.65rem; font-weight:500; }
-.pillar p  { font-family:var(--serif); font-size:1.05rem; line-height:1.6; font-style:italic; opacity:.75; }
+.pillar p  { font-family:var(--sans); font-size:1.02rem; line-height:1.6; font-style:normal; font-weight:500; opacity:.75; }
 .colour-blocks { display:flex; height:clamp(120px,18vw,200px); margin-top:5rem; border-radius:4px; overflow:hidden; gap:2px; }
 .cb-block {
   flex:1; display:flex; flex-direction:column; justify-content:flex-end;
@@ -523,7 +523,7 @@ nav {
    WHAT WE DO
 ══════════════════════════════════════════════════════════════ */
 .wwd-section {
-  background: var(--obsidian); color: var(--linen);
+  background: var(--cobalt); color: var(--linen);
   padding: 6.5rem 2.5rem 7rem;
 }
 .wwd-descriptor {
@@ -556,7 +556,7 @@ nav {
    WEDDINGS
 ══════════════════════════════════════════════════════════════ */
 .wed-section {
-  background: var(--obsidian); color: var(--linen);
+  background: var(--deep-jungle); color: var(--linen);
   padding: 2rem 2.5rem 7rem;
   border-top: 1px solid rgba(237,228,216,.08);
 }
@@ -565,7 +565,7 @@ nav {
   color: var(--acid); font-weight: 600; margin-bottom: 1.4rem;
 }
 .wed-body {
-  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-family: var(--sans); font-style: normal; font-weight: 500;
   font-size: clamp(1.3rem, 2.6vw, 2rem); line-height: 1.4;
   color: var(--linen); max-width: 30ch; margin-bottom: 2.6rem;
 }
@@ -584,7 +584,7 @@ nav {
    FIVE SENSES
 ══════════════════════════════════════════════════════════════ */
 .fs-section {
-  background: var(--obsidian); color: var(--linen);
+  background: var(--smoked-plum); color: var(--linen);
   padding: 2rem 2.5rem 7.5rem;
   border-top: 1px solid rgba(237,228,216,.08);
 }
@@ -602,7 +602,7 @@ nav {
 }
 .fs-item { display: flex; flex-direction: column; gap: .6rem; }
 .fs-word {
-  font-family: var(--serif); font-weight: 600; font-style: italic;
+  font-family: var(--sans); font-weight: 700; font-style: normal;
   font-size: clamp(1.5rem, 2.6vw, 2.1rem);
   color: var(--glacier); letter-spacing: -.01em;
 }
@@ -624,8 +624,8 @@ nav {
   color: var(--linen); opacity: .35; font-weight: 500; margin-bottom: 1rem;
 }
 .sw-sub {
-  font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2vw, 1.5rem);
-  color: var(--linen); opacity: .8;
+  font-family: var(--sans); font-style: normal; font-weight: 500; font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: var(--linen); opacity: .85;
 }
 .sw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
 .sw-card {
@@ -645,7 +645,7 @@ nav {
   padding: .3rem .8rem;
 }
 .sw-card-title {
-  font-family: var(--serif); font-weight: 600;
+  font-family: var(--sans); font-weight: 700;
   font-size: clamp(1.4rem, 2.6vw, 2rem); color: var(--linen); margin-bottom: .3rem;
 }
 .sw-card-meta {
@@ -725,27 +725,27 @@ nav {
    FINAL CTA
 ══════════════════════════════════════════════════════════════ */
 .fcta-section {
-  background: var(--obsidian); color: var(--linen);
+  background: var(--terracotta); color: var(--linen);
   padding: 7rem 2.5rem 8rem;
   border-top: 1px solid rgba(237,228,216,.08);
   text-align: center;
   display: flex; flex-direction: column; align-items: center;
 }
 .fcta-headline {
-  font-family: var(--serif); font-weight: 600;
-  font-size: clamp(2.4rem, 6vw, 5.5rem);
-  line-height: 1.05; letter-spacing: -.02em;
+  font-family: var(--sans); font-weight: 900;
+  font-size: clamp(2.2rem, 5.6vw, 5rem);
+  line-height: 1.08; letter-spacing: -.02em;
   color: var(--linen); max-width: 18ch; margin-bottom: 1.2rem;
 }
 .fcta-sub {
   font-size: clamp(.95rem, 1.3vw, 1.15rem);
-  color: var(--linen); opacity: .55; margin-bottom: 2.5rem;
+  color: var(--linen); opacity: .65; margin-bottom: 2.5rem;
 }
 .fcta-cta {
   font-size: clamp(1.6rem, 3.4vw, 2.4rem);
-  color: var(--molten);
+  color: var(--acid);
 }
-.fcta-cta:hover { color: var(--acid); }
+.fcta-cta:hover { color: var(--linen); }
 
 /* CONTACT */
 #contact { background:var(--deep-jungle); position:relative; overflow:hidden; }
