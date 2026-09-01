@@ -533,7 +533,7 @@ nav {
 }
 .wwd-services-line {
   font-size: clamp(1.05rem, 2vw, 1.4rem); letter-spacing: .1em; text-transform: uppercase;
-  color: #C2003A; opacity: 1; font-weight: 700; margin-bottom: 2.4rem;
+  color: var(--acid); opacity: 1; font-weight: 700; margin-bottom: 2.4rem;
 }
 .wwd-cta { margin-bottom: 6rem; }
 .wwd-headline {
