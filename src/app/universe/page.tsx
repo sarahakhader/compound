@@ -513,7 +513,6 @@ export default function UniversePage() {
   const [pct, setPct]                 = useState(0)
   const [lineIdx, setLineIdx]         = useState(0)
   const [selected, setSelected]       = useState<string | null>(null)
-  const [entering, setEntering]       = useState(false)
   const [districtPct, setDistrictPct] = useState(0)
   const [districtLine, setDistrictLine] = useState(0)
 
@@ -548,28 +547,18 @@ export default function UniversePage() {
       if (newLi !== li) { li = newLi; setDistrictLine(newLi) }
       if (p >= 100) {
         clearInterval(id)
-        setTimeout(() => {
-          const cu = (window as any).CompoundUniverse
-          if (cu?.start) cu.start()
-          setEntering(true)
-        }, 600)
+        setTimeout(() => setPhase("hub"), 700)
       }
     }, 40)
     return () => clearInterval(id)
   }, [phase, selectedDistrict])
 
   const launch = useCallback(() => {
-    if (entering) return
-    if (selectedDistrict) {
-      setDistrictPct(0)
-      setDistrictLine(0)
-      setPhase("district-loading")
-    } else {
-      setEntering(true)
-      const cu = (window as any).CompoundUniverse
-      if (cu?.start) cu.start()
-    }
-  }, [entering, selectedDistrict])
+    if (!selectedDistrict) return
+    setDistrictPct(0)
+    setDistrictLine(0)
+    setPhase("district-loading")
+  }, [selectedDistrict])
 
   const handleKey = useCallback((e: KeyboardEvent) => {
     if (phase !== "hub") return
@@ -605,8 +594,6 @@ export default function UniversePage() {
       display: "flex", flexDirection: "column",
       overflow: "hidden",
       fontFamily: "'Courier New', monospace",
-      opacity: entering ? 0 : 1,
-      transition: entering ? "opacity 0.6s ease" : "none",
     }}>
 
       {/* ── NAV ── */}
@@ -692,30 +679,33 @@ export default function UniversePage() {
         <button
           className="universe-launch-btn"
           onClick={launch}
+          disabled={!selectedDistrict}
           style={{
-            background: entering ? "rgba(237,228,216,0.06)" : "rgba(237,228,216,0.05)",
+            background: "rgba(237,228,216,0.05)",
             border: selectedDistrict
               ? `1px solid ${selectedDistrict.accent}88`
-              : "1px solid rgba(237,228,216,0.22)",
-            color: selectedDistrict ? selectedDistrict.accent : "#EDE4D8",
+              : "1px solid rgba(237,228,216,0.12)",
+            color: selectedDistrict ? selectedDistrict.accent : "rgba(237,228,216,0.3)",
             fontFamily: "'Courier New', monospace",
             fontSize: 9, letterSpacing: "0.36em",
             padding: "11px 32px",
-            cursor: "pointer",
+            cursor: selectedDistrict ? "pointer" : "default",
             textTransform: "uppercase",
             transition: "background 0.18s ease, border-color 0.18s ease, color 0.18s ease",
             whiteSpace: "nowrap",
           }}
           onMouseEnter={e => {
+            if (!selectedDistrict) return
             e.currentTarget.style.background = "rgba(237,228,216,0.1)"
-            e.currentTarget.style.borderColor = selectedDistrict ? selectedDistrict.accent : "rgba(237,228,216,0.45)"
+            e.currentTarget.style.borderColor = selectedDistrict.accent
           }}
           onMouseLeave={e => {
+            if (!selectedDistrict) return
             e.currentTarget.style.background = "rgba(237,228,216,0.05)"
-            e.currentTarget.style.borderColor = selectedDistrict ? selectedDistrict.accent + "88" : "rgba(237,228,216,0.22)"
+            e.currentTarget.style.borderColor = selectedDistrict.accent + "88"
           }}
         >
-          {entering ? "LOADING…" : selectedDistrict ? `ENTER ${selectedDistrict.name} →` : "ENTER COMPOUND WORLD →"}
+          {selectedDistrict ? `ENTER ${selectedDistrict.name} →` : "SELECT A DISTRICT"}
         </button>
       </div>
     </div>

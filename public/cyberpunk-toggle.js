@@ -14,7 +14,6 @@
     /* The drop-shadow applies to the whole cloud (body + bumps) as one shape */
     filter: drop-shadow(0 8px 24px rgba(0,0,0,0.46));
     transition: transform 0.22s ease, filter 0.22s ease;
-    cursor: pointer;
   }
 
   #cu-cloud-wrap:hover {
@@ -65,7 +64,7 @@
     pointer-events: none;
   }
 
-  /* ── Button body — the cloud base ── */
+  /* ── Button body — the cloud base. Purely decorative: no click behavior. ── */
   #cyberpunk-toggle-btn {
     position: relative;
     display: block;
@@ -85,25 +84,8 @@
     text-transform: uppercase;
     white-space: nowrap;
     text-align: center;
-    cursor: pointer;
-
-    transition: background 0.2s ease, color 0.2s ease;
+    cursor: default;
   }
-
-  #cyberpunk-toggle-btn:focus-visible {
-    outline: 3px solid rgba(110,206,206,0.9);
-    outline-offset: 5px;
-  }
-
-  /* Active state — storm-grey cloud, red text */
-  #cu-cloud-wrap.game-active #cyberpunk-toggle-btn  { background: #e2e2e2; color: #cc1800; }
-  #cu-cloud-wrap.game-active #cu-cloud-bumps::before { background: #e2e2e2; }
-  #cu-cloud-wrap.game-active #cu-cloud-bumps::after  { background: #e2e2e2; }
-  #cu-cloud-wrap.game-active #cu-cloud-bump-r        { background: #e2e2e2; }
-
-  /* Loading state */
-  #cu-cloud-wrap.loading { opacity: 0.6; cursor: wait; }
-  #cu-cloud-wrap.loading #cyberpunk-toggle-btn { cursor: wait; }
 
   @media (prefers-reduced-motion: reduce) {
     #cu-cloud-wrap { transition: none; }
@@ -133,8 +115,8 @@
   /* ── Build DOM: wrapper > bumps + right-bump + button ── */
   const wrap = document.createElement("div");
   wrap.id = "cu-cloud-wrap";
-  wrap.setAttribute("role", "group");
-  wrap.setAttribute("aria-label", "Compound Universe launcher");
+  wrap.setAttribute("role", "img");
+  wrap.setAttribute("aria-label", "Compound cloud");
 
   /* bump container */
   const bumps = document.createElement("div");
@@ -145,74 +127,32 @@
   bumpR.id = "cu-cloud-bump-r";
   bumps.appendChild(bumpR);
 
-  /* the actual button */
+  /* the actual button — decorative only, no interaction */
   const btn = document.createElement("button");
   btn.id = "cyberpunk-toggle-btn";
   btn.type = "button";
-  btn.setAttribute("aria-haspopup", "dialog");
+  btn.disabled = true;
+  btn.tabIndex = -1;
+  btn.setAttribute("aria-hidden", "true");
+
+  const isCompact = () => window.matchMedia("(max-width: 768px)").matches;
+  function setLabel() {
+    btn.textContent = isCompact() ? "☁" : "☁ ENTER COMPOUND'S UNIVERSE";
+  }
+  setLabel();
+  window.matchMedia("(max-width: 768px)").addEventListener("change", setLabel);
 
   wrap.appendChild(bumps);
   wrap.appendChild(btn);
-
-  /* ── State helpers ── */
-  const isCompact = () => window.matchMedia("(max-width: 768px)").matches;
-  let active = false;
-  function setActive(on) {
-    active = on;
-    btn.textContent = isCompact()
-      ? (on ? "↩" : "☁")
-      : (on ? "↩ RETURN TO THE MUNDANE" : "☁ ENTER COMPOUND'S UNIVERSE");
-    btn.setAttribute("aria-pressed", String(on));
-    btn.setAttribute("aria-label", on ? "Return to the mundane" : "Enter Compound's Universe");
-    wrap.classList.toggle("game-active", on);
-  }
-  setActive(false);
-  window.matchMedia("(max-width: 768px)").addEventListener("change", () => setActive(active));
-
-  /* ── Lazy-load compound-universe.js on first click ── */
-  let loaded = false;
-  function ensureLoaded(cb) {
-    if (loaded || window.CompoundUniverse) { loaded = true; cb(); return; }
-    wrap.classList.add("loading");
-    btn.setAttribute("aria-busy", "true");
-    const s = document.createElement("script");
-    s.src = "/compound-universe.js";
-    s.onload = () => {
-      loaded = true;
-      wrap.classList.remove("loading");
-      btn.removeAttribute("aria-busy");
-      cb();
-    };
-    s.onerror = () => {
-      wrap.classList.remove("loading");
-      btn.removeAttribute("aria-busy");
-      console.error("Compound Universe: failed to load game script.");
-    };
-    document.head.appendChild(s);
-  }
-
-  /* On touch devices, the 3D world has no keyboard controls — send users to the hub page instead */
-  const isTouch = () => window.matchMedia("(pointer: coarse)").matches;
-
-  btn.addEventListener("click", () => {
-    if (isTouch()) { window.location.href = "/universe"; return; }
-    const cu = window.CompoundUniverse;
-    if (cu && cu.active) { cu.stop(); setActive(false); return; }
-    ensureLoaded(() => {
-      if (window.CompoundUniverse) { window.CompoundUniverse.start(); setActive(true); }
-    });
-  });
-
-  window.addEventListener("compound-universe:exit", () => setActive(false));
 
   function mount() { document.body.appendChild(wrap); }
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", mount);
   else mount();
 
-  /* The /universe page is itself the universe entry hub — showing this
-     launcher there is redundant and overlaps the page's own CTA. Re-check
-     on every client-side (SPA) navigation, not just full page loads. */
+  /* The /universe page has its own district-hub UI in that bottom-right
+     corner — showing this decorative cloud there would overlap it.
+     Re-check on every client-side (SPA) navigation, not just full loads. */
   function syncVisibility() {
     wrap.style.display = window.location.pathname.startsWith("/universe") ? "none" : "";
   }
